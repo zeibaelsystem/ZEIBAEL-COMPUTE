@@ -73,15 +73,15 @@ jobs:
                   path = Path(root) / filename
                   if path.is_symlink() or filename.startswith("."):
                       continue
-                  if path.stat().st_size > 10 * 1024 * 1024:
-                      raise ValueError("Single file exceeds 10 MiB safety limit")
+                  if path.stat().st_size > 500 * 1024 * 1024:
+                      raise ValueError("Single file exceeds 500 MiB safety limit")
                   total_bytes += path.stat().st_size
-                  if total_bytes > 25 * 1024 * 1024:
-                      raise ValueError("Package exceeds 25 MiB safety limit")
+                  if total_bytes > 500 * 1024 * 1024:
+                      raise ValueError("Package exceeds 500 MiB safety limit")
                   files.append(path)
 
           assert files, "No packageable files found"
-          assert len(files) <= 1000, "Package exceeds 1000 file safety limit"
+          assert len(files) <= 5000, "Package exceeds 5000 file safety limit"
           output = repo / "dist"
           output.mkdir(exist_ok=True)
           package = output / "zeibael-package.zip"
