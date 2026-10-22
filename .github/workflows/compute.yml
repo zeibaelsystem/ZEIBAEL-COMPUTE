@@ -1,0 +1,79 @@
+name: ZEIBAEL - Compute Checks
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zeibael-compute-checks
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate project source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Python and Markdown checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 --version
+          python3 - <<'PY'
+          from pathlib import Path
+
+          root = Path.cwd()
+          assert (root / "README.md").is_file(), "Missing README.md"
+          markdown_files = [
+              p for p in root.rglob("*.md")
+              if ".git" not in p.parts and "node_modules" not in p.parts
+          ]
+          for path in markdown_files:
+              path.read_text(encoding="utf-8")
+          for skill in (root / "skills").glob("*/SKILL.md"):
+              assert skill.stat().st_size > 0, f"Empty skill file: {skill}"
+          print(f"Validated {len(markdown_files)} UTF-8 Markdown files.")
+          PY
+
+      - name: Node.js and JSON checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --version
+          node <<'NODE'
+          const fs = require('node:fs');
+          const candidates = ['package.json', 'skills/index.json'];
+          let checked = 0;
+          for (const file of candidates) {
+            if (fs.existsSync(file)) {
+              JSON.parse(fs.readFileSync(file, 'utf8'));
+              checked++;
+            }
+          }
+          console.log('Validated JSON files:', checked);
+          NODE
+
+      - name: Bash script syntax checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash --version | head -n 1
+          if [[ -d scripts ]]; then
+            while IFS= read -r -d '' file; do
+              bash -n "$file"
+              echo "OK: $file"
+            done < <(find scripts -type f -name '*.sh' -print0)
+          else
+            echo "No scripts/ directory yet; Bash runtime is available."
+          fi
+
+      - name: Summary
+        shell: bash
+        run: |
+          echo "### ZEIBAEL Compute checks" >> "$GITHUB_STEP_SUMMARY"
+          echo "Python, Node.js, Bash and project validation completed." >> "$GITHUB_STEP_SUMMARY"
