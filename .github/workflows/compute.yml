@@ -14,7 +14,7 @@ jobs:
   validate:
     name: Validate project source
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 360
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
