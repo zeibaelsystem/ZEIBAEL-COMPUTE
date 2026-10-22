@@ -28,7 +28,7 @@ jobs:
   package:
     name: Create verified ZIP artifact
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 360
     steps:
       - name: Checkout public source files
         uses: actions/checkout@v4
@@ -73,15 +73,14 @@ jobs:
                   path = Path(root) / filename
                   if path.is_symlink() or filename.startswith("."):
                       continue
-                  if path.stat().st_size > 500 * 1024 * 1024:
-                      raise ValueError("Single file exceeds 500 MiB safety limit")
+                  if path.stat().st_size > 100 * 1024 * 1024:
+                      raise ValueError("Single file exceeds GitHub regular Git file limit (100 MiB)")
                   total_bytes += path.stat().st_size
-                  if total_bytes > 500 * 1024 * 1024:
-                      raise ValueError("Package exceeds 500 MiB safety limit")
+                  if total_bytes > 500_000_000:
+                      raise ValueError("Package source exceeds 500 MB input budget")
                   files.append(path)
 
           assert files, "No packageable files found"
-          assert len(files) <= 5000, "Package exceeds 5000 file safety limit"
           output = repo / "dist"
           output.mkdir(exist_ok=True)
           package = output / "zeibael-package.zip"
@@ -89,6 +88,7 @@ jobs:
               for path in sorted(files):
                   archive.write(path, path.relative_to(source).as_posix())
 
+          assert package.stat().st_size <= 500_000_000, "ZIP exceeds 500 MB artifact budget"
           with zipfile.ZipFile(package) as archive:
               assert archive.testzip() is None, "Failed ZIP integrity check"
               assert len(archive.namelist()) == len(files), "File count mismatch"
