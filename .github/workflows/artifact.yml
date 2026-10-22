@@ -1,0 +1,114 @@
+name: ZEIBAEL - Package ZIP
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Package the public project, or one skill from skills/<skill_name>"
+        required: true
+        type: choice
+        default: project
+        options:
+          - project
+          - skill
+      skill_name:
+        description: "Required only for target=skill; e.g. brainstorming"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zeibael-package-zip
+  cancel-in-progress: false
+
+jobs:
+  package:
+    name: Create verified ZIP artifact
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout public source files
+        uses: actions/checkout@v4
+
+      - name: Build ZIP and checksum
+        shell: bash
+        env:
+          PACKAGE_TARGET: ${{ inputs.target }}
+          SKILL_NAME: ${{ inputs.skill_name }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          import re
+          import zipfile
+
+          repo = Path.cwd()
+          target = os.environ["PACKAGE_TARGET"]
+          skill_name = os.environ["SKILL_NAME"]
+          assert target in {"project", "skill"}, "Unsupported package target"
+
+          if target == "skill":
+              assert re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", skill_name), "Invalid skill name"
+              source = repo / "skills" / skill_name
+              assert source.is_dir() and not source.is_symlink(), "Skill directory not found"
+              assert (source / "SKILL.md").is_file(), "Missing required SKILL.md"
+          else:
+              source = repo
+
+          blocked = {".git", ".github", ".venv", "venv", "node_modules", "dist", "__pycache__"}
+          files = []
+          total_bytes = 0
+          for root, directories, filenames in os.walk(source, followlinks=False):
+              directories[:] = [
+                  item for item in directories
+                  if item not in blocked and not item.startswith(".")
+                  and not (Path(root) / item).is_symlink()
+              ]
+              for filename in filenames:
+                  path = Path(root) / filename
+                  if path.is_symlink() or filename.startswith("."):
+                      continue
+                  if path.stat().st_size > 10 * 1024 * 1024:
+                      raise ValueError("Single file exceeds 10 MiB safety limit")
+                  total_bytes += path.stat().st_size
+                  if total_bytes > 25 * 1024 * 1024:
+                      raise ValueError("Package exceeds 25 MiB safety limit")
+                  files.append(path)
+
+          assert files, "No packageable files found"
+          assert len(files) <= 1000, "Package exceeds 1000 file safety limit"
+          output = repo / "dist"
+          output.mkdir(exist_ok=True)
+          package = output / "zeibael-package.zip"
+          with zipfile.ZipFile(package, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
+              for path in sorted(files):
+                  archive.write(path, path.relative_to(source).as_posix())
+
+          with zipfile.ZipFile(package) as archive:
+              assert archive.testzip() is None, "Failed ZIP integrity check"
+              assert len(archive.namelist()) == len(files), "File count mismatch"
+
+          digest = hashlib.sha256(package.read_bytes()).hexdigest()
+          print(f"ZIP: {package} | files={len(files)} | sha256={digest}")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("### ZEIBAEL ZIP package\n\n")
+              summary.write(f"- Source: {target}\n")
+              summary.write(f"- Files: {len(files)}\n")
+              summary.write(f"- Size: {package.stat().st_size} bytes\n")
+              summary.write(f"- SHA256: {digest}\n")
+              summary.write("- Artifact is retained for 1 day to limit storage.\n")
+          PY
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zeibael-zip
+          path: dist/zeibael-package.zip
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
