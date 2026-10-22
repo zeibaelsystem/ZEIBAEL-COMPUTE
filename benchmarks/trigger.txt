@@ -1,0 +1,4 @@
+ZEIBAEL-COMPUTE benchmark trigger
+Purpose: one authorized manual benchmark of development packaging workflow.
+Scope: ubuntu-24.04 standard public GitHub runner, 300 synthetic Markdown fixtures, no artifact upload.
+Initial activation: 2026-10-22.
