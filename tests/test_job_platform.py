@@ -51,7 +51,7 @@ class JobPlatformTests(unittest.TestCase):
             self.manifest(root, [job(runner="self-hosted")])
             with self.assertRaises(ValueError):
                 read_manifest(root, "approved")
-            self.manifest(root, [job(str(i)) for i in range(9)])
+            self.manifest(root, [job(str(i)) for i in range(21)])
             with self.assertRaises(ValueError):
                 read_manifest(root, "approved")
 
