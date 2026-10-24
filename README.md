@@ -62,9 +62,9 @@ Grace dapat membuat **manifest pekerjaan yang direview** di `ci/jobs/<nama>.json
 
 Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfcheck.json) menjalankan dua job sekaligus, satu untuk unit test Python dan satu untuk pemeriksaan Node.js. Manifest berisi `schema=1`, daftar `jobs`, dan untuk setiap job: `id`, `runtime`, `runner`, `timeout_profile`, serta `commands` (daftar argv, **bukan shell command bebas dari input dispatch**).
 
-**Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest: `ubuntu-24.04` (x64), `ubuntu-24.04-arm` (ARM64), `windows-2022` (x64), dan `macos-15` (ARM64). **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Linux ARM64, Windows x64, dan macOS ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
+**Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest: `ubuntu-24.04` (Linux x64), `ubuntu-24.04-arm` (Linux ARM64), `windows-2022` (Windows x64), `windows-11-arm` (Windows ARM64), `macos-15-intel` (macOS Intel), `macos-15` (macOS ARM64), dan `ubuntu-slim` (Linux ringan). **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Linux ARM64, Windows x64, dan macOS ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
 
-**Paralelisme saat ini:** maksimal 8 job dalam satu manifest, maksimal 4 dieksekusi paralel. **Timeout per job:** `short` (10 menit), `standard` (30 menit), `long` (120 menit), atau `extended` (330 menit), dengan batas internal perintah sedikit lebih singkat agar laporan sempat ditulis.
+**Paralelisme saat ini:** maksimal 20 job dalam satu manifest, maksimal 20 dicoba paralel dalam satu run; batas GitHub Free 20 concurrent job untuk akun, dengan maksimal 5 macOS. Banyak run dapat berbagi slot; bukan 20 slot khusus per workflow. Tidak ada workflow-wide concurrency lock. **Timeout per job:** `short` (10 menit), `standard` (30 menit), `long` (120 menit), atau `extended` (330 menit), dengan batas internal perintah sedikit lebih singkat agar laporan sempat ditulis.
 
 **Laporan:** setiap job menghasilkan `result.json` serta baris log `ZEIBAEL_RESULT_JSON=...`. Job `results` menggabungkan laporan menjadi `aggregate.json`, baris `ZEIBAEL_AGGREGATE_JSON=...`, dan GitHub Actions artifacts dengan retensi satu hari. Grace dapat membaca status/log/artifact metadata melalui GitHub Native Plugin dan menyimpan ringkasan yang sesuai di repository privat. Jangan mengirim data rahasia ke runner publik.
 
@@ -101,8 +101,8 @@ _Dokumentasi diperbarui 24 Oktober 2026. Grace bertanggung jawab memilih jalur e
 
 ## Reliability, capacity and security (October 2026)
 
-- `ci.yml` and `artifact.yml` use `queue: max` with `cancel-in-progress: false`, so the GitHub Actions concurrency queue can hold multiple pending jobs. GitHub documents up to 100 pending runs per group, after which excess can be canceled; ordering is not guaranteed by dispatch order.
-- Manifest cap is now 8 trusted jobs with `max-parallel: 4` (not unlimited). The execution time budget is **shared by all commands** in a manifest job.
+- `ci.yml` no longer has a workflow-wide concurrency group. Independent CI runs can use available account-level standard-runner slots together; GitHub still applies Free-plan limits. The independent ZIP packaging workflow retains its own `queue: max`.
+- Manifest cap is now 20 trusted jobs with `max-parallel: 20` (not unlimited). The execution time budget is **shared by all commands** in a manifest job.
 - `job_ids` are propagated from the validated job plan to the result aggregator, preventing a mismatched but equal-size report collection from being treated as success. Each run is identified by GitHub run ID.
 - GitHub-managed actions are pinned to full immutable SHA commits; `.github/workflows/quality.yml` checks Python regressions and CodeQL on main.
 - Optional `platform_extensions` is a fixture-based smoke test for HTTP APIs, temporary SQLite, TypeScript and PWA source contract; not a claim of Playwright or real offline E2E.
@@ -112,3 +112,11 @@ _Dokumentasi diperbarui 24 Oktober 2026. Grace bertanggung jawab memilih jalur e
 ### Optional real-browser PWA E2E
 
 `ci/jobs/playwright_browser_smoke.json` runs **opt-in** Chromium testing with a fixed Playwright 1.56.1 package version on a public standard runner. It checks click behavior and reload while browser networking is set offline after service-worker precaching. Browser installation occurs only during this explicitly dispatched job; it is not part of every CI run. The fixture is not a production app. No cloud secrets or private code are used. This job installs npm dependencies ephemerally without committing a lockfile; for an actual application, commit its package lock and replace this fixture with reproducible project tests.
+
+### Profil kapasitas GitHub Free (20 slot)
+
+- `ci/jobs/capacity_20_probe.json`: uji 20 job dengan tujuh label runner standard publik; dipicu hanya ketika Bos meminta audit, bukan pada setiap CI.
+- Standard GitHub-hosted runners pada repository publik gratis, tetapi tunduk pada batas concurrency GitHub Free (20 total, maksimal 5 macOS), batas penggunaan yang wajar dan aturan GitHub Actions. Membuka tujuh runner **tidak** melipatgandakan slot concurrency menjadi 140.
+- `ubuntu-slim` disetujui hanya untuk runtime Python `short` (10 menit) di ZEIBAEL; batas GitHub 15 menit serta keterbatasan container membuatnya tidak cocok untuk Docker dan build berat. Runner lain mengikuti timeouts standar.
+- Setiap pekerjaan tetap memilih satu OS yang dibutuhkan; tidak otomatis menggandakan job di semua OS.
+- Tidak ada workflow baru, billing/PAYG, deployment Hatchable atau akses privat ke runner publik.
