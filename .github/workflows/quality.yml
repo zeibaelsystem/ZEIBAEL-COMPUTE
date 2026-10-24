@@ -1,0 +1,61 @@
+name: ZEIBAEL - Quality and Security
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: Python runner regressions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout public sources
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Run regression tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Validate committed CI manifest schemas
+        run: |
+          python3 -m compileall -q scripts tests ci/fixtures
+          python3 - <<'PY'
+          from pathlib import Path
+          from scripts.job_plan import read_manifest
+          for path in sorted(Path("ci/jobs").glob("*.json")):
+              manifest = read_manifest(Path.cwd(), path.stem)
+              assert manifest is not None, path
+              print(path, len(manifest["jobs"]))
+          PY
+
+  codeql:
+    name: CodeQL ${{ matrix.language }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [actions, python]
+    steps:
+      - name: Checkout public sources
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+      - name: Analyze code
+        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370
