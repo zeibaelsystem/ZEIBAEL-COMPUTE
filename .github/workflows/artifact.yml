@@ -26,6 +26,7 @@ concurrency:
 
 jobs:
   package:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.actor == 'zeibaelsystem' }}
     name: Create verified ZIP artifact
     runs-on: ubuntu-24.04
     timeout-minutes: 360
