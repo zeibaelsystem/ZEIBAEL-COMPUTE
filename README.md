@@ -46,6 +46,10 @@ Bos -> Grace -> Periksa kemampuan native
 | [`scripts/aggregate_results.py`](scripts/aggregate_results.py) | Membuat laporan JSON gabungan |
 | [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfcheck.json) | Contoh pekerjaan paralel Python dan Node |
 | [`ci/jobs/runtime_selfcheck.json`](ci/jobs/runtime_selfcheck.json) | Uji Go, Rust, Java, dan Docker |
+| [`ci/jobs/compiler_build_selfcheck.json`](ci/jobs/compiler_build_selfcheck.json) | Build dan jalankan C/C++, Go, Rust, Java; unit test Python |
+| [`ci/jobs/docker_npm_selfcheck.json`](ci/jobs/docker_npm_selfcheck.json) | Uji `npm ci/test`, build/run Docker, Docker Compose |
+| [`ci/jobs/cross_platform_selfcheck.json`](ci/jobs/cross_platform_selfcheck.json) | Uji Linux ARM64, Windows x64, dan macOS ARM64 |
+| [`ci/fixtures/`](ci/fixtures/) | Source proyek contoh publik untuk pengujian fungsional |
 | [`tests/test_job_platform.py`](tests/test_job_platform.py) | Unit test executor dan hasil terstruktur |
 
 Workflow `ci.yml` mendukung `validate`, `python_tests`, `node_tests`, `package`, dan `script`. Untuk menambah pekerjaan, Grace membuat manifest `ci/jobs/<id>.json` atau skrip `.py`/`.sh` publik yang telah direview. Tugas `node_tests` berbasis npm masih memerlukan proyek Node, sedangkan manifest Node sederhana dapat berjalan tanpa `package.json`.
@@ -58,13 +62,24 @@ Grace dapat membuat **manifest pekerjaan yang direview** di `ci/jobs/<nama>.json
 
 Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfcheck.json) menjalankan dua job sekaligus, satu untuk unit test Python dan satu untuk pemeriksaan Node.js. Manifest berisi `schema=1`, daftar `jobs`, dan untuk setiap job: `id`, `runtime`, `runner`, `timeout_profile`, serta `commands` (daftar argv, **bukan shell command bebas dari input dispatch**).
 
-**Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest: `ubuntu-24.04`, `windows-2022`, dan `macos-15`. **Keenam profil runtime sudah lulus uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. Runner Windows/macOS tetap belum diuji end-to-end.
+**Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest: `ubuntu-24.04` (x64), `ubuntu-24.04-arm` (ARM64), `windows-2022` (x64), dan `macos-15` (ARM64). **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Linux ARM64, Windows x64, dan macOS ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
 
 **Paralelisme:** maksimal 4 job dalam satu manifest, maksimal 3 dieksekusi paralel. **Timeout per job:** `short` (10 menit), `standard` (30 menit), `long` (120 menit), atau `extended` (330 menit), dengan batas internal perintah sedikit lebih singkat agar laporan sempat ditulis.
 
 **Laporan:** setiap job menghasilkan `result.json` serta baris log `ZEIBAEL_RESULT_JSON=...`. Job `results` menggabungkan laporan menjadi `aggregate.json`, baris `ZEIBAEL_AGGREGATE_JSON=...`, dan GitHub Actions artifacts dengan retensi satu hari. Grace dapat membaca status/log/artifact metadata melalui GitHub Native Plugin dan menyimpan ringkasan yang sesuai di repository privat. Jangan mengirim data rahasia ke runner publik.
 
 **Bukti integrasi:** [Run #40095281869](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40095281869) — 11 unit test Python lulus, Node berhasil, dua job matrix dan JSON gabungan. [Run #40095607051](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40095607051) — Go, Rust, Java, Docker berhasil (empat job, maksimal tiga sekaligus), serta JSON gabungan sukses. Kedua uji memakai dispatcher Hatchable yang sudah ada, tanpa mengubah konfigurasinya.
+
+## Verifikasi end-to-end terbaru
+
+| Kemampuan | Bukti |
+|---|---|
+| Build C/C++, Go, Rust, Java + 15 unit test | [Run #40096787388](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40096787388) |
+| npm, Docker image, container, Docker Compose | [Run #40096861811](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40096861811) |
+| Linux ARM64, Windows x64, macOS ARM64 | [Run #40097047606](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097047606) |
+| Negative test: job gagal harus membuat workflow dan laporan gagal | [Run #40097157009](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097157009) — sengaja FAILURE (exit 19), perilaku benar |
+
+**Pelaporan fail-closed:** agregator mengecek jumlah laporan sesuai jumlah job yang direncanakan, mendeteksi ID job duplikat, dan mengembalikan status failure apabila ada job gagal atau laporan hilang. Laporan per-job dan aggregate JSON tetap dibuat pada kegagalan biasa; perubahan sebelum driver sempat membuat laporan masih dapat menyebabkan job failure tanpa report lengkap. Artifact hanya disimpan 1 hari.
 
 ## Batas keamanan dan penggunaan
 
