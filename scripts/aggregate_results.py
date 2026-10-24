@@ -5,7 +5,7 @@ import os
 import sys
 from pathlib import Path
 
-def aggregate(root, expected_jobs=None):
+def aggregate(root, expected_jobs=None, expected_ids=None):
     reports = []
     seen = set()
     for path in sorted(root.rglob("result.json")):
@@ -18,6 +18,10 @@ def aggregate(root, expected_jobs=None):
         if job_id in seen:
             raise ValueError("Duplicate job id in result reports: " + job_id)
         seen.add(job_id)
+        if doc.get("exit_code") is not None and (doc["status"] == "success") != (doc["exit_code"] == 0):
+            raise ValueError("Inconsistent report status and exit code for " + job_id)
+        if doc.get("run_id") and os.environ.get("GITHUB_RUN_ID") and doc["run_id"] != os.environ["GITHUB_RUN_ID"]:
+            raise ValueError("Report belongs to a different GitHub Actions run")
         reports.append({
             "job_id": job_id,
             "runtime": doc.get("runtime"),
@@ -31,6 +35,8 @@ def aggregate(root, expected_jobs=None):
         raise ValueError("No job reports were produced")
     if expected_jobs is not None and len(reports) != expected_jobs:
         raise ValueError(f"Expected {expected_jobs} reports but received {len(reports)}; possible missing job report")
+    if expected_ids is not None and set(expected_ids) != seen:
+        raise ValueError("Expected job ids differ from received reports")
     return {
         "schema": 1,
         "status": "success" if all(r["status"] == "success" for r in reports) else "failure",
@@ -46,9 +52,13 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     try:
         expected = int(raw_count) if raw_count else None
-        if expected is not None and not 1 <= expected <= 4:
+        if expected is not None and not 1 <= expected <= 8:
             raise ValueError("Invalid expected job count")
-        doc = aggregate(Path(os.environ["ZEIBAEL_REPORT_DIR"]), expected_jobs=expected)
+        raw_ids = os.environ.get("ZEIBAEL_EXPECTED_JOB_IDS", "")
+        expected_ids = raw_ids.split("|") if raw_ids else None
+        if expected_ids is not None and expected is not None and len(expected_ids) != expected:
+            raise ValueError("Expected job identifiers disagree with job count")
+        doc = aggregate(Path(os.environ["ZEIBAEL_REPORT_DIR"]), expected_jobs=expected, expected_ids=expected_ids)
     except (ValueError, json.JSONDecodeError) as exc:
         doc = {
             "schema": 1, "status": "failure",
