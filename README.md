@@ -62,7 +62,23 @@ Grace dapat membuat **manifest pekerjaan yang direview** di `ci/jobs/<nama>.json
 
 Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfcheck.json) menjalankan dua job sekaligus, satu untuk unit test Python dan satu untuk pemeriksaan Node.js. Manifest berisi `schema=1`, daftar `jobs`, dan untuk setiap job: `id`, `runtime`, `runner`, `timeout_profile`, serta `commands` (daftar argv, **bukan shell command bebas dari input dispatch**).
 
-**Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest tercantum pada tabel **Standar penamaan runner ZEIBAEL** di bawah, dengan nama lengkap dan label asli GitHub. **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Ubuntu Linux 24.04 — ARM64, Microsoft Windows Server 2022 — x64, dan Apple macOS 15 — Apple Silicon ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
+**Runtime yang dikonfigurasi (11):** `python`, `node`, `go`, `rust`, `java`, `docker`, `php`, `ruby`, `dotnet`, `kotlin`, `swift` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest tercantum pada tabel **Standar penamaan runner ZEIBAEL** di bawah, dengan nama lengkap dan label asli GitHub. **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Ubuntu Linux 24.04 — ARM64, Microsoft Windows Server 2022 — x64, dan Apple macOS 15 — Apple Silicon ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
+
+## Dukungan bahasa tambahan: PHP, Ruby, .NET/C#, Kotlin, Swift
+
+Bahasa berikut dijalankan pada **standard GitHub-hosted runner yang sama**, bukan layanan berbayar atau mesin terpisah. Alat CLI memakai toolchain yang sudah tersedia dalam image runner. Untuk mengurangi kegagalan tak terduga, ZEIBAEL membatasi kombinasi baru sampai diverifikasi:
+
+| Runtime manifest | CLI | Runner yang disetujui ZEIBAEL |
+|---|---|---|
+| `php` | `php` (script PHP) | `ubuntu-24.04` |
+| `ruby` | `ruby` (script Ruby) | `ubuntu-24.04` |
+| `dotnet` | `dotnet` (C#/.NET SDK) | `ubuntu-24.04` |
+| `kotlin` | `kotlinc` dan `java` (JVM) | `ubuntu-24.04` |
+| `swift` | `swift` (script Swift) | `ubuntu-24.04` dan `macos-15` |
+
+`ci/jobs/additional_languages_smoke.json` adalah enam job uji publik yang menjalankan **program nyata**, bukan sekadar cek versi: PHP, Ruby, C#/.NET, Kotlin JVM, Swift Linux, dan Swift macOS Apple Silicon. Manifest memakai batas timeout yang sama; `output_files` tetap tidak aktif secara default. Toolchain bawaan image dapat berubah ketika provider memperbarui image; periksa log untuk membedakan kegagalan lingkungan/provider dari allowlist internal ZEIBAEL.
+
+**Batas yang berasal dari ZEIBAEL sendiri:** daftar kombinasi runner/bahasa dan CLI yang diizinkan, maksimal 12 perintah/job, jumlah job 20, serta durasi 10/30/120/330 menit. Jangan keliru menganggap pembatasan internal tersebut sebagai limit GitHub.
 
 ## Standar penamaan runner ZEIBAEL
 

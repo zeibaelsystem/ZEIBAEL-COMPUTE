@@ -10,7 +10,16 @@ import re
 from pathlib import Path
 
 IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\Z")
-RUNTIMES = {"python", "node", "go", "rust", "java", "docker"}
+RUNTIMES = {"python", "node", "go", "rust", "java", "docker", "php", "ruby", "dotnet", "kotlin", "swift"}
+# Internally approved combinations for NEW runtimes. Provider runners may
+# support more combinations; do not claim this ZEIBAEL policy is a GitHub limit.
+NEW_RUNTIME_RUNNERS = {
+    "php": {"ubuntu-24.04"},
+    "ruby": {"ubuntu-24.04"},
+    "dotnet": {"ubuntu-24.04"},
+    "kotlin": {"ubuntu-24.04"},
+    "swift": {"ubuntu-24.04", "macos-15"},
+}
 RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "windows-11-arm",
            "macos-15", "macos-15-intel", "ubuntu-slim"}
 TIMEOUTS = {"short": 10, "standard": 30, "long": 120, "extended": 330}
@@ -42,6 +51,8 @@ def read_manifest(root, script_id):
         seen.add(name)
         if job["runtime"] not in RUNTIMES or job["runner"] not in RUNNERS or job["timeout_profile"] not in TIMEOUTS:
             raise ValueError("Unsupported runtime/runner/timeout_profile")
+        if job["runtime"] in NEW_RUNTIME_RUNNERS and job["runner"] not in NEW_RUNTIME_RUNNERS[job["runtime"]]:
+            raise ValueError("Unsupported runtime/runner combination in ZEIBAEL internal allowlist")
         if job["runner"] == "ubuntu-slim" and (job["timeout_profile"] != "short" or job["runtime"] != "python"):
             raise ValueError("ubuntu-slim requires short Python jobs (max 10 minutes)")
         if job["runtime"] == "docker" and job["runner"] != "ubuntu-24.04":
@@ -55,7 +66,7 @@ def read_manifest(root, script_id):
             if any(not isinstance(a, str) or not a or len(a) > 512 or "\x00" in a or "\n" in a or "\r" in a for a in argv):
                 raise ValueError("Invalid argv argument")
             # No shell=True: arguments cannot inject shell control operators.
-            if argv[0] not in {"python", "python3", "node", "npm", "go", "cargo", "rustc", "java", "javac", "docker", "bash", "gcc", "g++"}:
+            if argv[0] not in {"python", "python3", "node", "npm", "go", "cargo", "rustc", "java", "javac", "docker", "bash", "gcc", "g++", "php", "ruby", "dotnet", "kotlinc", "swift"}:
                 raise ValueError("Command executable not on approved runtime list")
             if argv[0] == "bash" and (len(argv) < 2 or argv[1].startswith("-")):
                 raise ValueError("Bash must run a reviewed script file, not -c")
