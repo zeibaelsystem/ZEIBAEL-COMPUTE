@@ -11,7 +11,7 @@ from pathlib import Path
 
 IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\Z")
 RUNTIMES = {"python", "node", "go", "rust", "java", "docker"}
-RUNNERS = {"ubuntu-24.04", "windows-2022", "macos-15"}
+RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "macos-15"}
 TIMEOUTS = {"short": 10, "standard": 30, "long": 120, "extended": 330}
 TASKS = {"validate", "python_tests", "node_tests", "package", "script"}
 MAX_JOBS = 4
@@ -50,7 +50,7 @@ def read_manifest(root, script_id):
             if any(not isinstance(a, str) or not a or len(a) > 512 or "\x00" in a or "\n" in a or "\r" in a for a in argv):
                 raise ValueError("Invalid argv argument")
             # No shell=True: arguments cannot inject shell control operators.
-            if argv[0] not in {"python", "python3", "node", "npm", "go", "cargo", "rustc", "java", "javac", "docker", "bash"}:
+            if argv[0] not in {"python", "python3", "node", "npm", "go", "cargo", "rustc", "java", "javac", "docker", "bash", "gcc", "g++"}:
                 raise ValueError("Command executable not on approved runtime list")
             if argv[0] == "bash" and (len(argv) < 2 or argv[1].startswith("-")):
                 raise ValueError("Bash must run a reviewed script file, not -c")
@@ -89,6 +89,7 @@ def main():
     print("ZEIBAEL_MATRIX=" + value)
     with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
         f.write("matrix=" + value + "\n")
+        f.write("job_count=" + str(len(plan["include"])) + "\n")
 
 if __name__ == "__main__":
     main()
