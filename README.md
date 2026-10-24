@@ -98,3 +98,13 @@ Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfchec
 - [Halaman Actions](../../actions) untuk melihat status eksekusi terbaru
 
 _Dokumentasi diperbarui 24 Oktober 2026. Grace bertanggung jawab memilih jalur eksekusi sesuai pekerjaan, bukan meminta Bos mengingat detail workflow._
+
+## Reliability, capacity and security (October 2026)
+
+- `ci.yml` and `artifact.yml` use `queue: max` with `cancel-in-progress: false`, so the GitHub Actions concurrency queue can hold multiple pending jobs. GitHub documents up to 100 pending runs per group, after which excess can be canceled; ordering is not guaranteed by dispatch order.
+- Manifest cap is now 8 trusted jobs with `max-parallel: 4` (not unlimited). The execution time budget is **shared by all commands** in a manifest job.
+- `job_ids` are propagated from the validated job plan to the result aggregator, preventing a mismatched but equal-size report collection from being treated as success. Each run is identified by GitHub run ID.
+- GitHub-managed actions are pinned to full immutable SHA commits; `.github/workflows/quality.yml` checks Python regressions and CodeQL on main.
+- Optional `platform_extensions` is a fixture-based smoke test for HTTP APIs, temporary SQLite, TypeScript and PWA source contract; not a claim of Playwright or real offline E2E.
+- Public artifacts expire after 1 day. Grace can archive a public-safe summary to the private registry through the connected GitHub app **when actively asked**, not by granting the public runner private tokens or doing background work.
+- These changes target the free standard runners on public repositories; no billing, private code checkout or external secret stores are used.

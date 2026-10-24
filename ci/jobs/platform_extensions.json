@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "http_api",
+      "runtime": "node",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "node",
+          "ci/fixtures/web/api_smoke.mjs"
+        ]
+      ]
+    },
+    {
+      "id": "sqlite_db",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/web/sqlite_smoke.py"
+        ]
+      ]
+    },
+    {
+      "id": "typescript",
+      "runtime": "node",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "node",
+          "--experimental-strip-types",
+          "ci/fixtures/web/typescript_smoke.ts"
+        ]
+      ]
+    },
+    {
+      "id": "pwa_contract",
+      "runtime": "node",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "node",
+          "ci/fixtures/web/pwa_smoke.mjs"
+        ]
+      ]
+    },
+    {
+      "id": "python_suite",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ]
+      ]
+    },
+    {
+      "id": "node_setup",
+      "runtime": "node",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "node",
+          "--version"
+        ]
+      ]
+    },
+    {
+      "id": "linux_arm64",
+      "runtime": "python",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "--version"
+        ]
+      ]
+    },
+    {
+      "id": "windows_x64",
+      "runtime": "python",
+      "runner": "windows-2022",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "--version"
+        ]
+      ]
+    }
+  ]
+}

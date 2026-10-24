@@ -123,11 +123,15 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
     safe = {k: v for k, v in os.environ.items() if k in safe_names}
     safe.update(ZEIBAEL_SOURCE_ROOT=str(root), ZEIBAEL_OUTPUT_DIR=str(output_dir),
                 ZEIBAEL_JOB_ID=job_id)
+    deadline = time.monotonic() + timeout
     logs = []
     for argv in job["commands"]:
         command = [sys.executable if a in ("python", "python3") and i == 0 else a
                    for i, a in enumerate(argv)]
-        rc, detail = execute(command, root, timeout=timeout, env=safe)
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise subprocess.TimeoutExpired(command, timeout)
+        rc, detail = execute(command, root, timeout=remaining, env=safe)
         logs.append("$ " + command[0] + " ...\n" + detail[-MAX_OUTPUT:])
         if rc:
             return rc, "\n".join(logs)[-MAX_OUTPUT:]

@@ -23,6 +23,7 @@ permissions:
 concurrency:
   group: zeibael-package-zip
   cancel-in-progress: false
+  queue: max
 
 jobs:
   package:
@@ -32,7 +33,7 @@ jobs:
     timeout-minutes: 360
     steps:
       - name: Checkout public source files
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Build ZIP and checksum
         shell: bash
@@ -106,7 +107,7 @@ jobs:
           PY
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: zeibael-zip
           path: dist/zeibael-package.zip

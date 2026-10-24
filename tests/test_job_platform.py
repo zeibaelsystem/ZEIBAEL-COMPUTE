@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -50,7 +51,7 @@ class JobPlatformTests(unittest.TestCase):
             self.manifest(root, [job(runner="self-hosted")])
             with self.assertRaises(ValueError):
                 read_manifest(root, "approved")
-            self.manifest(root, [job(str(i)) for i in range(5)])
+            self.manifest(root, [job(str(i)) for i in range(9)])
             with self.assertRaises(ValueError):
                 read_manifest(root, "approved")
 
@@ -140,6 +141,60 @@ class JobPlatformTests(unittest.TestCase):
             doc = aggregate(root)
             self.assertEqual(doc["job_count"], 2)
             self.assertEqual(doc["status"], "failure")
+
+
+    def test_eight_reviewed_jobs_supported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.manifest(root, [job("step" + str(i)) for i in range(8)])
+            plan = build_plan(root, "script", "approved")
+            self.assertEqual(len(plan["include"]), 8)
+
+    def test_aggregate_rejects_wrong_ids_even_if_count_matches(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "actual").mkdir()
+            (root / "actual" / "result.json").write_text(json.dumps({
+                "schema": 1, "job_id": "unexpected", "runtime": "python",
+                "task": "script", "status": "success", "exit_code": 0
+            }))
+            with self.assertRaisesRegex(ValueError, "job ids"):
+                aggregate(root, expected_jobs=1, expected_ids=["expected"])
+
+    def test_aggregate_rejects_inconsistent_exit_code(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "bad").mkdir()
+            (root / "bad" / "result.json").write_text(json.dumps({
+                "schema": 1, "job_id": "bad", "runtime": "python",
+                "task": "script", "status": "success", "exit_code": 42
+            }))
+            with self.assertRaisesRegex(ValueError, "Inconsistent"):
+                aggregate(root, expected_jobs=1)
+
+    def test_manifest_commands_share_one_deadline(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            out = root / "output"
+            out.mkdir()
+            self.manifest(root, [job(commands=[["python", "--version"], ["python", "--version"]])])
+            with patch.dict(os.environ, {"ZEIBAEL_JOB_RUNTIME": "python"}), \
+                 patch("scripts.ci_driver.execute", return_value=(0, "ok")) as mocked, \
+                 patch("scripts.ci_driver.time.monotonic", side_effect=[0, 1, 5]):
+                rc, _ = manifest_job(root, "approved", "one", out, 10)
+            self.assertEqual(rc, 0)
+            self.assertEqual([c.kwargs["timeout"] for c in mocked.call_args_list], [9, 5])
+
+    def test_expired_manifest_deadline_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            out = root / "output"
+            out.mkdir()
+            self.manifest(root, [job(commands=[["python", "--version"]])])
+            with patch.dict(os.environ, {"ZEIBAEL_JOB_RUNTIME": "python"}), \
+                 patch("scripts.ci_driver.time.monotonic", side_effect=[0, 11]):
+                with self.assertRaises(subprocess.TimeoutExpired):
+                    manifest_job(root, "approved", "one", out, 10)
 
 if __name__ == "__main__":
     unittest.main()
