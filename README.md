@@ -79,6 +79,8 @@ Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfchec
 | Linux ARM64, Windows x64, macOS ARM64 | [Run #40097047606](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097047606) |
 | Negative test: job gagal harus membuat workflow dan laporan gagal | [Run #40097157009](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097157009) — sengaja FAILURE (exit 19), perilaku benar |
 
+**Regresi terakhir:** [16 unit test berhasil pada commit terbaru](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097391339). Manifest negative test sementara telah dihapus setelah digunakan, sementara riwayat run dan bukti tetap tersimpan.
+
 **Pelaporan fail-closed:** agregator mengecek jumlah laporan sesuai jumlah job yang direncanakan, mendeteksi ID job duplikat, dan mengembalikan status failure apabila ada job gagal atau laporan hilang. Laporan per-job dan aggregate JSON tetap dibuat pada kegagalan biasa; perubahan sebelum driver sempat membuat laporan masih dapat menyebabkan job failure tanpa report lengkap. Artifact hanya disimpan 1 hari.
 
 ## Batas keamanan dan penggunaan
