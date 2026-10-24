@@ -1,97 +1,64 @@
 # ZEIBAEL COMPUTE
 
-**Repository publik untuk CI/build sementara ZEIBAEL · GitHub Actions · FREE-ONLY**
+**Runner GitHub Actions publik untuk pekerjaan komputasi pengembangan ZEIBAEL · FREE-ONLY**
 
-Repository ini menyediakan runner GitHub-hosted untuk **validasi kode, pengujian, packaging ZIP, dan skrip pengembangan yang aman dijalankan secara publik**. Data dan konfigurasi utama ZEIBAEL tetap berada di repository privat `ZEIBAEL-SYSTEM`; kode privat **tidak otomatis dipindahkan** ke runner ini.
+Repository ini berfungsi sebagai **mesin eksekusi sementara** ketika suatu pekerjaan benar-benar membutuhkan runtime di luar kemampuan operasi langsung GitHub Native Plugin. Fokusnya **bukan satu jenis output**, melainkan menjalankan pekerjaan pengembangan software yang sesuai: validasi, tes otomatis, menjalankan skrip terkontrol, memproses pekerjaan build, dan tugas CI lain yang dapat ditambahkan sesuai kebutuhan.
 
-## Alur eksekusi
+Repository utama dan data internal tetap berada di **ZEIBAEL-SYSTEM (private)**. Runner publik hanya menggunakan material yang memang aman diproses secara publik.
 
-```text
-Bos meminta pekerjaan
-        |
-        v
-Grace memilih GitHub Native Plugin untuk pekerjaan file biasa
-        |
-        +-- Jika perlu runner --> GitHub Actions di ZEIBAEL-COMPUTE
-                                   ^
-                                   |
-                          Hatchable sebagai dispatcher
-                      (hanya jika plugin tak bisa dispatch)
-                                   |
-                                   v
-                        Grace baca hasil lewat GitHub Plugin
-                                   |
-                                   v
-                        Grace simpan hasil yang sesuai
-                        ke ZEIBAEL-SYSTEM (private)
-```
+## Pemilihan jalur otomatis oleh Grace
 
-Hatchable **bukan** mesin build; fungsinya mengirim permintaan `workflow_dispatch` ke GitHub. Owner juga bisa memicu workflow secara manual dari tab **Actions**. Tidak diperlukan secret baru untuk jalur CI publik yang berlaku sekarang.
+Bos **tidak perlu** meminta “pakai GitHub Actions”, “jalankan di runner”, atau “panggil Hatchable”. Grace memilih sendiri:
 
-## Workflow yang tersedia
-
-| Workflow | Lokasi | Input | Hasil |
-|---|---|---|---|
-| **Modular Public CI** | [`ci.yml`](.github/workflows/ci.yml) | `task`, opsional `script_id` | Status, log, dan ZIP satu hari untuk `package` |
-| **Package ZIP** | [`artifact.yml`](.github/workflows/artifact.yml) | `target`, opsional `skill_name` | ZIP artifact satu hari |
-
-Pilihan `task` dalam `ci.yml`:
-
-| Task | Kegunaan | Syarat |
-|---|---|---|
-| `validate` | Periksa sintaks Python, JSON, dan Bash | File sumber publik tersedia |
-| `python_tests` | Jalankan Python `unittest` | Folder `tests/` |
-| `node_tests` | Jalankan `npm test` | `package.json` dengan skrip `test`; perlu dependensi yang sesuai |
-| `package` | Buat ZIP sumber publik | File publik tersedia |
-| `script` | Jalankan skrip CI yang sudah direview | `ci/jobs/<script_id>.py` atau `.sh` |
-
-**Kondisi saat dokumentasi ini dibuat:** `tests/` tersedia dan pengujian Python berhasil. Belum ada `package.json`, folder `ci/jobs/`, atau folder `skills/`; akibatnya `node_tests`, `script`, dan opsi `artifact target=skill` **belum dapat dipakai sampai berkas yang diperlukan ditambahkan**. Packaging `target=project` sudah berhasil diuji.
-
-## Menjalankan workflow
-
-**Dari Grace:** bila perlu runner, Grace memilih workflow dan meminta Hatchable menjalankannya melalui endpoint **admin-only** `POST /api/github-dispatch` pada proyek ZEIBAEL SYSTEM. Setelah itu Grace menggunakan GitHub Native Plugin untuk membaca status dan log, lalu menyimpan hasil yang diperlukan di repository privat.
-
-Contoh parameter dispatcher (bukan URL publik):
-
-```json
-{"workflow":"ci","task":"python_tests"}
-```
-
-```json
-{"workflow":"ci","task":"script","script_id":"nama_job"}
-```
-
-```json
-{"workflow":"artifact","target":"project"}
-```
-
-**Secara manual:** buka tab [Actions](../../actions), pilih **ZEIBAEL - Modular Public CI** atau **ZEIBAEL - Package ZIP**, kemudian **Run workflow**. Hanya pengguna dengan izin yang sesuai bisa menjalankannya.
-
-## Struktur repository
+1. **GitHub Native Plugin** untuk pekerjaan repository yang dapat dilakukan langsung.
+2. **ZEIBAEL-COMPUTE** jika pekerjaan pengembangan memerlukan eksekusi pada runner GitHub-hosted.
+3. **Hatchable ZEIBAEL SYSTEM** hanya sebagai dispatcher jika plugin native belum menyediakan pemicu `workflow_dispatch`.
+4. **GitHub Native Plugin** kembali dipakai untuk membaca status/log dan menyimpan hasil yang sesuai ke repository privat selama pekerjaan berlangsung.
 
 ```text
-.github/workflows/
-  ci.yml                 # Validasi, unit test, skrip CI, dan packaging
-  artifact.yml           # ZIP project atau skill publik yang tersedia
-scripts/
-  ci_driver.py           # Mesin pelaksana tugas CI
-tests/
-  test_ci_driver.py      # Unit test untuk CI driver
-README.md                # Dokumentasi ini
+Bos -> Grace -> Periksa kemampuan native
+                    |
+          +---------+----------+
+          |                    |
+    Bisa langsung         Perlu runner
+          |                    |
+    GitHub Plugin      GitHub Actions public
+          |                    ^
+          |          Hatchable hanya jika
+          |          dispatch native tidak ada
+          +----------+---------+
+                     |
+              Grace cek hasil
+                     |
+              Simpan ke private
+              lewat GitHub Plugin
 ```
 
-## Keamanan dan batasan
+## Infrastruktur yang aktif
 
-- **PUBLIC berarti publik:** source, workflow, log, dan artifact dapat terlihat orang lain. **Jangan** menaruh token, file privat, data pribadi, atau hasil sensitif di sini.
-- Runner hanya checkout **repository publik**. Ia **tidak mempunyai akses otomatis** ke `ZEIBAEL-SYSTEM`; tidak ada PAT privat atau signing secret tambahan pada jalur utama.
-- Pengujian dan build mengikuti batas waktu job, konkurensi, penyimpanan, serta kebijakan penggunaan GitHub Actions. **Tidak berarti cloud compute tanpa batas atau boleh dipakai untuk semua jenis beban kerja.**
-- ZIP yang diunggah sebagai Actions artifact menggunakan **retensi satu hari**. Jangan gunakan sebagai penyimpanan permanen.
-- Skrip baru ditambahkan melalui GitHub Native Plugin, direview dahulu, dan tidak boleh mengeluarkan rahasia ke log.
-- **FREE-ONLY:** jangan aktifkan billing atau sumber daya berbayar.
+| Komponen | Peran |
+|---|---|
+| [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Workflow modular untuk pemeriksaan dan pekerjaan pengembangan |
+| [`.github/workflows/artifact.yml`](.github/workflows/artifact.yml) | Workflow tambahan untuk menyiapkan keluaran proyek/skill publik |
+| [`scripts/ci_driver.py`](scripts/ci_driver.py) | Pelaksana pekerjaan terdefinisi pada runner |
+| [`tests/test_ci_driver.py`](tests/test_ci_driver.py) | Unit test dan pemeriksaan keselamatan skrip CI |
 
-## Verifikasi
+Workflow `ci.yml` saat ini mendukung `validate`, `python_tests`, `node_tests`, `package`, dan `script`. Untuk menambah kebutuhan pengembangan yang spesifik, Grace dapat membuat/memperbarui skrip yang direview dalam `ci/jobs/<id>.py` atau `.sh` melalui GitHub Native Plugin, kemudian memicu tugas `script`. Kemampuan yang membutuhkan berkas tambahan tidak otomatis tersedia sebelum berkas tersebut dibuat; misalnya tugas Node.js memerlukan proyek Node dengan skrip tes.
 
-- [Unit test CI publik — berhasil, 5/5](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40048674561)
-- [Packaging ZIP — berhasil](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40048678563)
+**Hatchable bukan tempat pemrosesan utama:** ia hanya mengirim perintah yang diizinkan ke GitHub Actions. Endpoint dispatcher berada di proyek ZEIBAEL SYSTEM dan hanya mengizinkan akses administrator. Saat ini terdapat dua workflow aktif; runner lainnya atau konfigurasi lama bukan bagian dari jalur operasional utama.
 
-**Status dokumentasi:** 24 Oktober 2026. Workflow yang aktif adalah `ci.yml` dan `artifact.yml`; workflow duplikat lama sudah dihentikan.
+## Batas keamanan dan penggunaan
+
+- **Public berarti terlihat publik.** Jangan menaruh token, kredensial, kode privat, data pelanggan, maupun hasil sensitif dalam repository, input workflow, log, atau artifact.
+- Runner tidak mewarisi akses Grace ke repository privat. Alur aktif **tidak memerlukan secret privat tambahan**; sumber privat tidak dicheckout otomatis ke runner.
+- Gunakan runner untuk pengembangan, pengujian, dan pekerjaan CI sesuai ketentuan GitHub, **bukan** komputasi umum tanpa batas.
+- Ikuti batas durasi job, konkurensi, penyimpanan, dan kebijakan penggunaan GitHub-hosted runners.
+- **FREE-ONLY:** tidak mengaktifkan billing, PAYG, trial berbayar, atau fitur yang dapat menimbulkan tagihan.
+- Semua pekerjaan baru dan hasilnya harus diverifikasi; jangan menganggap workflow berhasil hanya karena permintaan dispatch diterima.
+
+## Bukti pengujian
+
+- [CI modular dan unit test — berhasil](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40048674561)
+- [Halaman Actions](../../actions) untuk melihat status eksekusi terbaru
+
+_Dokumentasi diperbarui 24 Oktober 2026. Grace bertanggung jawab memilih jalur eksekusi sesuai pekerjaan, bukan meminta Bos mengingat detail workflow._
