@@ -54,17 +54,17 @@ Bos -> Grace -> Periksa kemampuan native
 
 Workflow `ci.yml` mendukung `validate`, `python_tests`, `node_tests`, `package`, dan `script`. Untuk menambah pekerjaan, Grace membuat manifest `ci/jobs/<id>.json` atau skrip `.py`/`.sh` publik yang telah direview. Tugas `node_tests` berbasis npm masih memerlukan proyek Node, sedangkan manifest Node sederhana dapat berjalan tanpa `package.json`.
 
-**Hatchable bukan tempat pemrosesan utama:** ia hanya mengirim perintah yang diizinkan ke GitHub Actions. Endpoint dispatcher berada di proyek ZEIBAEL SYSTEM dan hanya mengizinkan akses administrator. Saat ini terdapat dua workflow aktif; runner lainnya atau konfigurasi lama bukan bagian dari jalur operasional utama.
+**Hatchable bukan tempat pemrosesan utama:** ia hanya mengirim perintah yang diizinkan ke GitHub Actions. Endpoint dispatcher berada di proyek ZEIBAEL SYSTEM dan hanya mengizinkan akses administrator. Saat ini terdapat tiga workflow: `ci.yml` dan `artifact.yml` untuk eksekusi atas permintaan, serta `quality.yml` untuk pengujian pada perubahan kode. Workflow quality tidak ditambahkan ke jalur dispatch job biasa.
 
 ## Generic Job Executor — aktif
 
-Grace dapat membuat **manifest pekerjaan yang direview** di `ci/jobs/<nama>.json`, lalu memicunya melalui `workflow=ci`, `task=script`, `script_id=<nama>`. Hatchable v8 **tidak diubah**. Skrip `.py` dan `.sh` yang sudah ada tetap didukung.
+Grace dapat membuat **manifest pekerjaan yang direview** di `ci/jobs/<nama>.json`, lalu memicunya melalui `workflow=ci`, `task=script`, `script_id=<nama>`. Kode dispatcher Hatchable **tidak diubah** selama peningkatan GitHub Compute; versi proyek Hatchable saat ini adalah v10 (heartbeat harian). Skrip `.py` dan `.sh` yang sudah ada tetap didukung.
 
 Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfcheck.json) menjalankan dua job sekaligus, satu untuk unit test Python dan satu untuk pemeriksaan Node.js. Manifest berisi `schema=1`, daftar `jobs`, dan untuk setiap job: `id`, `runtime`, `runner`, `timeout_profile`, serta `commands` (daftar argv, **bukan shell command bebas dari input dispatch**).
 
 **Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest: `ubuntu-24.04` (x64), `ubuntu-24.04-arm` (ARM64), `windows-2022` (x64), dan `macos-15` (ARM64). **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Linux ARM64, Windows x64, dan macOS ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
 
-**Paralelisme:** maksimal 4 job dalam satu manifest, maksimal 3 dieksekusi paralel. **Timeout per job:** `short` (10 menit), `standard` (30 menit), `long` (120 menit), atau `extended` (330 menit), dengan batas internal perintah sedikit lebih singkat agar laporan sempat ditulis.
+**Paralelisme saat ini:** maksimal 8 job dalam satu manifest, maksimal 4 dieksekusi paralel. **Timeout per job:** `short` (10 menit), `standard` (30 menit), `long` (120 menit), atau `extended` (330 menit), dengan batas internal perintah sedikit lebih singkat agar laporan sempat ditulis.
 
 **Laporan:** setiap job menghasilkan `result.json` serta baris log `ZEIBAEL_RESULT_JSON=...`. Job `results` menggabungkan laporan menjadi `aggregate.json`, baris `ZEIBAEL_AGGREGATE_JSON=...`, dan GitHub Actions artifacts dengan retensi satu hari. Grace dapat membaca status/log/artifact metadata melalui GitHub Native Plugin dan menyimpan ringkasan yang sesuai di repository privat. Jangan mengirim data rahasia ke runner publik.
 
