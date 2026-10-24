@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "expected-success",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "print('ZEIBAEL_SUCCESS_PATH_OK')"
+        ]
+      ]
+    },
+    {
+      "id": "expected-failure",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import sys; sys.exit(19)"
+        ]
+      ]
+    }
+  ]
+}
