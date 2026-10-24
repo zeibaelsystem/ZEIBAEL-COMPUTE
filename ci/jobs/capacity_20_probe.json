@@ -1,0 +1,265 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "linux_x64_1",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_2",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_3",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_4",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_5",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_6",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_7",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_8",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_9",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_10",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_11",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_12",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_arm64_1",
+      "runtime": "python",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_arm64_2",
+      "runtime": "python",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "windows_x64_1",
+      "runtime": "python",
+      "runner": "windows-2022",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "windows_arm64_1",
+      "runtime": "python",
+      "runner": "windows-11-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "macos_intel_1",
+      "runtime": "python",
+      "runner": "macos-15-intel",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "macos_arm_1",
+      "runtime": "python",
+      "runner": "macos-15",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_slim_1",
+      "runtime": "python",
+      "runner": "ubuntu-slim",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    },
+    {
+      "id": "linux_x64_13",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os,platform; print('ZEIBAEL_CAPACITY_PROBE', platform.system(), platform.machine(),os.environ.get('RUNNER_ARCH','?'))"
+        ]
+      ]
+    }
+  ]
+}
