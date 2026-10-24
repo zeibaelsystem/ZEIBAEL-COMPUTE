@@ -11,6 +11,9 @@ class WindowsLanguageRuntimeTests(unittest.TestCase):
             "PATH": r"C:\\Windows\\System32",
             "ProgramFiles": r"C:\\Program Files",
             "ProgramFiles(x86)": r"C:\\Program Files (x86)",
+            "ProgramData": r"C:\\ProgramData",
+            "CommonProgramFiles": r"C:\\Program Files\\Common Files",
+            "CommonProgramFiles(x86)": r"C:\\Program Files (x86)\\Common Files",
             "HOMEDRIVE": "C:",
             "HOMEPATH": r"\\Users\\runneradmin",
             "SystemDrive": "C:",
@@ -22,7 +25,9 @@ class WindowsLanguageRuntimeTests(unittest.TestCase):
             "ZEIBAEL_TEST_PRIVATE_VALUE": "should-not-pass",
         }
         safe = safe_job_environment(values)
-        for name in ("ProgramFiles", "ProgramFiles(x86)", "HOMEDRIVE", "HOMEPATH",
+        for name in ("ProgramFiles", "ProgramFiles(x86)", "ProgramData",
+                     "CommonProgramFiles", "CommonProgramFiles(x86)",
+                     "HOMEDRIVE", "HOMEPATH",
                      "COMSPEC", "PATHEXT", "DOTNET_ROOT", "SystemDrive"):
             self.assertEqual(safe[name], values[name])
         for name in ("GITHUB_TOKEN", "NUGET_AUTH_TOKEN", "ZEIBAEL_TEST_PRIVATE_VALUE"):
