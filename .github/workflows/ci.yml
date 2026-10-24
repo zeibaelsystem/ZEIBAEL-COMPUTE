@@ -24,12 +24,6 @@ on:
 permissions:
   contents: read
 
-# Bound queued runs to avoid accidental high-volume resource consumption.
-concurrency:
-  group: zeibael-ci-${{ github.ref }}
-  cancel-in-progress: false
-  queue: max
-
 jobs:
   plan:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.actor == 'zeibaelsystem' }}
@@ -63,7 +57,7 @@ jobs:
     timeout-minutes: ${{ matrix.timeout }}
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 20
       matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     steps:
       - name: Checkout reviewed public jobs

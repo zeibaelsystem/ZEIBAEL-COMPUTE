@@ -52,7 +52,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     try:
         expected = int(raw_count) if raw_count else None
-        if expected is not None and not 1 <= expected <= 8:
+        if expected is not None and not 1 <= expected <= 20:
             raise ValueError("Invalid expected job count")
         raw_ids = os.environ.get("ZEIBAEL_EXPECTED_JOB_IDS", "")
         expected_ids = raw_ids.split("|") if raw_ids else None

@@ -11,10 +11,11 @@ from pathlib import Path
 
 IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\Z")
 RUNTIMES = {"python", "node", "go", "rust", "java", "docker"}
-RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "macos-15"}
+RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "windows-11-arm",
+           "macos-15", "macos-15-intel", "ubuntu-slim"}
 TIMEOUTS = {"short": 10, "standard": 30, "long": 120, "extended": 330}
 TASKS = {"validate", "python_tests", "node_tests", "package", "script"}
-MAX_JOBS = 8
+MAX_JOBS = 20
 MAX_COMMANDS = 12
 
 def read_manifest(root, script_id):
@@ -28,7 +29,7 @@ def read_manifest(root, script_id):
         raise ValueError("Manifest must contain schema=1 and jobs")
     jobs = manifest["jobs"]
     if not isinstance(jobs, list) or not 1 <= len(jobs) <= MAX_JOBS:
-        raise ValueError("Expected 1–8 jobs")
+        raise ValueError("Expected 1–20 jobs")
     seen = set()
     for job in jobs:
         if not isinstance(job, dict) or set(job) != {"id", "runtime", "runner", "timeout_profile", "commands"}:
@@ -39,6 +40,8 @@ def read_manifest(root, script_id):
         seen.add(name)
         if job["runtime"] not in RUNTIMES or job["runner"] not in RUNNERS or job["timeout_profile"] not in TIMEOUTS:
             raise ValueError("Unsupported runtime/runner/timeout_profile")
+        if job["runner"] == "ubuntu-slim" and (job["timeout_profile"] != "short" or job["runtime"] != "python"):
+            raise ValueError("ubuntu-slim requires short Python jobs (max 10 minutes)")
         if job["runtime"] == "docker" and job["runner"] != "ubuntu-24.04":
             raise ValueError("Docker requires Ubuntu")
         commands = job["commands"]
