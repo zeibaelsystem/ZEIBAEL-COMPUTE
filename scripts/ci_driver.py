@@ -60,7 +60,8 @@ JOB_SAFE_ENV_NAMES = {
     "JAVA_HOME", "GOPATH", "GOROOT", "RUSTUP_HOME", "CARGO_HOME",
     "RUNNER_OS", "RUNNER_ARCH",
     # Needed by Windows tools, particularly .NET/NuGet and .bat executables.
-    "ProgramFiles", "ProgramFiles(x86)", "ProgramW6432",
+    "ProgramFiles", "ProgramFiles(x86)", "ProgramW6432", "ProgramData",
+    "CommonProgramFiles", "CommonProgramFiles(x86)", "CommonProgramW6432",
     "SystemDrive", "HOMEDRIVE", "HOMEPATH", "COMSPEC", "PATHEXT",
     "PROCESSOR_ARCHITECTURE", "DOTNET_ROOT", "DOTNET_CLI_HOME",
     "NUGET_PACKAGES", "MSBuildSDKsPath",
