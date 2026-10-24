@@ -1,0 +1,230 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "dotnet-ubuntu-arm",
+      "runtime": "dotnet",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "dotnet-windows-x64",
+      "runtime": "dotnet",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "dotnet-windows-arm",
+      "runtime": "dotnet",
+      "runner": "windows-11-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "dotnet-macos-intel",
+      "runtime": "dotnet",
+      "runner": "macos-15-intel",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "dotnet-macos-arm",
+      "runtime": "dotnet",
+      "runner": "macos-15",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-ubuntu-arm",
+      "runtime": "kotlin",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-windows-x64",
+      "runtime": "kotlin",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-windows-arm",
+      "runtime": "kotlin",
+      "runner": "windows-11-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-macos-intel",
+      "runtime": "kotlin",
+      "runner": "macos-15-intel",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-macos-arm",
+      "runtime": "kotlin",
+      "runner": "macos-15",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    }
+  ]
+}
