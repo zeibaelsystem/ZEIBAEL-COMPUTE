@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "python-check",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ]
+      ]
+    },
+    {
+      "id": "node-check",
+      "runtime": "node",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "node",
+          "--version"
+        ]
+      ]
+    }
+  ]
+}
