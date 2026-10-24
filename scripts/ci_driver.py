@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -49,6 +50,35 @@ def inspect_public_files(directory):
     if not count:
         raise ValueError("Opted-in output files directory is empty")
     return count, total
+
+
+# Whitelist only standard runner operating-system path variables. Never forward
+# arbitrary user, provider-token, NuGet credentials, or project secrets.
+JOB_SAFE_ENV_NAMES = {
+    "PATH", "HOME", "LANG", "CI", "TMPDIR", "TMP", "TEMP",
+    "SYSTEMROOT", "WINDIR", "USERPROFILE", "APPDATA", "LOCALAPPDATA",
+    "JAVA_HOME", "GOPATH", "GOROOT", "RUSTUP_HOME", "CARGO_HOME",
+    "RUNNER_OS", "RUNNER_ARCH",
+    # Needed by Windows tools, particularly .NET/NuGet and .bat executables.
+    "ProgramFiles", "ProgramFiles(x86)", "ProgramW6432",
+    "SystemDrive", "HOMEDRIVE", "HOMEPATH", "COMSPEC", "PATHEXT",
+    "PROCESSOR_ARCHITECTURE", "DOTNET_ROOT", "DOTNET_CLI_HOME",
+    "NUGET_PACKAGES", "MSBuildSDKsPath",
+}
+
+
+def safe_job_environment(source):
+    return {key: value for key, value in source.items() if key in JOB_SAFE_ENV_NAMES}
+
+
+def resolve_job_command(command, runner_os=None):
+    if command and command[0] == "kotlinc" and runner_os == "Windows":
+        # Windows runner installs Kotlin via kotlinc.bat, not kotlinc.exe.
+        compiler = shutil.which("kotlinc.bat") or shutil.which("kotlinc.cmd")
+        if not compiler:
+            raise FileNotFoundError("Kotlin Windows batch compiler not found in runner PATH")
+        return [compiler] + command[1:]
+    return command
 
 
 def execute(command, directory, timeout=900, env=None):
@@ -141,11 +171,7 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
     job = jobs[0]
     if os.environ.get("ZEIBAEL_JOB_RUNTIME") != job["runtime"]:
         raise ValueError("Runner runtime differs from reviewed manifest")
-    safe_names = {"PATH", "HOME", "LANG", "CI", "TMPDIR", "TMP", "TEMP",
-                  "SYSTEMROOT", "WINDIR", "USERPROFILE", "APPDATA", "LOCALAPPDATA",
-                  "JAVA_HOME", "GOPATH", "GOROOT", "RUSTUP_HOME", "CARGO_HOME",
-                  "RUNNER_OS", "RUNNER_ARCH"}
-    safe = {k: v for k, v in os.environ.items() if k in safe_names}
+    safe = safe_job_environment(os.environ)
     safe.update(ZEIBAEL_SOURCE_ROOT=str(root), ZEIBAEL_OUTPUT_DIR=str(output_dir),
                 ZEIBAEL_JOB_ID=job_id)
     deadline = time.monotonic() + timeout
@@ -153,6 +179,7 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
     for argv in job["commands"]:
         command = [sys.executable if a in ("python", "python3") and i == 0 else a
                    for i, a in enumerate(argv)]
+        command = resolve_job_command(command, runner_os=safe.get("RUNNER_OS"))
         remaining = deadline - time.monotonic()
         if remaining <= 0:
             raise subprocess.TimeoutExpired(command, timeout)
