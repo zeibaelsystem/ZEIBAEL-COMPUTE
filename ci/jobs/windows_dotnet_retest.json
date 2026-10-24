@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "dotnet-windows-x64",
+      "runtime": "dotnet",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "dotnet-windows-arm",
+      "runtime": "dotnet",
+      "runner": "windows-11-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    }
+  ]
+}
