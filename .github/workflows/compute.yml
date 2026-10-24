@@ -77,7 +77,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile scripts/private_data_compute.py
+          python3 -m py_compile scripts/private_data_compute.py scripts/verify_dispatch.py
           echo "Ephemeral bridge syntax OK"
 
       - name: Summary
