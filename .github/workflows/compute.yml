@@ -72,6 +72,13 @@ jobs:
             echo "No scripts/ directory yet; Bash runtime is available."
           fi
 
+      - name: Validate ephemeral bridge Python syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile scripts/private_data_compute.py
+          echo "Ephemeral bridge syntax OK"
+
       - name: Summary
         shell: bash
         run: |
