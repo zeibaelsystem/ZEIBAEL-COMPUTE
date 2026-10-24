@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "go-check",
+      "runtime": "go",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "go",
+          "version"
+        ]
+      ]
+    },
+    {
+      "id": "rust-check",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "rustc",
+          "--version"
+        ]
+      ]
+    },
+    {
+      "id": "java-check",
+      "runtime": "java",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "java",
+          "-version"
+        ]
+      ]
+    },
+    {
+      "id": "docker-check",
+      "runtime": "docker",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "docker",
+          "version"
+        ]
+      ]
+    }
+  ]
+}
