@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "Software development task to run"
-        type: choice
+        description: "Approved public software job type"
         required: true
+        type: choice
         default: validate
         options:
           - validate
@@ -15,7 +15,7 @@ on:
           - package
           - script
       script_id:
-        description: "For task=script: ci/jobs/<script_id>.py or .sh"
+        description: "Reviewed ci/jobs/<script_id>.json, .py or .sh; task=script only"
         required: false
         type: string
         default: ""
@@ -23,47 +23,160 @@ on:
 permissions:
   contents: read
 
+# Bound queued runs to avoid accidental high-volume resource consumption.
 concurrency:
-  group: zeibael-public-ci
+  group: zeibael-ci-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  ci:
-    name: Public CI - ${{ inputs.task }}
+  plan:
     if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.actor == 'zeibaelsystem' }}
+    name: Validate trusted job and build matrix
     runs-on: ubuntu-24.04
-    timeout-minutes: 360
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
     steps:
-      - name: Checkout public project
+      - name: Checkout public source
         uses: actions/checkout@v4
         with:
           path: runner
           persist-credentials: false
 
-      - name: Run modular software validation, tests or package
-        id: execute
+      - name: Validate committed manifest
+        id: plan
+        shell: bash
+        env:
+          ZEIBAEL_CI_ROOT: ${{ github.workspace }}/runner
+          ZEIBAEL_CI_TASK: ${{ inputs.task }}
+          ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
+        run: python3 runner/scripts/job_plan.py
+
+  execute:
+    name: ${{ matrix.id }} / ${{ matrix.runtime }} / ${{ matrix.runner }}
+    needs: plan
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: ${{ matrix.timeout }}
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - name: Checkout reviewed public jobs
+        uses: actions/checkout@v4
+        with:
+          path: runner
+          persist-credentials: false
+
+      - name: Setup driver Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Node runtime
+        if: ${{ matrix.runtime == 'node' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup Go runtime
+        if: ${{ matrix.runtime == 'go' }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Setup Java runtime
+        if: ${{ matrix.runtime == 'java' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Rust runtime
+        if: ${{ matrix.runtime == 'rust' }}
+        shell: bash
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+
+      - name: Check Docker runtime
+        if: ${{ matrix.runtime == 'docker' }}
+        shell: bash
+        run: docker version
+
+      - name: Run reviewed software job
+        id: run
         continue-on-error: true
         shell: bash
         env:
+          ZEIBAEL_CI_ROOT: ${{ github.workspace }}/runner
           ZEIBAEL_CI_TASK: ${{ inputs.task }}
           ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
           ZEIBAEL_CI_OUTPUT: ${{ runner.temp }}/zeibael-ci-output
-        run: |
-          set -euo pipefail
-          umask 077
-          export ZEIBAEL_CI_ROOT="$GITHUB_WORKSPACE/runner"
-          python3 runner/scripts/ci_driver.py
+          ZEIBAEL_JOB_ID: ${{ matrix.id }}
+          ZEIBAEL_JOB_RUNTIME: ${{ matrix.runtime }}
+          ZEIBAEL_JOB_TIMEOUT: ${{ matrix.timeout }}
+        run: python runner/scripts/ci_driver.py
 
-      - name: Publish public package for one day
-        if: ${{ inputs.task == 'package' && steps.execute.outcome == 'success' }}
+      - name: Upload structured job report
+        if: ${{ always() && steps.run.outcome != 'skipped' }}
         uses: actions/upload-artifact@v4
         with:
-          name: zeibael-public-ci-zip
+          name: zeibael-report-${{ matrix.id }}
+          path: ${{ runner.temp }}/zeibael-ci-output/result.json
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Upload public package when requested
+        if: ${{ inputs.task == 'package' && steps.run.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: zeibael-public-source
           path: ${{ runner.temp }}/zeibael-ci-output/zeibael-source.zip
           if-no-files-found: error
           retention-days: 1
 
-      - name: Mark failed CI jobs
-        if: ${{ always() && steps.execute.outcome == 'failure' }}
+      - name: Fail on software job error
+        if: ${{ always() && steps.run.outcome == 'failure' }}
         shell: bash
+        run: exit 1
+
+  results:
+    name: Aggregate machine-readable results
+    needs: [plan, execute]
+    if: ${{ always() && needs.plan.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout reporter
+        uses: actions/checkout@v4
+        with:
+          path: runner
+          persist-credentials: false
+
+      - name: Download per-job JSON reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: zeibael-report-*
+          path: reports
+
+      - name: Aggregate per-job JSON
+        id: aggregate
+        continue-on-error: true
+        env:
+          ZEIBAEL_REPORT_DIR: reports
+          ZEIBAEL_SUMMARY_DIR: ${{ runner.temp }}/zeibael-results
+        run: python3 runner/scripts/aggregate_results.py
+
+      - name: Publish aggregate JSON
+        if: ${{ always() && steps.aggregate.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: zeibael-results-${{ github.run_id }}
+          path: ${{ runner.temp }}/zeibael-results/aggregate.json
+          if-no-files-found: warn
+          retention-days: 1
+
+      - name: Fail when aggregate failed
+        if: ${{ always() && steps.aggregate.outcome == 'failure' }}
         run: exit 1
