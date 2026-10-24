@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "php-ubuntu",
+      "runtime": "php",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "php",
+          "--version"
+        ],
+        [
+          "php",
+          "ci/fixtures/languages/hello.php"
+        ]
+      ]
+    },
+    {
+      "id": "ruby-ubuntu",
+      "runtime": "ruby",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "ruby",
+          "--version"
+        ],
+        [
+          "ruby",
+          "ci/fixtures/languages/hello.rb"
+        ]
+      ]
+    },
+    {
+      "id": "dotnet-ubuntu",
+      "runtime": "dotnet",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-ubuntu",
+      "runtime": "kotlin",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    },
+    {
+      "id": "swift-ubuntu",
+      "runtime": "swift",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "swift",
+          "--version"
+        ],
+        [
+          "swift",
+          "ci/fixtures/languages/Hello.swift"
+        ]
+      ]
+    },
+    {
+      "id": "swift-macos-arm64",
+      "runtime": "swift",
+      "runner": "macos-15",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "swift",
+          "--version"
+        ],
+        [
+          "swift",
+          "ci/fixtures/languages/Hello.swift"
+        ]
+      ]
+    }
+  ]
+}
