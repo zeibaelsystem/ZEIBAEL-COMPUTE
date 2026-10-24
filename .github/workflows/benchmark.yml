@@ -2,11 +2,6 @@ name: ZEIBAEL - Build Benchmark
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths:
-      - 'benchmarks/trigger.txt'
 
 permissions:
   contents: read
