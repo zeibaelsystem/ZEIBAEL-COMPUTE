@@ -118,7 +118,8 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
         raise ValueError("Runner runtime differs from reviewed manifest")
     safe_names = {"PATH", "HOME", "LANG", "CI", "TMPDIR", "TMP", "TEMP",
                   "SYSTEMROOT", "WINDIR", "USERPROFILE", "APPDATA", "LOCALAPPDATA",
-                  "JAVA_HOME", "GOPATH", "GOROOT", "RUSTUP_HOME", "CARGO_HOME"}
+                  "JAVA_HOME", "GOPATH", "GOROOT", "RUSTUP_HOME", "CARGO_HOME",
+                  "RUNNER_OS", "RUNNER_ARCH"}
     safe = {k: v for k, v in os.environ.items() if k in safe_names}
     safe.update(ZEIBAEL_SOURCE_ROOT=str(root), ZEIBAEL_OUTPUT_DIR=str(output_dir),
                 ZEIBAEL_JOB_ID=job_id)
