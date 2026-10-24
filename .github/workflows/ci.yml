@@ -36,6 +36,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       matrix: ${{ steps.plan.outputs.matrix }}
+      job_count: ${{ steps.plan.outputs.job_count }}
     steps:
       - name: Checkout public source
         uses: actions/checkout@v4
@@ -166,6 +167,7 @@ jobs:
         env:
           ZEIBAEL_REPORT_DIR: reports
           ZEIBAEL_SUMMARY_DIR: ${{ runner.temp }}/zeibael-results
+          ZEIBAEL_EXPECTED_JOBS: ${{ needs.plan.outputs.job_count }}
         run: python3 runner/scripts/aggregate_results.py
 
       - name: Publish aggregate JSON
