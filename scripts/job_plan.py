@@ -14,7 +14,7 @@ RUNTIMES = {"python", "node", "go", "rust", "java", "docker"}
 RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "macos-15"}
 TIMEOUTS = {"short": 10, "standard": 30, "long": 120, "extended": 330}
 TASKS = {"validate", "python_tests", "node_tests", "package", "script"}
-MAX_JOBS = 4
+MAX_JOBS = 8
 MAX_COMMANDS = 12
 
 def read_manifest(root, script_id):
@@ -28,7 +28,7 @@ def read_manifest(root, script_id):
         raise ValueError("Manifest must contain schema=1 and jobs")
     jobs = manifest["jobs"]
     if not isinstance(jobs, list) or not 1 <= len(jobs) <= MAX_JOBS:
-        raise ValueError("Expected 1–4 jobs")
+        raise ValueError("Expected 1–8 jobs")
     seen = set()
     for job in jobs:
         if not isinstance(job, dict) or set(job) != {"id", "runtime", "runner", "timeout_profile", "commands"}:
@@ -90,6 +90,7 @@ def main():
     with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
         f.write("matrix=" + value + "\n")
         f.write("job_count=" + str(len(plan["include"])) + "\n")
+        f.write("job_ids=" + "|".join(item["id"] for item in plan["include"]) + "\n")
 
 if __name__ == "__main__":
     main()
