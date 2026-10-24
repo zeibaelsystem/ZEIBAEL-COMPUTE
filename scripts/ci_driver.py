@@ -190,7 +190,7 @@ def main():
     summary = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary:
         with open(summary, "a", encoding="utf-8") as f:
-            f.write("### ZEIBAEL job result\\n\n")
+            f.write("### ZEIBAEL job result\n\n")
             f.write(f"- Task: `{task}` / Job: `{job_id}`\n")
             f.write(f"- Runtime: `{runtime}` / Timeout: {timeout_minutes}m\n")
             f.write(f"- Status: **{report['status']}** / Exit: {rc}\n")
