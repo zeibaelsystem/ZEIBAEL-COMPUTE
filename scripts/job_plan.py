@@ -14,11 +14,15 @@ RUNTIMES = {"python", "node", "go", "rust", "java", "docker", "php", "ruby", "do
 # Internally approved combinations for NEW runtimes. Provider runners may
 # support more combinations; do not claim this ZEIBAEL policy is a GitHub limit.
 NEW_RUNTIME_RUNNERS = {
-    "php": {"ubuntu-24.04"},
-    "ruby": {"ubuntu-24.04"},
-    "dotnet": {"ubuntu-24.04"},
-    "kotlin": {"ubuntu-24.04"},
-    "swift": {"ubuntu-24.04", "macos-15"},
+    "php": {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022",
+            "windows-11-arm", "macos-15-intel"},
+    "ruby": {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022",
+             "windows-11-arm", "macos-15-intel", "macos-15"},
+    "dotnet": {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022",
+               "windows-11-arm", "macos-15-intel", "macos-15"},
+    "kotlin": {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022",
+               "windows-11-arm", "macos-15-intel", "macos-15"},
+    "swift": {"ubuntu-24.04", "ubuntu-24.04-arm", "macos-15-intel", "macos-15"},
 }
 RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "windows-11-arm",
            "macos-15", "macos-15-intel", "ubuntu-slim"}

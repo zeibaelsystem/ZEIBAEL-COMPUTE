@@ -70,13 +70,13 @@ Bahasa berikut dijalankan pada **standard GitHub-hosted runner yang sama**, buka
 
 | Runtime manifest | CLI | Runner yang disetujui ZEIBAEL |
 |---|---|---|
-| `php` | `php` (script PHP) | `ubuntu-24.04` |
-| `ruby` | `ruby` (script Ruby) | `ubuntu-24.04` |
-| `dotnet` | `dotnet` (C#/.NET SDK) | `ubuntu-24.04` |
-| `kotlin` | `kotlinc` dan `java` (JVM) | `ubuntu-24.04` |
-| `swift` | `swift` (script Swift) | `ubuntu-24.04` dan `macos-15` |
+| `php` | `php` | `ubuntu-24.04`, `ubuntu-24.04-arm`, `windows-2022`, `windows-11-arm`, `macos-15-intel` |
+| `ruby` | `ruby` | `ubuntu-24.04`, `ubuntu-24.04-arm`, `windows-2022`, `windows-11-arm`, `macos-15-intel`, `macos-15` |
+| `dotnet` | `dotnet` (C#/.NET) | `ubuntu-24.04`, `ubuntu-24.04-arm`, `windows-2022`, `windows-11-arm`, `macos-15-intel`, `macos-15` |
+| `kotlin` | `kotlinc`, `java` (JVM) | `ubuntu-24.04`, `ubuntu-24.04-arm`, `windows-2022`, `windows-11-arm`, `macos-15-intel`, `macos-15` |
+| `swift` | `swift` | `ubuntu-24.04`, `ubuntu-24.04-arm`, `macos-15-intel`, `macos-15` |
 
-`ci/jobs/additional_languages_smoke.json` adalah enam job uji publik yang menjalankan **program nyata**, bukan sekadar cek versi: PHP, Ruby, C#/.NET, Kotlin JVM, Swift Linux, dan Swift macOS Apple Silicon. Manifest memakai batas timeout yang sama; `output_files` tetap tidak aktif secara default. Toolchain bawaan image dapat berubah ketika provider memperbarui image; periksa log untuk membedakan kegagalan lingkungan/provider dari allowlist internal ZEIBAEL.
+`ci/jobs/additional_languages_smoke.json` membuktikan enam kombinasi awal. `ci/jobs/languages_platform_a.json` dan `ci/jobs/languages_platform_b.json` menguji 21 kombinasi tambahan dengan program nyata di GitHub-hosted standard runner; hasil terbaru harus dikonfirmasi dari GitHub Actions run yang tepat. PHP pada macOS Apple Silicon, Swift pada Windows, dan seluruh lima bahasa pada Ubuntu Slim masih **dibatasi internal ZEIBAEL** karena belum didukung/dibuktikan untuk konfigurasi ini. Manifest memakai batas timeout yang sama; `output_files` tetap tidak aktif secara default. Toolchain bawaan image dapat berubah ketika provider memperbarui image; periksa log untuk membedakan kegagalan lingkungan/provider dari allowlist internal ZEIBAEL.
 
 **Batas yang berasal dari ZEIBAEL sendiri:** daftar kombinasi runner/bahasa dan CLI yang diizinkan, maksimal 12 perintah/job, jumlah job 20, serta durasi 10/30/120/330 menit. Jangan keliru menganggap pembatasan internal tersebut sebagai limit GitHub.
 

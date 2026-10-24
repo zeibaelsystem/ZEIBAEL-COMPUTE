@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "php-ubuntu-arm",
+      "runtime": "php",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "php",
+          "--version"
+        ],
+        [
+          "php",
+          "ci/fixtures/languages/hello.php"
+        ]
+      ]
+    },
+    {
+      "id": "php-windows-x64",
+      "runtime": "php",
+      "runner": "windows-2022",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "php",
+          "--version"
+        ],
+        [
+          "php",
+          "ci/fixtures/languages/hello.php"
+        ]
+      ]
+    },
+    {
+      "id": "php-windows-arm",
+      "runtime": "php",
+      "runner": "windows-11-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "php",
+          "--version"
+        ],
+        [
+          "php",
+          "ci/fixtures/languages/hello.php"
+        ]
+      ]
+    },
+    {
+      "id": "php-macos-intel",
+      "runtime": "php",
+      "runner": "macos-15-intel",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "php",
+          "--version"
+        ],
+        [
+          "php",
+          "ci/fixtures/languages/hello.php"
+        ]
+      ]
+    },
+    {
+      "id": "ruby-ubuntu-arm",
+      "runtime": "ruby",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "ruby",
+          "--version"
+        ],
+        [
+          "ruby",
+          "ci/fixtures/languages/hello.rb"
+        ]
+      ]
+    },
+    {
+      "id": "ruby-windows-x64",
+      "runtime": "ruby",
+      "runner": "windows-2022",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "ruby",
+          "--version"
+        ],
+        [
+          "ruby",
+          "ci/fixtures/languages/hello.rb"
+        ]
+      ]
+    },
+    {
+      "id": "ruby-windows-arm",
+      "runtime": "ruby",
+      "runner": "windows-11-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "ruby",
+          "--version"
+        ],
+        [
+          "ruby",
+          "ci/fixtures/languages/hello.rb"
+        ]
+      ]
+    },
+    {
+      "id": "ruby-macos-intel",
+      "runtime": "ruby",
+      "runner": "macos-15-intel",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "ruby",
+          "--version"
+        ],
+        [
+          "ruby",
+          "ci/fixtures/languages/hello.rb"
+        ]
+      ]
+    },
+    {
+      "id": "ruby-macos-arm",
+      "runtime": "ruby",
+      "runner": "macos-15",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "ruby",
+          "--version"
+        ],
+        [
+          "ruby",
+          "ci/fixtures/languages/hello.rb"
+        ]
+      ]
+    },
+    {
+      "id": "swift-ubuntu-arm",
+      "runtime": "swift",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "swift",
+          "--version"
+        ],
+        [
+          "swift",
+          "ci/fixtures/languages/Hello.swift"
+        ]
+      ]
+    },
+    {
+      "id": "swift-macos-intel",
+      "runtime": "swift",
+      "runner": "macos-15-intel",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "swift",
+          "--version"
+        ],
+        [
+          "swift",
+          "ci/fixtures/languages/Hello.swift"
+        ]
+      ]
+    }
+  ]
+}

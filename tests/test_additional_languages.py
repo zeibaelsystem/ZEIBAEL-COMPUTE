@@ -47,10 +47,12 @@ class LanguageExtensionTests(unittest.TestCase):
         self.assertEqual(build_plan(self.root, "script", "language")["include"][0]["runner"],
                          "macos-15")
 
-    def test_unverified_platform_combination_rejected_internally(self):
+    def test_newly_reviewed_windows_arm_kotlin_is_accepted(self):
         self.manifest([self.one("kotlin", runner="windows-11-arm")])
-        with self.assertRaisesRegex(ValueError, "runtime|runner|combination"):
-            read_manifest(self.root, "language")
+        self.assertEqual(
+            read_manifest(self.root, "language")["jobs"][0]["runner"],
+            "windows-11-arm",
+        )
 
     def test_bash_shell_injection_still_rejected(self):
         self.manifest([self.one("php", commands=[["bash", "-c", "echo arbitrary"]])])
