@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "dotnet-windows-x64",
+      "runtime": "dotnet",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "dotnet-windows-arm",
+      "runtime": "dotnet",
+      "runner": "windows-11-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "dotnet",
+          "--version"
+        ],
+        [
+          "dotnet",
+          "run",
+          "--project",
+          "ci/fixtures/languages/dotnet/ZeibaelSmoke.csproj",
+          "--configuration",
+          "Release",
+          "--no-launch-profile"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-windows-x64",
+      "runtime": "kotlin",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    },
+    {
+      "id": "kotlin-windows-arm",
+      "runtime": "kotlin",
+      "runner": "windows-11-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "kotlinc",
+          "-version"
+        ],
+        [
+          "kotlinc",
+          "ci/fixtures/languages/Hello.kt",
+          "-include-runtime",
+          "-d",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ],
+        [
+          "java",
+          "-jar",
+          "ci/fixtures/languages/hello-kotlin.jar"
+        ]
+      ]
+    }
+  ]
+}
