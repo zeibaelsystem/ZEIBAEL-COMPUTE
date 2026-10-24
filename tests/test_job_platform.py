@@ -54,6 +54,45 @@ class JobPlatformTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 read_manifest(root, "approved")
 
+    def test_arm64_runner_supported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.manifest(root, [job("arm", runner="ubuntu-24.04-arm")])
+            plan = build_plan(root, "script", "approved")
+            self.assertEqual(plan["include"][0]["runner"], "ubuntu-24.04-arm")
+
+    def test_cc_compiler_commands_allowed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.manifest(root, [job("cc", commands=[
+                ["gcc", "-std=c11", "-o", "hello-c", "hello.c"],
+                ["g++", "-std=c++17", "-o", "hello-cpp", "hello.cpp"],
+            ])])
+            self.assertEqual(read_manifest(root, "approved")["jobs"][0]["id"], "cc")
+
+    def test_aggregator_detects_missing_job_report(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "only").mkdir()
+            (root / "only" / "result.json").write_text(json.dumps({
+                "schema": 1, "job_id": "only", "runtime": "python",
+                "task": "script", "status": "success", "exit_code": 0
+            }))
+            with self.assertRaisesRegex(ValueError, "missing|Expected|count"):
+                aggregate(root, expected_jobs=2)
+
+    def test_aggregator_rejects_duplicate_job_ids(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for folder in ("first", "second"):
+                (root / folder).mkdir()
+                (root / folder / "result.json").write_text(json.dumps({
+                    "schema": 1, "job_id": "same", "runtime": "python",
+                    "task": "script", "status": "success", "exit_code": 0
+                }))
+            with self.assertRaisesRegex(ValueError, "Duplicate|duplicate"):
+                aggregate(root, expected_jobs=2)
+
     def test_generic_manifest_executes_reviewed_command(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
