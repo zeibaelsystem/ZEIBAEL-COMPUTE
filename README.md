@@ -48,7 +48,7 @@ Bos -> Grace -> Periksa kemampuan native
 | [`ci/jobs/runtime_selfcheck.json`](ci/jobs/runtime_selfcheck.json) | Uji Go, Rust, Java, dan Docker |
 | [`ci/jobs/compiler_build_selfcheck.json`](ci/jobs/compiler_build_selfcheck.json) | Build dan jalankan C/C++, Go, Rust, Java; unit test Python |
 | [`ci/jobs/docker_npm_selfcheck.json`](ci/jobs/docker_npm_selfcheck.json) | Uji `npm ci/test`, build/run Docker, Docker Compose |
-| [`ci/jobs/cross_platform_selfcheck.json`](ci/jobs/cross_platform_selfcheck.json) | Uji Linux ARM64, Windows x64, dan macOS ARM64 |
+| [`ci/jobs/cross_platform_selfcheck.json`](ci/jobs/cross_platform_selfcheck.json) | Uji Ubuntu Linux 24.04 — ARM64, Microsoft Windows Server 2022 — x64, dan Apple macOS 15 — Apple Silicon ARM64 |
 | [`ci/fixtures/`](ci/fixtures/) | Source proyek contoh publik untuk pengujian fungsional |
 | [`tests/test_job_platform.py`](tests/test_job_platform.py) | Unit test executor dan hasil terstruktur |
 
@@ -62,7 +62,23 @@ Grace dapat membuat **manifest pekerjaan yang direview** di `ci/jobs/<nama>.json
 
 Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfcheck.json) menjalankan dua job sekaligus, satu untuk unit test Python dan satu untuk pemeriksaan Node.js. Manifest berisi `schema=1`, daftar `jobs`, dan untuk setiap job: `id`, `runtime`, `runner`, `timeout_profile`, serta `commands` (daftar argv, **bukan shell command bebas dari input dispatch**).
 
-**Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest: `ubuntu-24.04` (Linux x64), `ubuntu-24.04-arm` (Linux ARM64), `windows-2022` (Windows x64), `windows-11-arm` (Windows ARM64), `macos-15-intel` (macOS Intel), `macos-15` (macOS ARM64), dan `ubuntu-slim` (Linux ringan). **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Linux ARM64, Windows x64, dan macOS ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
+**Runtime yang dikonfigurasi:** `python`, `node`, `go`, `rust`, `java`, `docker` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest tercantum pada tabel **Standar penamaan runner ZEIBAEL** di bawah, dengan nama lengkap dan label asli GitHub. **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Ubuntu Linux 24.04 — ARM64, Microsoft Windows Server 2022 — x64, dan Apple macOS 15 — Apple Silicon ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
+
+## Standar penamaan runner ZEIBAEL
+
+Untuk menghindari kebingungan, laporan Grace dan README menyebut **nama lengkap sistem operasi — arsitektur**, diikuti **label GitHub sebenarnya**. Semua tujuh runner sudah masuk allowlist; tabel ini tidak mengubah konfigurasi atau kapasitas runner.
+
+| No. | Nama lengkap (untuk ditampilkan) | Label asli GitHub (untuk `runs-on`/manifest) |
+|---|---|---|
+| 1 | **Ubuntu Linux 24.04 — x64** | `ubuntu-24.04` |
+| 2 | **Ubuntu Linux 24.04 — ARM64** | `ubuntu-24.04-arm` |
+| 3 | **Microsoft Windows Server 2022 — x64** | `windows-2022` |
+| 4 | **Microsoft Windows 11 — ARM64** | `windows-11-arm` |
+| 5 | **Apple macOS 15 — Intel x64** | `macos-15-intel` |
+| 6 | **Apple macOS 15 — Apple Silicon ARM64** | `macos-15` |
+| 7 | **Ubuntu Linux Slim — x64 (container)** | `ubuntu-slim` |
+
+**Pembedaan penting:** `runner` adalah label resmi di kolom kanan, sedangkan `id` seperti `linux_x64_1` pada manifest `capacity_20_probe.json` hanyalah **ID job pengujian lama** buatan ZEIBAEL, bukan nama atau label GitHub Runner. Riwayat run lama tetap memakai ID tersebut. Jangan mengubah nilai `runner` menjadi `linux_x64_1`; untuk job baru, pakai ID yang jelas mencerminkan Ubuntu/Windows/macOS dan selalu tampilkan label runner sebenarnya.
 
 **Paralelisme saat ini:** maksimal 20 job dalam satu manifest, maksimal 20 dicoba paralel dalam satu run; batas GitHub Free 20 concurrent job untuk akun, dengan maksimal 5 macOS. Banyak run dapat berbagi slot; bukan 20 slot khusus per workflow. Tidak ada workflow-wide concurrency lock. **Timeout per job:** `short` (10 menit), `standard` (30 menit), `long` (120 menit), atau `extended` (330 menit), dengan batas internal perintah sedikit lebih singkat agar laporan sempat ditulis.
 
@@ -76,7 +92,7 @@ Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfchec
 |---|---|
 | Build C/C++, Go, Rust, Java + 15 unit test | [Run #40096787388](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40096787388) |
 | npm, Docker image, container, Docker Compose | [Run #40096861811](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40096861811) |
-| Linux ARM64, Windows x64, macOS ARM64 | [Run #40097047606](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097047606) |
+| Ubuntu Linux 24.04 — ARM64, Microsoft Windows Server 2022 — x64, Apple macOS 15 — Apple Silicon ARM64 | [Run #40097047606](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097047606) |
 | Negative test: job gagal harus membuat workflow dan laporan gagal | [Run #40097157009](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097157009) — sengaja FAILURE (exit 19), perilaku benar |
 
 **Regresi terakhir:** [16 unit test berhasil pada commit terbaru](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40097391339). Manifest negative test sementara telah dihapus setelah digunakan, sementara riwayat run dan bukti tetap tersimpan.
