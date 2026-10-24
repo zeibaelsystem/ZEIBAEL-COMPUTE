@@ -108,3 +108,7 @@ _Dokumentasi diperbarui 24 Oktober 2026. Grace bertanggung jawab memilih jalur e
 - Optional `platform_extensions` is a fixture-based smoke test for HTTP APIs, temporary SQLite, TypeScript and PWA source contract; not a claim of Playwright or real offline E2E.
 - Public artifacts expire after 1 day. Grace can archive a public-safe summary to the private registry through the connected GitHub app **when actively asked**, not by granting the public runner private tokens or doing background work.
 - These changes target the free standard runners on public repositories; no billing, private code checkout or external secret stores are used.
+
+### Optional real-browser PWA E2E
+
+`ci/jobs/playwright_browser_smoke.json` runs **opt-in** Chromium testing with a fixed Playwright 1.56.1 package version on a public standard runner. It checks click behavior and reload while browser networking is set offline after service-worker precaching. Browser installation occurs only during this explicitly dispatched job; it is not part of every CI run. The fixture is not a production app. No cloud secrets or private code are used. This job installs npm dependencies ephemerally without committing a lockfile; for an actual application, commit its package lock and replace this fixture with reproducible project tests.
