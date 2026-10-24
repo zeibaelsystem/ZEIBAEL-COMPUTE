@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "browser_pwa_e2e",
+      "runtime": "node",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "npm",
+          "--prefix",
+          "ci/fixtures/web",
+          "install",
+          "--no-save",
+          "--no-package-lock",
+          "--ignore-scripts",
+          "--no-audit",
+          "--no-fund",
+          "playwright@1.56.1"
+        ],
+        [
+          "node",
+          "ci/fixtures/web/node_modules/playwright/cli.js",
+          "install",
+          "--with-deps",
+          "chromium"
+        ],
+        [
+          "node",
+          "ci/fixtures/web/playwright_smoke.mjs"
+        ]
+      ]
+    }
+  ]
+}
