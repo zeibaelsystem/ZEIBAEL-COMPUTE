@@ -1,0 +1,84 @@
+import json
+import os
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+from scripts.job_plan import build_plan, read_manifest
+from scripts.aggregate_results import aggregate
+from scripts.ci_driver import manifest_job
+
+def job(name="one", runtime="python", runner="ubuntu-24.04", timeout="short", commands=None):
+    return {"id": name, "runtime": runtime, "runner": runner,
+            "timeout_profile": timeout, "commands": commands or [["python", "--version"]]}
+
+class JobPlatformTests(unittest.TestCase):
+    def manifest(self, root, jobs):
+        folder = root / "ci" / "jobs"
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "approved.json").write_text(json.dumps({"schema": 1, "jobs": jobs}))
+
+    def test_default_job_has_one_runner_and_bounded_timeout(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plan = build_plan(Path(tmp), "python_tests", "")
+            self.assertEqual(plan["include"][0]["runner"], "ubuntu-24.04")
+            self.assertEqual(plan["include"][0]["timeout"], 30)
+            self.assertEqual(len(plan["include"]), 1)
+
+    def test_manifest_expands_to_parallel_python_and_node(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.manifest(root, [job("python"), job("node", runtime="node",
+                                                     commands=[["node", "--version"]])])
+            plan = build_plan(root, "script", "approved")
+            self.assertEqual(len(plan["include"]), 2)
+            self.assertEqual([j["runtime"] for j in plan["include"]], ["python", "node"])
+
+    def test_invalid_script_and_unapproved_commands_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with self.assertRaises(ValueError):
+                build_plan(root, "script", "../outside")
+            self.manifest(root, [job(commands=[["bash", "-c", "curl example.com"]])])
+            with self.assertRaises(ValueError):
+                read_manifest(root, "approved")
+
+    def test_unknown_runner_and_excess_parallel_jobs_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.manifest(root, [job(runner="self-hosted")])
+            with self.assertRaises(ValueError):
+                read_manifest(root, "approved")
+            self.manifest(root, [job(str(i)) for i in range(5)])
+            with self.assertRaises(ValueError):
+                read_manifest(root, "approved")
+
+    def test_generic_manifest_executes_reviewed_command(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            out = root / "output"
+            out.mkdir()
+            self.manifest(root, [job(commands=[["python", "--version"]])])
+            with patch.dict(os.environ, {"ZEIBAEL_JOB_RUNTIME": "python"}):
+                rc, output = manifest_job(root, "approved", "one", out, 30)
+            self.assertEqual(rc, 0)
+            self.assertIn("Python", output)
+
+    def test_result_aggregator_counts_success_and_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "success").mkdir()
+            (root / "failure").mkdir()
+            (root / "success" / "result.json").write_text(json.dumps(
+                {"schema": 1, "job_id": "one", "task": "script", "runtime": "python",
+                 "status": "success", "exit_code": 0, "duration_seconds": 0.1}))
+            (root / "failure" / "result.json").write_text(json.dumps(
+                {"schema": 1, "job_id": "two", "task": "script", "runtime": "node",
+                 "status": "failure", "exit_code": 1, "duration_seconds": 0.1}))
+            doc = aggregate(root)
+            self.assertEqual(doc["job_count"], 2)
+            self.assertEqual(doc["status"], "failure")
+
+if __name__ == "__main__":
+    unittest.main()
