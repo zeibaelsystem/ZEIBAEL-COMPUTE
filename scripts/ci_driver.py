@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""ZEIBAEL CI driver. Run approved software development tasks in a fresh runner.
+"""ZEIBAEL CI driver for public-safe software development tasks.
 
-PRIVATE source: capture build/test output locally; never print source/log contents
-to the public Actions log. Public source: print bounded diagnostics.
+Private repository data never enter this runner. Grace uses the GitHub native
+plugin to transfer only approved public-safe work and to store results privately.
 """
 import hashlib
 import json
@@ -91,7 +91,7 @@ def script(root, script_id, output_dir):
         cmd = ["bash", str(sh)]
     else:
         raise ValueError("Job script is not present in ci/jobs")
-    # Subprocess never inherits PAT or Hatchable signature variables.
+    # Never inherit unexpected environment variables in a project job.
     safe = {k: v for k, v in os.environ.items() if k in {"PATH", "HOME", "LANG", "CI", "TMPDIR"}}
     safe["ZEIBAEL_SOURCE_ROOT"] = str(root)
     safe["ZEIBAEL_OUTPUT_DIR"] = str(output_dir)
@@ -102,12 +102,12 @@ def script(root, script_id, output_dir):
 
 def main():
     task = os.environ.get("ZEIBAEL_CI_TASK", "")
-    source = os.environ.get("ZEIBAEL_CI_SOURCE", "")
+    source = "public"
     script_id = os.environ.get("ZEIBAEL_SCRIPT_ID", "")
     root = Path(os.environ["ZEIBAEL_CI_ROOT"]).resolve()
     output_dir = Path(os.environ["ZEIBAEL_CI_OUTPUT"]).resolve()
-    if task not in TASKS or source not in {"public", "private"} or not root.is_dir():
-        raise SystemExit("Invalid CI task/source/root")
+    if task not in TASKS or not root.is_dir():
+        raise SystemExit("Invalid CI task/root")
     if task != "script" and script_id:
         raise SystemExit("script_id is supported only for script jobs")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -146,10 +146,8 @@ def main():
         "attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
     }
     (output_dir / "result.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
-    # Private details belong only in private GitHub; public log stays generic.
-    if source == "public":
-        print(detail[-4000:])
-    print("ZEIBAEL CI job:", task, "|", report["status"], "| details:", "private" if source == "private" else "public")
+    print(detail[-4000:])
+    print("ZEIBAEL CI job:", task, "|", report["status"], "| details: public")
     return rc
 
 
