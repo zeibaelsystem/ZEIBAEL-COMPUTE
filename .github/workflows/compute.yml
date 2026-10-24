@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   validate:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.actor == 'zeibaelsystem' }}
     name: Validate project source
     runs-on: ubuntu-24.04
     timeout-minutes: 360
