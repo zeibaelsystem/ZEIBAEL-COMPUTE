@@ -1,0 +1,9 @@
+{
+  "name": "zeibael-node-smoke",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-contained npm test for public CI runner",
+  "scripts": {
+    "test": "node --test test.js"
+  }
+}

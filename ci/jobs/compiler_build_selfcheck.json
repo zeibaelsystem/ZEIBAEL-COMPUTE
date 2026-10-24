@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "cc-build",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "gcc",
+          "-std=c11",
+          "-o",
+          "ci/fixtures/cc/hello_c",
+          "ci/fixtures/cc/hello.c"
+        ],
+        [
+          "g++",
+          "-std=c++17",
+          "-o",
+          "ci/fixtures/cc/hello_cpp",
+          "ci/fixtures/cc/hello.cpp"
+        ],
+        [
+          "python",
+          "ci/fixtures/python/verify_binary.py",
+          "ci/fixtures/cc/hello_c",
+          "ZEIBAEL_C_OK"
+        ],
+        [
+          "python",
+          "ci/fixtures/python/verify_binary.py",
+          "ci/fixtures/cc/hello_cpp",
+          "ZEIBAEL_CPP_OK"
+        ],
+        [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ]
+      ]
+    },
+    {
+      "id": "go-build",
+      "runtime": "go",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "go",
+          "build",
+          "-o",
+          "ci/fixtures/go/hello",
+          "ci/fixtures/go/main.go"
+        ],
+        [
+          "python",
+          "ci/fixtures/python/verify_binary.py",
+          "ci/fixtures/go/hello",
+          "ZEIBAEL_GO_OK"
+        ]
+      ]
+    },
+    {
+      "id": "rust-build",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "cargo",
+          "build",
+          "--offline",
+          "--manifest-path",
+          "ci/fixtures/rust/Cargo.toml"
+        ],
+        [
+          "python",
+          "ci/fixtures/python/verify_binary.py",
+          "ci/fixtures/rust/target/debug/zeibael-rust-smoke",
+          "ZEIBAEL_RUST_OK"
+        ]
+      ]
+    },
+    {
+      "id": "java-build",
+      "runtime": "java",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "javac",
+          "ci/fixtures/java/Hello.java"
+        ],
+        [
+          "java",
+          "-cp",
+          "ci/fixtures/java",
+          "Hello"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "npm-test",
+      "runtime": "node",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "npm",
+          "ci",
+          "--ignore-scripts",
+          "--prefix",
+          "ci/fixtures/node"
+        ],
+        [
+          "npm",
+          "test",
+          "--prefix",
+          "ci/fixtures/node"
+        ]
+      ]
+    },
+    {
+      "id": "docker-compose",
+      "runtime": "docker",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "docker",
+          "build",
+          "-t",
+          "zeibael-ci-smoke:latest",
+          "-f",
+          "ci/fixtures/docker/Dockerfile",
+          "ci/fixtures/docker"
+        ],
+        [
+          "docker",
+          "run",
+          "--rm",
+          "zeibael-ci-smoke:latest"
+        ],
+        [
+          "docker",
+          "compose",
+          "-f",
+          "ci/fixtures/docker/compose.yaml",
+          "up",
+          "--build",
+          "--abort-on-container-exit",
+          "--exit-code-from",
+          "app"
+        ],
+        [
+          "docker",
+          "compose",
+          "-f",
+          "ci/fixtures/docker/compose.yaml",
+          "down",
+          "--remove-orphans"
+        ]
+      ]
+    }
+  ]
+}

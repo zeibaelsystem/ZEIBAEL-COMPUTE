@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "linux-arm64",
+      "runtime": "python",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "Linux",
+          "ARM64"
+        ]
+      ]
+    },
+    {
+      "id": "windows-x64",
+      "runtime": "python",
+      "runner": "windows-2022",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "Windows",
+          "X64"
+        ]
+      ]
+    },
+    {
+      "id": "macos-arm64",
+      "runtime": "python",
+      "runner": "macos-15",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "macOS",
+          "ARM64"
+        ]
+      ]
+    }
+  ]
+}
