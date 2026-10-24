@@ -1,0 +1,48 @@
+name: K3 - Fetch Official PP35 2021 PDF
+
+on:
+  push:
+    paths:
+      - '.github/workflows/k3-pp35-fetch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Download and validate original government PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p pp35
+          URLS=(
+            "https://jdih.kemnaker.go.id/asset/data_puu/PP352021.pdf"
+            "https://peraturan.bpk.go.id/Home/Download/154582/PP%20Nomor%2035%20Tahun%202021.pdf"
+            "https://peraturan.go.id/files/pp35-2021bt.pdf"
+          )
+          for URL in "${URLS[@]}"; do
+            echo "Attempting source: ${URL}"
+            if curl --fail --location --silent --show-error --retry 2 --retry-delay 2 --connect-timeout 12 --max-time 90 --user-agent "Mozilla/5.0 (ZEIBAEL public law archive)" "${URL}" -o pp35/candidate.pdf; then
+              if [ "$(head -c 5 pp35/candidate.pdf)" = "%PDF-" ] && [ "$(wc -c < pp35/candidate.pdf)" -gt 30000 ]; then
+                mv pp35/candidate.pdf pp35/PP_No_35_Tahun_2021_ASLI.pdf
+                printf '%s\n' "${URL}" > pp35/SUMBER_RESMI.txt
+                sha256sum pp35/PP_No_35_Tahun_2021_ASLI.pdf > pp35/SHA256SUMS.txt
+                file pp35/PP_No_35_Tahun_2021_ASLI.pdf
+                exit 0
+              fi
+            fi
+          done
+          echo "No validated official PDF source could be fetched" >&2
+          exit 1
+      - name: Upload original PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: k3-pp35-original
+          path: pp35/
+          retention-days: 1
+          if-no-files-found: error
+          compression-level: 0
