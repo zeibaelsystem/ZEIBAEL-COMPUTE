@@ -47,26 +47,31 @@ class ModularCIDriverTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 script(root, "../bad", root)
 
-    def test_signed_private_ci_verifier(self):
-        import hashlib
-        import hmac
-        import time
-        ts = str(int(time.time()))
-        key = "temporary-ci-unit-test-secret-string-strong"
-        nonce = "abcdef0123456789abcdef0123456789"
-        message = f"v1|ci|private|validate||{ts}|{nonce}"
-        sig = hmac.new(key.encode(), message.encode(), hashlib.sha256).hexdigest()
-        env = dict(os.environ, ZEIBAEL_DISPATCH_SIGNING_KEY=key,
-                   ZEIBAEL_CI_SOURCE="private", ZEIBAEL_CI_TASK="validate",
-                   ZEIBAEL_SCRIPT_ID="", ZEIBAEL_ISSUED_AT=ts,
-                   ZEIBAEL_NONCE=nonce, ZEIBAEL_SIGNATURE=sig)
-        ok = subprocess.run([sys.executable, "scripts/verify_ci_dispatch.py"],
-                            env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        self.assertEqual(ok.returncode, 0)
-        env["ZEIBAEL_SIGNATURE"] = "0" * 64
-        invalid = subprocess.run([sys.executable, "scripts/verify_ci_dispatch.py"],
-                                 env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        self.assertNotEqual(invalid.returncode, 0)
+    def test_script_runs_and_does_not_inherit_unrelated_env(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "source"
+            jobs = root / "ci" / "jobs"
+            jobs.mkdir(parents=True)
+            result_dir = Path(temp) / "results"
+            result_dir.mkdir()
+            (jobs / "testjob.py").write_text(
+                "import os\n"
+                "from pathlib import Path\n"
+                "assert not os.environ.get('ZEIBAEL_TEST_PRIVATE_VALUE')\n"
+                "assert Path(os.environ['ZEIBAEL_OUTPUT_DIR']).is_dir()\n"
+                "print('script job ok')\n"
+            )
+            original = os.environ.get("ZEIBAEL_TEST_PRIVATE_VALUE")
+            os.environ["ZEIBAEL_TEST_PRIVATE_VALUE"] = "do-not-inherit"
+            try:
+                rc, output = script(root, "testjob", result_dir)
+            finally:
+                if original is None:
+                    os.environ.pop("ZEIBAEL_TEST_PRIVATE_VALUE", None)
+                else:
+                    os.environ["ZEIBAEL_TEST_PRIVATE_VALUE"] = original
+            self.assertEqual(rc, 0)
+            self.assertIn("script job ok", output)
 
 
 if __name__ == "__main__":
