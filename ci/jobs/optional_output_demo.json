@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "public_file_demo",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-c",
+          "import os; from pathlib import Path; p=Path(os.environ['ZEIBAEL_OUTPUT_DIR'])/'files'/'public-demo.txt'; p.parent.mkdir(parents=True,exist_ok=True); p.write_text('ZEIBAEL optional public output test - no secrets\\n',encoding='utf-8'); print('created:',p.name)"
+        ]
+      ]
+    },
+    {
+      "id": "ordinary_job_no_file",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "--version"
+        ]
+      ]
+    }
+  ]
+}

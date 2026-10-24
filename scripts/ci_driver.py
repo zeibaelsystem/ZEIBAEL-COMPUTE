@@ -24,6 +24,31 @@ IGNORE = {".git", ".github", ".venv", "venv", "node_modules", "__pycache__", "di
 MAX_FILES = 15000
 MAX_SOURCE = 250_000_000
 MAX_OUTPUT = 20000
+MAX_PUBLIC_OUTPUT_BYTES = 50_000_000
+MAX_PUBLIC_OUTPUT_FILES = 100
+
+
+def inspect_public_files(directory):
+    """Verify the isolated public output folder before GitHub artifact upload."""
+    if not directory.is_dir() or directory.is_symlink():
+        raise ValueError("Opted-in output files directory missing or unsafe")
+    count = 0
+    total = 0
+    for path in directory.rglob("*"):
+        relative = path.relative_to(directory)
+        if path.is_symlink() or any(part.startswith(".") for part in relative.parts):
+            raise ValueError("Hidden file or symlink in public output")
+        if path.is_dir():
+            continue
+        if not path.is_file():
+            raise ValueError("Unsupported public output entry")
+        count += 1
+        total += path.stat().st_size
+        if count > MAX_PUBLIC_OUTPUT_FILES or total > MAX_PUBLIC_OUTPUT_BYTES:
+            raise ValueError("Public output exceeds 100 files or 50 MB")
+    if not count:
+        raise ValueError("Opted-in output files directory is empty")
+    return count, total
 
 
 def execute(command, directory, timeout=900, env=None):
@@ -135,6 +160,9 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
         logs.append("$ " + command[0] + " ...\n" + detail[-MAX_OUTPUT:])
         if rc:
             return rc, "\n".join(logs)[-MAX_OUTPUT:]
+    if job.get("output_files", False):
+        nfiles, nbytes = inspect_public_files(output_dir / "files")
+        logs.append(f"ZEIBAEL_PUBLIC_OUTPUT_OK {nfiles} files / {nbytes} bytes")
     return 0, "\n".join(logs)[-MAX_OUTPUT:]
 
 def main():

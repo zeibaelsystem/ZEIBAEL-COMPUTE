@@ -99,6 +99,17 @@ Untuk menghindari kebingungan, laporan Grace dan README menyebut **nama lengkap 
 
 **Pelaporan fail-closed:** agregator mengecek jumlah laporan sesuai jumlah job yang direncanakan, mendeteksi ID job duplikat, dan mengembalikan status failure apabila ada job gagal atau laporan hilang. Laporan per-job dan aggregate JSON tetap dibuat pada kegagalan biasa; perubahan sebelum driver sempat membuat laporan masih dapat menyebabkan job failure tanpa report lengkap. Artifact hanya disimpan 1 hari.
 
+### Output file opsional — hanya untuk job yang meminta
+
+- Manifest pekerjaan publik yang direview boleh menambahkan `"output_files": true` pada sebuah job. Default-nya `false`, jadi **job biasa tidak menjalankan langkah upload file output**.
+- Saat `true`, perintah job menulis file hasil ke folder `$ZEIBAEL_OUTPUT_DIR/files/` (di Python: `Path(os.environ["ZEIBAEL_OUTPUT_DIR"]) / "files"`). Folder tersebut adalah lokasi sementara terisolasi, bukan path arbitrary dari pengguna.
+- Setelah perintah berhasil, driver memeriksa keberadaan file, **maksimal 100 file dan total 50 MB**, menolak hidden paths serta symlink. Jika output kosong atau tidak memenuhi batas, job gagal.
+- File yang lolos diunggah sebagai `zeibael-output-<job_id>` di artifact GitHub Actions dengan retensi **1 hari**. `result.json` / `aggregate.json` tetap diproduksi seperti biasa.
+- Data yang dikeluarkan harus **aman dipublikasikan**. Jangan mengunggah rahasia, data pelanggan, private source, atau kredensial. Pemeriksaan struktur/ukuran tidak bisa menjamin isi file bebas informasi sensitif.
+- Tidak ada penambahan server, workflow, database, atau mekanisme pengarsipan permanen. Grace dapat membaca artifact yang masih berlaku dari run GitHub yang tepat.
+
+Uji cepat: `ci/jobs/optional_output_demo.json`, job Python kecil yang menulis contoh teks publik. Untuk pekerjaan nyata, tulis hasil build ke folder `files/` yang sama dan aktifkan flag hanya jika file memang dibutuhkan.
+
 ## Batas keamanan dan penggunaan
 
 - **Public berarti terlihat publik.** Jangan menaruh token, kredensial, kode privat, data pelanggan, maupun hasil sensitif dalam repository, input workflow, log, atau artifact.

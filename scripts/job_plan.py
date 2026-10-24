@@ -32,8 +32,10 @@ def read_manifest(root, script_id):
         raise ValueError("Expected 1–20 jobs")
     seen = set()
     for job in jobs:
-        if not isinstance(job, dict) or set(job) != {"id", "runtime", "runner", "timeout_profile", "commands"}:
+        if not isinstance(job, dict) or not {"id", "runtime", "runner", "timeout_profile", "commands"}.issubset(job) or set(job) - {"id", "runtime", "runner", "timeout_profile", "commands", "output_files"}:
             raise ValueError("Invalid job fields")
+        if not isinstance(job.get("output_files", False), bool):
+            raise ValueError("output_files must be true or false")
         name = job["id"]
         if not isinstance(name, str) or not IDENTIFIER.fullmatch(name) or name in seen:
             raise ValueError("Job ids must be unique safe identifiers")
@@ -79,7 +81,7 @@ def build_plan(root, task, script_id):
                  "runner": "ubuntu-24.04", "timeout_profile": "standard", "commands": []}]
     return {"include": [
         {"id": j["id"], "runtime": j["runtime"], "runner": j["runner"],
-         "timeout": TIMEOUTS[j["timeout_profile"]], "index": index}
+         "timeout": TIMEOUTS[j["timeout_profile"]], "output_files": j.get("output_files", False), "index": index}
         for index, j in enumerate(jobs)
     ]}
 
