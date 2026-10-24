@@ -1,0 +1,135 @@
+name: ZEIBAEL - Modular Software CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Repository containing software to test/build"
+        type: choice
+        required: true
+        default: public
+        options:
+          - public
+          - private
+      task:
+        description: "Software development task"
+        type: choice
+        required: true
+        default: validate
+        options:
+          - validate
+          - python_tests
+          - node_tests
+          - package
+          - script
+      script_id:
+        description: "For task=script: ci/jobs/<script_id>.py or .sh in selected repo"
+        required: false
+        type: string
+        default: ""
+      issued_at:
+        description: "Hatchable signature timestamp; required for private"
+        required: false
+        type: string
+        default: ""
+      nonce:
+        description: "Hatchable authorization nonce; required for private"
+        required: false
+        type: string
+        default: ""
+      signature:
+        description: "Hatchable HMAC; required for private"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zeibael-ci-${{ inputs.source }}
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    name: CI - ${{ inputs.source }} / ${{ inputs.task }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.actor == 'zeibaelsystem' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - name: Checkout public CI scripts
+        uses: actions/checkout@v4
+        with:
+          path: runner
+          persist-credentials: false
+
+      - name: Verify signed private request
+        if: ${{ inputs.source == 'private' }}
+        id: verify
+        shell: bash
+        env:
+          ZEIBAEL_DISPATCH_SIGNING_KEY: ${{ secrets.ZEIBAEL_DISPATCH_SIGNING_KEY }}
+          ZEIBAEL_CI_SOURCE: ${{ inputs.source }}
+          ZEIBAEL_CI_TASK: ${{ inputs.task }}
+          ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
+          ZEIBAEL_ISSUED_AT: ${{ inputs.issued_at }}
+          ZEIBAEL_NONCE: ${{ inputs.nonce }}
+          ZEIBAEL_SIGNATURE: ${{ inputs.signature }}
+        run: |
+          set -euo pipefail
+          python3 runner/scripts/verify_ci_dispatch.py
+
+      - name: Checkout private software temporarily
+        if: ${{ inputs.source == 'private' && steps.verify.outcome == 'success' }}
+        id: checkout_private
+        uses: actions/checkout@v4
+        with:
+          repository: zeibaelsystem/ZEIBAEL-SYSTEM
+          ref: main
+          token: ${{ secrets.ZEIBAEL_PRIVATE_REPO_PAT }}
+          path: private-source
+          persist-credentials: false
+
+      - name: Run modular software checks or build
+        id: execute
+        continue-on-error: true
+        shell: bash
+        env:
+          ZEIBAEL_CI_SOURCE: ${{ inputs.source }}
+          ZEIBAEL_CI_TASK: ${{ inputs.task }}
+          ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
+          ZEIBAEL_CI_OUTPUT: ${{ runner.temp }}/zeibael-ci-output
+        run: |
+          set -euo pipefail
+          umask 077
+          if [[ "$ZEIBAEL_CI_SOURCE" == "private" ]]; then
+            export ZEIBAEL_CI_ROOT="$GITHUB_WORKSPACE/private-source"
+          else
+            export ZEIBAEL_CI_ROOT="$GITHUB_WORKSPACE/runner"
+          fi
+          python3 runner/scripts/ci_driver.py
+
+      - name: Save private result to private repository
+        if: ${{ always() && inputs.source == 'private' && steps.verify.outcome == 'success' && steps.checkout_private.outcome == 'success' && steps.execute.outcome != 'skipped' }}
+        shell: bash
+        env:
+          ZEIBAEL_PRIVATE_REPO_PAT: ${{ secrets.ZEIBAEL_PRIVATE_REPO_PAT }}
+          ZEIBAEL_CI_SOURCE: ${{ inputs.source }}
+          ZEIBAEL_CI_OUTPUT: ${{ runner.temp }}/zeibael-ci-output
+        run: |
+          set -euo pipefail
+          python3 runner/scripts/publish_ci_result.py
+
+      - name: Publish public-source ZIP for one day
+        if: ${{ inputs.source == 'public' && inputs.task == 'package' && steps.execute.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: zeibael-public-ci-zip
+          path: ${{ runner.temp }}/zeibael-ci-output/zeibael-source.zip
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Fail if CI execution failed
+        if: ${{ always() && steps.execute.outcome == 'failure' }}
+        shell: bash
+        run: exit 1
