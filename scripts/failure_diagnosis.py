@@ -5,12 +5,12 @@ bounded and redacted. UNKNOWN is deliberate when evidence is insufficient.
 """
 import re
 
-TIMESTAMP = re.compile(r"^\\d{4}-\\d\\d-\\d\\dT[^ ]+\\s*")
-ANSI = re.compile(r"\\x1b\\[[0-9;]*m")
-TOKEN = re.compile(r"\\b(?:gh[pousr]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+|sk-[A-Za-z0-9_-]{12,})\\b")
-AUTH = re.compile(r"(?i)\\b(Authorization:\\s*Bearer\\s+)\\S+")
-ASSIGNMENT = re.compile(r"(?i)\\b(token|password|api[_-]?key|secret)\\s*[:=]\\s*[^\\s,;]+")
-EXIT_ONLY = re.compile(r"(?i)(?:process completed with exit code|exit code \\d+|^FAILED \\(failures=|^##\\[endgroup\\])")
+TIMESTAMP = re.compile(r"^\d{4}-\d\d-\d\dT[^ ]+\s*")
+ANSI = re.compile(r"\x1b\[[0-9;]*m")
+TOKEN = re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+|sk-[A-Za-z0-9_-]{12,})\b")
+AUTH = re.compile(r"(?i)\b(Authorization:\s*Bearer\s+)\S+")
+ASSIGNMENT = re.compile(r"(?i)\b(token|password|api[_-]?key|secret)\s*[:=]\s*[^\s,;]+")
+EXIT_ONLY = re.compile(r"(?i)(?:process completed with exit code|exit code \d+|^FAILED \(failures=|^##\[endgroup\])")
 
 RULES = (
     ("PROVIDER_LIMIT", "high", re.compile(
@@ -21,7 +21,7 @@ RULES = (
         r"hosted runner.*quota exceeded)"),
      "GitHub provider limit reported explicitly in the job log"),
     ("ZEIBAEL_INTERNAL", "high", re.compile(
-        r"(?i)(NuGet\\.targets.*(?:path1|Value cannot be null)|"
+        r"(?i)(NuGet\.targets.*(?:path1|Value cannot be null)|"
         r"unsupported runtime/runner combination in ZEIBAEL|"
         r"Unsupported runtime in ZEIBAEL|"
         r"ZEIBAEL internal allowlist|"
@@ -29,20 +29,20 @@ RULES = (
         r"Public output exceeds 100 files or 50 MB)"),
      "ZEIBAEL configuration, allowlist, or previously confirmed Windows NuGet regression"),
     ("ZEIBAEL_INTERNAL", "medium", re.compile(
-        r"(?i)FileNotFoundError: \\[WinError 2\\]"),
+        r"(?i)FileNotFoundError: \[WinError 2\]"),
      "Windows executable resolution failed; confirm command path in ZEIBAEL manifest"),
     ("TRANSIENT", "medium", re.compile(
-        r"(?i)(\\bHTTP\\s*(?:429|502|503|504)\\b|"
+        r"(?i)(\bHTTP\s*(?:429|502|503|504)\b|"
         r"server returned (?:429|502|503|504)|"
         r"the runner has received a shutdown signal|"
         r"runner lost communication|"
-        r"connection (?:reset|timed out)\\b)"),
+        r"connection (?:reset|timed out)\b)"),
      "Transient network, runner, or service error indicated; retry requires review"),
     ("USER_CODE", "medium", re.compile(
         r"(?i)(SyntaxError:|AssertionError:|TypeError:|NameError:|"
-        r"ModuleNotFoundError:|\\berror (?:TS|CS|E)\\d{3,}|"
-        r"\\bfatal error: .*\\.(?:c|cpp|h):|"
-        r"\\bFAIL\\s+tests?/)"),
+        r"ModuleNotFoundError:|\berror (?:TS|CS|E)\d{3,}|"
+        r"\bfatal error: .*\.(?:c|cpp|h):|"
+        r"\bFAIL\s+tests?/)"),
      "Program or test failure in supplied job source"),
 )
 ACTIONABLE = re.compile(r"(?i)(error|exception|failed|fatal|timeout|denied|quota|limit|not found|unavailable)")
@@ -51,7 +51,7 @@ ACTIONABLE = re.compile(r"(?i)(error|exception|failed|fatal|timeout|denied|quota
 def redact(value):
     value = ANSI.sub("", str(value))
     value = TOKEN.sub("[REDACTED]", value)
-    value = AUTH.sub(r"\\1[REDACTED]", value)
+    value = AUTH.sub(r"\1[REDACTED]", value)
     value = ASSIGNMENT.sub(lambda m: m.group(1) + "=[REDACTED]", value)
     return value[:280]
 
@@ -66,7 +66,7 @@ def diagnose_failure(log):
     lines = []
     for raw in log.splitlines():
         line = TIMESTAMP.sub("", ANSI.sub("", raw)).strip()
-        line = re.sub(r"^##\\[error\\]\\s*", "", line)
+        line = re.sub(r"^##\[error\]\s*", "", line)
         if not line or EXIT_ONLY.search(line):
             continue
         lines.append(line)
