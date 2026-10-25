@@ -72,6 +72,9 @@ def choose_reviewed_runner(runtime, requirements, approved, timeout_profile, run
     if not set(requirements.get("toolchains", [])).issubset(TOOLCHAINS.get(runtime, set())):
         raise ValueError("Unsupported ZEIBAEL reviewed toolchain; no automatic installation")
     candidates = set(approved) & set(RUNNER_SPECS)
+    # C/C++ build fixtures were proven only on Ubuntu x64, not all Python images.
+    if runtime == "python" and set(requirements.get("toolchains", [])) & {"gcc", "g++"}:
+        candidates &= {"ubuntu-24.04"}
     if runner not in (None, "auto"):
         candidates &= {runner}
     candidates = {r for r in candidates
