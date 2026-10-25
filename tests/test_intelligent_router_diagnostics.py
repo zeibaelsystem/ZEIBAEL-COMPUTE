@@ -21,8 +21,16 @@ class FailureDiagnosisTests(unittest.TestCase):
         result = diagnose_failure("Traceback (most recent call last):\n"
                                   "FileNotFoundError: [WinError 2] The system cannot find the file specified\n"
                                   "##[error]Process completed with exit code 1.")
-        self.assertEqual(result["category"], "ZEIBAEL_INTERNAL")
+        self.assertEqual(result["category"], "UNKNOWN")
         self.assertIn("FileNotFoundError", result["first_error"])
+
+    def test_known_kotlin_driver_error_is_internal(self):
+        result = diagnose_failure("Kotlin Windows batch compiler not found in runner PATH")
+        self.assertEqual(result["category"], "ZEIBAEL_INTERNAL")
+
+    def test_bare_windows_file_error_must_not_be_assumed_internal(self):
+        result = diagnose_failure("FileNotFoundError: [WinError 2] user missing config")
+        self.assertEqual(result["category"], "UNKNOWN")
 
     def test_user_syntax_error(self):
         result = diagnose_failure("main.py:13: SyntaxError: invalid syntax\nexit code 1")
@@ -96,6 +104,11 @@ class IntelligentRouterTests(unittest.TestCase):
     def test_unsupported_large_cpu_fails_no_paid_upgrade(self):
         root = self.manifest(self.base(requirements={"min_cpu": 8}))
         with self.assertRaisesRegex(ValueError, "ZEIBAEL|standard|FREE"):
+            read_manifest(root, "reviewed")
+
+    def test_compiler_on_windows_is_unverified_and_must_fail(self):
+        root = self.manifest(self.base(requirements={"os": "windows", "toolchains": ["gcc"]}))
+        with self.assertRaisesRegex(ValueError, "ZEIBAEL|FREE"):
             read_manifest(root, "reviewed")
 
     def test_toolchain_mismatch_fails_closed(self):
