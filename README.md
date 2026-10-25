@@ -62,7 +62,7 @@ Grace dapat membuat **manifest pekerjaan yang direview** di `ci/jobs/<nama>.json
 
 Contoh manifest pada [`ci/jobs/zeibael_selfcheck.json`](ci/jobs/zeibael_selfcheck.json) menjalankan dua job sekaligus, satu untuk unit test Python dan satu untuk pemeriksaan Node.js. Manifest berisi `schema=1`, daftar `jobs`, dan untuk setiap job: `id`, `runtime`, `runner`, `timeout_profile`, serta `commands` (daftar argv, **bukan shell command bebas dari input dispatch**).
 
-**Runtime yang dikonfigurasi (11):** `python`, `node`, `go`, `rust`, `java`, `docker`, `php`, `ruby`, `dotnet`, `kotlin`, `swift` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest tercantum pada tabel **Standar penamaan runner ZEIBAEL** di bawah, dengan nama lengkap dan label asli GitHub. **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Ubuntu Linux 24.04 — ARM64, Microsoft Windows Server 2022 — x64, dan Apple macOS 15 — Apple Silicon ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
+**Runtime yang dikonfigurasi (18):** `python`, `node`, `go`, `rust`, `java`, `docker`, `php`, `ruby`, `dotnet`, `kotlin`, `swift`, `powershell`, `perl`, `julia`, `haskell`, `fortran`, `r`, `scala` (Docker hanya Ubuntu). Runner yang diizinkan dalam manifest tercantum pada tabel **Standar penamaan runner ZEIBAEL** di bawah, dengan nama lengkap dan label asli GitHub. **Seluruh enam profil runtime telah lolos uji smoke di Ubuntu**: Python, Node, Go, Rust, Java, dan Docker. **Build nyata** C/C++, Go, Rust, Java, pengujian npm, Docker image, Docker container, dan Docker Compose juga telah lulus. Ubuntu Linux 24.04 — ARM64, Microsoft Windows Server 2022 — x64, dan Apple macOS 15 — Apple Silicon ARM64 lolos pemeriksaan OS/arsitektur menggunakan Python; kombinasi toolchain lain pada sistem operasi tersebut belum otomatis teruji.
 
 ## Dukungan bahasa tambahan: PHP, Ruby, .NET/C#, Kotlin, Swift
 
@@ -87,6 +87,24 @@ Bahasa berikut dijalankan pada **standard GitHub-hosted runner yang sama**, buka
 - **Cakupan klaim:** uji ini membuktikan menjalankan program smoke nyata pada kombinasi runner yang disebutkan. Ini bukan bukti semua framework/beban kerja produksi atau semua kombinasi yang belum diizinkan, misalnya Swift pada Windows dan runtime baru pada `ubuntu-slim`.
 
 **Batas yang berasal dari ZEIBAEL sendiri:** daftar kombinasi runner/bahasa dan CLI yang diizinkan, maksimal 12 perintah/job, jumlah job 20, serta durasi 10/30/120/330 menit. Jangan keliru menganggap pembatasan internal tersebut sebagai limit GitHub.
+
+## Auto router ringan dan 7 bahasa bawaan (ZEIBAEL)
+
+Tambahan bahasa yang bisa digunakan pada standard GitHub-hosted runners: **PowerShell, Perl, Julia, Haskell, Fortran, R, Scala**. Daftar awal bersifat terbatas dan harus dibuktikan dengan uji nyata, bukan dianggap tersedia pada semua OS.
+
+| Bahasa | Kompiler/interpreter | Runner pilihan ZEIBAEL |
+|---|---|---|
+| PowerShell | `pwsh` | `ubuntu-24.04` |
+| Perl | `perl` | `ubuntu-24.04` |
+| Julia | `julia` | `ubuntu-24.04` |
+| Haskell | `runghc` (GHC) | `ubuntu-24.04` |
+| Fortran | `gfortran` | `ubuntu-24.04` |
+| R | Rscript (dari instalasi image) | `windows-2022` |
+| Scala | sbt + Java 21 (compiler Scala dapat diunduh sbt via repositori publik) | `windows-2022` |
+
+**Pemilihan otomatis tanpa server baru:** manifest publik yang ditinjau boleh menggunakan `"language": "Julia"`, `"runtime": "auto"` dan `"runner": "auto"` (atau menghilangkan kedua field yang `auto`). `scripts/runtime_router.py` menormalkan alias bahasa menjadi runtime dan memilih runner yang memang masuk allowlist lokal ZEIBAEL. Pemilihan ini deterministik, dilakukan pada tahap `plan`, dan tidak menerima perintah tak tepercaya dari dispatcher. Jika bahasa tidak tersedia, planner **gagal jelas**; tidak memasang paket sendiri, tidak mengalihkan ke provider berbayar, dan tidak menjalankan shell command bebas. `ci/jobs/builtin_languages_smoke.json` adalah manifest uji 7 bahasa.
+
+Grace tetap menentukan kebutuhan bahasa dari permintaan Bos dan menyiapkan manifest yang direview di repo publik. Router hanya memilih runtime+runner untuk bahasa yang sudah didukung; **ini bukan sistem yang membaca prompt alami langsung dari GitHub**. Untuk kombinasi OS lain gunakan runner eksplisit yang telah lolos pemeriksaan, bukan menebak. Batasan pemilihan merupakan **aturan ZEIBAEL**, bukan kuota GitHub.
 
 ## Standar penamaan runner ZEIBAEL
 

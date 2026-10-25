@@ -84,7 +84,7 @@ jobs:
           go-version: '1.24'
 
       - name: Setup Java runtime
-        if: ${{ matrix.runtime == 'java' }}
+        if: ${{ matrix.runtime == 'java' || matrix.runtime == 'scala' }}
         uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
         with:
           distribution: temurin
