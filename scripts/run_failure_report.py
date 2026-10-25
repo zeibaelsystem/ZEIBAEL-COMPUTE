@@ -80,12 +80,12 @@ def main():
     target.write_text(json.dumps(result, indent=2), encoding="utf-8")
     diag = result["diagnosis"]
     with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
-        summary.write("### ZEIBAEL failure diagnosis (source workflow)\\n\\n")
-        summary.write(f"- Source run: {result.get('source_run_id')}\\n")
-        summary.write(f"- Classification: **{diag['category']}** (confidence: {diag['confidence']})\\n")
-        summary.write(f"- First evidence: \`{diag.get('first_error', '')}\`\\n")
-        summary.write(f"- Reason: {diag['reason']}\\n")
-        summary.write("- No workflows retried; billing and runner configuration unchanged.\\n")
+        summary.write("### ZEIBAEL failure diagnosis (source workflow)\n\n")
+        summary.write(f"- Source run: {result.get('source_run_id')}\n")
+        summary.write(f"- Classification: **{diag['category']}** (confidence: {diag['confidence']})\n")
+        summary.write(f"- First evidence: `{diag.get('first_error', '')}`\n")
+        summary.write(f"- Reason: {diag['reason']}\n")
+        summary.write("- No workflows retried; billing and runner configuration unchanged.\n")
     print(f"ZEIBAEL_DIAGNOSIS={diag['category']}; run={result.get('source_run_id')}")
     return 0
 
