@@ -1,0 +1,38 @@
+name: ZEIBAEL - Automatic Failure Diagnosis
+
+on:
+  workflow_run:
+    workflows:
+      - ZEIBAEL - Modular Public CI
+      - ZEIBAEL - Quality and Security
+      - ZEIBAEL - Package ZIP
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  diagnose:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    name: Attribute earliest actionable failure
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout trusted diagnosis code from main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Examine failed jobs read-only
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          ZEIBAEL_DIAG_OUTPUT: ${{ runner.temp }}/zeibael-diagnosis.json
+        run: python3 -m scripts.run_failure_report
+      - name: Publish sanitized diagnostic
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: zeibael-failure-${{ github.event.workflow_run.id }}
+          path: ${{ runner.temp }}/zeibael-diagnosis.json
+          if-no-files-found: error
+          retention-days: 1
