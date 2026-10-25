@@ -191,3 +191,42 @@ _Dokumentasi diverifikasi 25 Oktober 2026. Grace bertanggung jawab memilih jalur
 - `ubuntu-slim` disetujui hanya untuk runtime Python `short` (10 menit) di ZEIBAEL; batas GitHub 15 menit serta keterbatasan container membuatnya tidak cocok untuk Docker dan build berat. Runner lain mengikuti timeouts standar.
 - Setiap pekerjaan tetap memilih satu OS yang dibutuhkan; tidak otomatis menggandakan job di semua OS.
 - Tidak ada workflow baru, billing/PAYG, deployment Hatchable atau akses privat ke runner publik.
+
+
+## Intelligent Compute Router (resource-aware; FREE-ONLY)
+
+Untuk job `ci/jobs/*.json` yang sudah direview, field `requirements` bersifat **opsional**. Manifest lama yang tidak menggunakan field ini tetap memakai runner semula. Contoh job yang meminta Linux ARM64, minimal 4 vCPU dan RAM 12 GB:
+
+```json
+{
+  "schema": 1,
+  "jobs": [{
+    "id": "python-arm64",
+    "runtime": "python",
+    "runner": "auto",
+    "timeout_profile": "short",
+    "requirements": {
+      "os": "linux",
+      "arch": "arm64",
+      "min_cpu": 4,
+      "min_memory_gb": 12,
+      "toolchains": ["python"],
+      "output_mb": 0
+    },
+    "commands": [["python", "--version"]]
+  }]
+}
+```
+
+- `os`: `linux`, `windows`, `macos`; `arch`: `x64` atau `arm64`. Nilai CPU/RAM adalah kebutuhan minimum, bukan perkiraan kecepatan. `output_mb` adalah estimasi ukuran output, bukan reservasi ataupun pengukuran aktual.
+- `output_mb` lebih besar dari 0 mensyaratkan `output_files: true` dan tidak boleh melebihi **batas internal ZEIBAEL 50 MB per job**. Pemeriksaan output aktual tetap dilakukan oleh `ci_driver.py`.
+- Router menggunakan spesifikasi standard GitHub-hosted runners **repository publik** dan kombinasi runtime/runner yang telah diverifikasi. Informasi spesifikasi: [GitHub-hosted runners reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). **Tidak** memakai larger/paid runners, self-hosted, billing, instalasi toolchain tak disetujui, atau fallback berbayar.
+- Permintaan tanpa kombinasi runner yang memenuhi syarat ditolak sebelum matrix dieksekusi: `ZEIBAEL FREE-ONLY standard runner insufficient or internally unverified`. Ini adalah **kebijakan internal ZEIBAEL**, bukan bukti GitHub kekurangan kapasitas/kuota. Untuk toolchain di luar cakupan teruji, permintaan dihentikan.
+- Pilihan CPU/RAM ialah spesifikasi advertised dan dapat berubah saat GitHub memperbarui runner. Router tidak melakukan benchmark CPU/RAM langsung atau memesan resource eksklusif. Batas workflow/job, perintah, keamanan, retensi 1 hari, dan FREE-ONLY tetap berlaku.
+
+## Automatic Failure Diagnosis
+
+- `scripts/failure_diagnosis.py` mengklasifikasikan error substantif pertama yang dikenali: `ZEIBAEL_INTERNAL`, `USER_CODE`, `PROVIDER_LIMIT`, `TRANSIENT`, atau `UNKNOWN`. `UNKNOWN` berarti bukti belum cukup; **tidak** boleh otomatis dilabeli kesalahan provider.
+- `scripts/ci_driver.py` menambahkan `diagnosis` ke `result.json` saat job gagal. `scripts/aggregate_results.py` mempertahankan field tersebut dalam `aggregate.json` dan step summary.
+- `.github/workflows/failure_diagnosis.yml` berjalan **hanya ketika** CI, Quality/Security, atau Packaging selesai dengan status `failure`. Workflow read-only ini memakai kode terpercaya dari `main`, membaca job/log GitHub yang sudah terjadi (tidak menjalankan ulang), lalu membuat ringkasan dan artifact diagnosis **satu hari**. Tidak ada akses write, dispatch job, atau perubahan billing.
+- Bukti diringkas dan token yang dikenal disamarkan; jangan menaruh rahasia di repo/log publik. Klasifikasi adalah heuristik konservatif, bukan diagnosis sempurna. Ketika log tidak tersedia, hasilnya `UNKNOWN`. Tidak ada auto-retry; pengecekan manual tetap diperlukan sebelum keputusan perbaikan.

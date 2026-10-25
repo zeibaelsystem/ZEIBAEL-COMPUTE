@@ -6,6 +6,10 @@ plugin to transfer only approved public-safe work and to store results privately
 """
 import hashlib
 import json
+try:
+    from scripts.failure_diagnosis import diagnose_failure
+except ModuleNotFoundError:
+    from failure_diagnosis import diagnose_failure
 import os
 import re
 import shutil
@@ -246,6 +250,7 @@ def main():
         "status": "success" if rc == 0 else "failure",
         "exit_code": rc, "duration_seconds": round(time.monotonic() - started, 3),
         "details": detail[-MAX_OUTPUT:],
+        "diagnosis": diagnose_failure(detail) if rc else None,
         "run_id": os.environ.get("GITHUB_RUN_ID"),
         "attempt": os.environ.get("GITHUB_RUN_ATTEMPT"),
     }

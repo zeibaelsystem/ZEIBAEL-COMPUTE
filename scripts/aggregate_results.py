@@ -28,6 +28,7 @@ def aggregate(root, expected_jobs=None, expected_ids=None):
             "task": doc.get("task"),
             "status": doc.get("status"),
             "exit_code": doc.get("exit_code"),
+            "diagnosis": doc.get("diagnosis") if doc.get("status") == "failure" else None,
             "duration_seconds": doc.get("duration_seconds"),
             "run_id": doc.get("run_id"),
         })
@@ -74,6 +75,9 @@ def main():
             f.write(f"### ZEIBAEL CI result: {doc['status']}\n")
             for entry in doc["jobs"]:
                 f.write(f"- {entry['job_id']} ({entry['runtime']}): {entry['status']}\n")
+                if entry.get("diagnosis"):
+                    diag = entry["diagnosis"]
+                    f.write(f"  - Root cause: {diag.get('category', 'UNKNOWN')} — {diag.get('reason', '')}\n")
             if doc.get("error"):
                 f.write(f"- Error: {doc['error']}\n")
     return 0 if doc["status"] == "success" else 1
