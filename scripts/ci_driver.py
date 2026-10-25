@@ -69,7 +69,11 @@ JOB_SAFE_ENV_NAMES = {
 
 
 def safe_job_environment(source):
-    return {key: value for key, value in source.items() if key in JOB_SAFE_ENV_NAMES}
+    # On Windows, Python uppercases environment keys (e.g. ProgramData ->
+    # PROGRAMDATA). Check only the approved names case-insensitively while
+    # preserving original keys and filtering all unapproved credentials.
+    safe_names = {name.upper() for name in JOB_SAFE_ENV_NAMES}
+    return {key: value for key, value in source.items() if key.upper() in safe_names}
 
 
 def resolve_job_command(command, runner_os=None):
