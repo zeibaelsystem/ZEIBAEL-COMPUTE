@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "thermochemistry_cantera",
+      "runtime": "python",
+      "runner": "auto",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 2,
+        "min_memory_gb": 4,
+        "toolchains": [
+          "python"
+        ],
+        "output_mb": 3
+      },
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "cantera==3.2.0"
+        ],
+        [
+          "python",
+          "scripts/industrial_simulation.py",
+          "cantera"
+        ]
+      ]
+    },
+    {
+      "id": "circuit_ngspice",
+      "runtime": "python",
+      "runner": "auto",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 2,
+        "min_memory_gb": 4,
+        "toolchains": [
+          "python"
+        ],
+        "output_mb": 3
+      },
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_industrial_solvers.sh",
+          "ngspice"
+        ],
+        [
+          "python",
+          "scripts/industrial_simulation.py",
+          "ngspice"
+        ]
+      ]
+    },
+    {
+      "id": "structural_calculix",
+      "runtime": "python",
+      "runner": "auto",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 2,
+        "min_memory_gb": 4,
+        "toolchains": [
+          "python"
+        ],
+        "output_mb": 3
+      },
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_industrial_solvers.sh",
+          "calculix-ccx"
+        ],
+        [
+          "python",
+          "scripts/industrial_simulation.py",
+          "calculix"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+* ZEIBAEL synthetic public 1 kOhm / 1 uF RC charging benchmark
+V1 in 0 PULSE(0 1 0 1n 1n 50m 100m)
+R1 in out 1k
+C1 out 0 1u
+.control
+set wr_singlescale
+tran 0.0001 0.02
+wrdata rc_response.txt v(out)
+quit
+.endc
+.end

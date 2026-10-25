@@ -254,3 +254,21 @@ Manifest baru: [ci/jobs/scientific_compute_smoke.json](ci/jobs/scientific_comput
 - Memicu: `workflow=ci`, `task=script`, `script_id=scientific_compute_smoke`. Jika dependensi tersedia di runner dan semua tes sukses, hasil dimuat melalui GitHub Actions artifact.
 
 Kedua engine tunduk pada batas internal ZEIBAEL yang telah ada (20 job/manifest, output maksimal 50 MB/job, artifact satu hari) dan aturan FREE-ONLY. **Batas internal bukan limit resmi GitHub.** Perubahan image runner dan browser binary dapat memerlukan pengujian ulang kompatibilitas.
+
+
+## Three Industrial Engineering Simulation Smoke Engines — PUBLIC FIXTURES ONLY
+
+Manifest: [ci/jobs/industrial_simulation_smoke.json](ci/jobs/industrial_simulation_smoke.json)
+Runtime: standard GitHub-hosted `ubuntu-24.04` (Linux x64) via existing `ci.yml`. Execute on demand via existing admin dispatcher with `workflow=ci`, `task=script`, `script_id=industrial_simulation_smoke`. No recurring service, no external account or billing.
+
+| Job ID | Engine | Verified software behavior | Public artifact |
+|---|---|---|---|
+| `thermochemistry_cantera` | Cantera 3.2.0 Python wheel | Ideal-gas demonstration: stoichiometric methane/air `gri30.yaml`; constant-enthalpy/pressure equilibrium, temperature, energy and elemental conservation checks | `thermochemistry_summary.json` |
+| `circuit_ngspice` | ngspice (Ubuntu `universe` package) | 1 kOhm / 1 µF RC transient; verify 1 ms time constant against analytical 63.2% step response, final steady state | `circuit_summary.json`, `rc_transient.csv` |
+| `structural_calculix` | CalculiX CCX (Ubuntu `universe` package) | Single-element 1 × 1 × 1 mm cube subject to four nodal loads; validate total support reactions and displacement direction | `fea_summary.json`, `fea_nodal_results.dat` |
+
+Implementation: [scripts/industrial_simulation.py](scripts/industrial_simulation.py). Input models: [ci/fixtures/industrial/](ci/fixtures/industrial/). Installer: [ci/jobs/install_industrial_solvers.sh](ci/jobs/install_industrial_solvers.sh), which only installs two explicitly reviewed Ubuntu repository packages from the standard runner and refuses unsupported OS/architecture/package names.
+
+Artifacts opt in per job, are scanned by the existing ZEIBAEL bounded output validator (100 files / 50 MB per job **internal** ceiling, engineering manifest requests ≤3 MB per job) and expire after one day. No project secrets, customer data, industrial plant parameter files, company drawings, field readings, or proprietary models are supported by these public fixtures.
+
+**Engineering safety**: smoke tests check that the open-source numerical solvers execute and basic reference invariants hold. The simulations are synthetic teaching and software-regression benchmarks, NOT validated process hazard analyses, combustor designs, certified electrical circuit design, structural strength calculations, mesh-converged FEA, or fitness-for-service evidence. Never use them to determine real operating pressure, tank integrity, chemical compatibility, exposure limits, protection settings or worker safety. Real designs require qualified engineers, traceable input data, independent validation, sensitivity analysis, appropriate codes and physical testing. All three use only public, committed fixture inputs.
