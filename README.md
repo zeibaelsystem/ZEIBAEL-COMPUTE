@@ -230,3 +230,27 @@ Untuk job `ci/jobs/*.json` yang sudah direview, field `requirements` bersifat **
 - `scripts/ci_driver.py` menambahkan `diagnosis` ke `result.json` saat job gagal. `scripts/aggregate_results.py` mempertahankan field tersebut dalam `aggregate.json` dan step summary.
 - `.github/workflows/failure_diagnosis.yml` berjalan **hanya ketika** CI, Quality/Security, atau Packaging selesai dengan status `failure`. Workflow read-only ini memakai kode terpercaya dari `main`, membaca job/log GitHub yang sudah terjadi (tidak menjalankan ulang), lalu membuat ringkasan dan artifact diagnosis **satu hari**. Tidak ada akses write, dispatch job, atau perubahan billing.
 - Bukti diringkas dan token yang dikenal disamarkan; jangan menaruh rahasia di repo/log publik. Klasifikasi adalah heuristik konservatif, bukan diagnosis sempurna. Ketika log tidak tersedia, hasilnya `UNKNOWN`. Tidak ada auto-retry; pengecekan manual tetap diperlukan sebelum keputusan perbaikan.
+
+
+## Browser Automation Engine — Chromium, Firefox, WebKit
+
+Manifest baru yang direview: [ci/jobs/playwright_browser_smoke.json](ci/jobs/playwright_browser_smoke.json).
+
+- Tiga job Node.js terpisah pada standard GitHub-hosted Ubuntu 24.04 x64. Masing-masing menginstal **Playwright 1.56.1** dan browser binary yang cocok melalui CLI, lalu menguji halaman **localhost** yang dihasilkan dari fixture publik repository sendiri.
+- Ketiga browser: tes tampilan viewport mobile, mengisi input, klik tombol, validasi DOM, dan menulis screenshot PNG ke folder output GitHub Actions yang disetujui. Chromium juga mempertahankan uji PWA offline/service worker.
+- Browser yang diizinkan: `chromium`, `firefox`, `webkit`. Tidak menerima URL, akun, cookie, atau sesi pengguna. Browser runner publik **bukan** sarana untuk memproses situs privat/login dengan kredensial.
+- Screenshot diunggah **hanya saat job sukses** sebagai public-safe optional artifact; retensi satu hari. Lihat `zeibael-output-browser_chromium`, `zeibael-output-browser_firefox`, dan `zeibael-output-browser_webkit`. Dependency/binary browser dipasang sementara, tidak mengaktifkan akun atau layanan berbayar.
+- Memicu hanya jika diperlukan: `workflow=ci`, `task=script`, `script_id=playwright_browser_smoke` melalui dispatcher administrator yang telah ada. Tidak ada schedule baru.
+
+## Scientific & Data Compute — PUBLIC DATA ONLY
+
+Manifest baru: [ci/jobs/scientific_compute_smoke.json](ci/jobs/scientific_compute_smoke.json). Implementasi: [scripts/scientific_compute.py](scripts/scientific_compute.py). Dataset: [ci/fixtures/science/public_demo_prices.csv](ci/fixtures/science/public_demo_prices.csv).
+
+- Runtime: Python 3.12 pada standard Ubuntu GitHub-hosted. Manifest menginstal wheel open-source **NumPy 2.2.6, Pandas 2.3.3, SciPy 1.16.2** untuk satu job sementara, tanpa registrasi/billing tambahan.
+- Dataset CSV diberi label **SYNTHETIC** dan tidak berasal dari data pasar, pelanggan, strategi trading privat, maupun sistem produksi.
+- Hasil nyata: statistik deskriptif; Monte Carlo *seeded* dengan batas jumlah simulasi; `scipy.optimize.minimize_scalar` pada fungsi konveks contoh; backtest long/cash SMA yang memakai sinyal harga penutupan sebelumnya, memasukkan biaya + slippage **18 bps setiap perubahan posisi**, serta maksimum drawdown dan total return.
+- Output dua file: `scientific_summary.json` dan `equity_curve.csv`, hanya di output artifact publik (retensi 1 hari). Input dari file fixture lokal saja—tidak ada API/market data fetch, token, order submission, atau write database.
+- Pembatasan penting: demo backtest **in-sample dan sintetis**; bukan strategi tervalidasi atau dasar keputusan trading. Pengujian strategi nyata, data privat, atau integrasi broker memerlukan desain lain yang tidak melewatkan data rahasia melalui repo publik.
+- Memicu: `workflow=ci`, `task=script`, `script_id=scientific_compute_smoke`. Jika dependensi tersedia di runner dan semua tes sukses, hasil dimuat melalui GitHub Actions artifact.
+
+Kedua engine tunduk pada batas internal ZEIBAEL yang telah ada (20 job/manifest, output maksimal 50 MB/job, artifact satu hari) dan aturan FREE-ONLY. **Batas internal bukan limit resmi GitHub.** Perubahan image runner dan browser binary dapat memerlukan pengujian ulang kompatibilitas.
