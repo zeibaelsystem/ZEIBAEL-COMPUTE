@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "scientific_public_demo",
+      "runtime": "python",
+      "runner": "auto",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 2,
+        "min_memory_gb": 4,
+        "toolchains": [
+          "python"
+        ],
+        "output_mb": 2
+      },
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==2.2.6",
+          "pandas==2.3.3",
+          "scipy==1.16.2"
+        ],
+        [
+          "python",
+          "scripts/scientific_compute.py"
+        ]
+      ]
+    }
+  ]
+}
