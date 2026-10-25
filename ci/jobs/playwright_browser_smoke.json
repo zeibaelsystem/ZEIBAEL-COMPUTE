@@ -2,10 +2,22 @@
   "schema": 1,
   "jobs": [
     {
-      "id": "browser_pwa_e2e",
+      "id": "browser_chromium",
       "runtime": "node",
-      "runner": "ubuntu-24.04",
-      "timeout_profile": "standard",
+      "runner": "auto",
+      "timeout_profile": "long",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "min_memory_gb": 8,
+        "toolchains": [
+          "node",
+          "npm"
+        ],
+        "output_mb": 3
+      },
       "commands": [
         [
           "npm",
@@ -28,7 +40,100 @@
         ],
         [
           "node",
+          "ci/fixtures/web/browser_matrix.mjs",
+          "chromium"
+        ],
+        [
+          "node",
           "ci/fixtures/web/playwright_smoke.mjs"
+        ]
+      ]
+    },
+    {
+      "id": "browser_firefox",
+      "runtime": "node",
+      "runner": "auto",
+      "timeout_profile": "long",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "min_memory_gb": 8,
+        "toolchains": [
+          "node",
+          "npm"
+        ],
+        "output_mb": 3
+      },
+      "commands": [
+        [
+          "npm",
+          "--prefix",
+          "ci/fixtures/web",
+          "install",
+          "--no-save",
+          "--no-package-lock",
+          "--ignore-scripts",
+          "--no-audit",
+          "--no-fund",
+          "playwright@1.56.1"
+        ],
+        [
+          "node",
+          "ci/fixtures/web/node_modules/playwright/cli.js",
+          "install",
+          "--with-deps",
+          "firefox"
+        ],
+        [
+          "node",
+          "ci/fixtures/web/browser_matrix.mjs",
+          "firefox"
+        ]
+      ]
+    },
+    {
+      "id": "browser_webkit",
+      "runtime": "node",
+      "runner": "auto",
+      "timeout_profile": "long",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "min_memory_gb": 8,
+        "toolchains": [
+          "node",
+          "npm"
+        ],
+        "output_mb": 3
+      },
+      "commands": [
+        [
+          "npm",
+          "--prefix",
+          "ci/fixtures/web",
+          "install",
+          "--no-save",
+          "--no-package-lock",
+          "--ignore-scripts",
+          "--no-audit",
+          "--no-fund",
+          "playwright@1.56.1"
+        ],
+        [
+          "node",
+          "ci/fixtures/web/node_modules/playwright/cli.js",
+          "install",
+          "--with-deps",
+          "webkit"
+        ],
+        [
+          "node",
+          "ci/fixtures/web/browser_matrix.mjs",
+          "webkit"
         ]
       ]
     }
