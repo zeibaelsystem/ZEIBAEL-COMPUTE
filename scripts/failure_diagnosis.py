@@ -29,8 +29,8 @@ RULES = (
         r"Public output exceeds 100 files or 50 MB)"),
      "ZEIBAEL configuration, allowlist, or previously confirmed Windows NuGet regression"),
     ("ZEIBAEL_INTERNAL", "medium", re.compile(
-        r"(?i)FileNotFoundError: \[WinError 2\]"),
-     "Windows executable resolution failed; confirm command path in ZEIBAEL manifest"),
+        r"(?i)(Kotlin Windows batch compiler not found|kotlinc\\.bat.*not found)"),
+     "Reviewed Windows Kotlin CLI resolution failed in ZEIBAEL driver"),
     ("TRANSIENT", "medium", re.compile(
         r"(?i)(\bHTTP\s*(?:429|502|503|504)\b|"
         r"server returned (?:429|502|503|504)|"
