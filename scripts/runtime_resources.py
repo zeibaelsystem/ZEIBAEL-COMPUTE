@@ -4,7 +4,10 @@ Capacity evidence: https://docs.github.com/en/actions/reference/runners/github-h
 Only known smoke-tested runtime/platform combinations are auto-selected.
 Spec numbers are minimum advertised resources, not guaranteed free resources forever.
 """
-from scripts.runtime_router import select_runner
+try:
+    from scripts.runtime_router import select_runner
+except ModuleNotFoundError:
+    from runtime_router import select_runner
 
 RUNNER_SPECS = {
     "ubuntu-24.04": {"os": "linux", "arch": "x64", "cpu": 4, "memory_gb": 16},
