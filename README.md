@@ -102,6 +102,8 @@ Tambahan bahasa yang bisa digunakan pada standard GitHub-hosted runners: **Power
 | R | Rscript (dari instalasi image) | `windows-2022` |
 | Scala | sbt + Java 21 (compiler Scala dapat diunduh sbt via repositori publik) | `windows-2022` |
 
+**Verifikasi end-to-end (25 Oktober 2026): [Run #40188271356 — SUCCESS](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40188271356).** Ketujuh job menjalankan program asli dan menghasilkan penanda `ZEIBAEL_POWERSHELL_OK`, `ZEIBAEL_PERL_OK`, `ZEIBAEL_JULIA_OK`, `ZEIBAEL_HASKELL_OK`, `ZEIBAEL_FORTRAN_OK`, `ZEIBAEL_R_OK`, dan `ZEIBAEL_SCALA_OK` dengan exit code 0; plan dan agregasi JSON juga sukses. [Quality & Security pada commit pengembangan](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40188225330) sukses, 64/64 tes regresi. Scala diuji menggunakan sbt di Windows dengan Java 21; dependensi Scala diunduh secara sementara dari repositori publik dan tidak membutuhkan account berbayar. Rscript menggunakan lokasi instalasi R yang disediakan Windows runner; tidak memerlukan instalasi tambahan.
+
 **Pemilihan otomatis tanpa server baru:** manifest publik yang ditinjau boleh menggunakan `"language": "Julia"`, `"runtime": "auto"` dan `"runner": "auto"` (atau menghilangkan kedua field yang `auto`). `scripts/runtime_router.py` menormalkan alias bahasa menjadi runtime dan memilih runner yang memang masuk allowlist lokal ZEIBAEL. Pemilihan ini deterministik, dilakukan pada tahap `plan`, dan tidak menerima perintah tak tepercaya dari dispatcher. Jika bahasa tidak tersedia, planner **gagal jelas**; tidak memasang paket sendiri, tidak mengalihkan ke provider berbayar, dan tidak menjalankan shell command bebas. `ci/jobs/builtin_languages_smoke.json` adalah manifest uji 7 bahasa.
 
 Grace tetap menentukan kebutuhan bahasa dari permintaan Bos dan menyiapkan manifest yang direview di repo publik. Router hanya memilih runtime+runner untuk bahasa yang sudah didukung; **ini bukan sistem yang membaca prompt alami langsung dari GitHub**. Untuk kombinasi OS lain gunakan runner eksplisit yang telah lolos pemeriksaan, bukan menebak. Batasan pemilihan merupakan **aturan ZEIBAEL**, bukan kuota GitHub.
@@ -166,7 +168,7 @@ Uji cepat: `ci/jobs/optional_output_demo.json`, job Python kecil yang menulis co
 - [CI modular dan unit test — berhasil](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/40048674561)
 - [Halaman Actions](../../actions) untuk melihat status eksekusi terbaru
 
-_Dokumentasi diperbarui 24 Oktober 2026. Grace bertanggung jawab memilih jalur eksekusi sesuai pekerjaan, bukan meminta Bos mengingat detail workflow._
+_Dokumentasi diverifikasi 25 Oktober 2026. Grace bertanggung jawab memilih jalur eksekusi sesuai pekerjaan, bukan meminta Bos mengingat detail workflow._
 
 ## Reliability, capacity and security (October 2026)
 
