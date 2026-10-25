@@ -6,6 +6,19 @@ Repository ini berfungsi sebagai **mesin eksekusi sementara** ketika suatu peker
 
 Repository utama dan data internal tetap berada di **ZEIBAEL-SYSTEM (private)**. Runner publik hanya menggunakan material yang memang aman diproses secara publik.
 
+## Structured Web Intelligence — fallback FREE-ONLY untuk Keenable SELECT
+
+Keenable SELECT yang asli **tetap BLOCKED**: [landing page resmi](https://app.keenable.ai/select/start) menyatakan *Free Through October* (promosi sementara), sementara [dokumentasi MCP](https://docs.keenable.ai/select) menyatakan penggunaan ChatGPT OAuth dimeter terhadap organisasi. Tidak ada bukti berlangganan gratis permanen khusus SQL/SEM_* SELECT tanpa risiko biaya.
+
+Untuk riset tabel besar, GPT memilih pencarian + pembacaan sumber publik dari provider yang memenuhi FREE-ONLY (misalnya Keenable **keyless** Search/Fetch), menyusun record terstruktur dengan URL sumber, lalu menjalankan **normalisasi/deduplikasi deterministik offline** (tanpa token, billing, API key, atau AI berbayar):
+
+- [`scripts/structured_web_normalize.py`](scripts/structured_web_normalize.py) — normalisasi berdasarkan identitas fasilitas lengkap; lokasi kosong **tidak digabung otomatis**; unit kapasitas `cell`, `bess` dan lainnya **tidak dijumlahkan silang**; konflik sumber ditandai untuk audit; tanggal pengumuman terpisah dari tanggal update.
+- [`tests/test_structured_web_normalize.py`](tests/test_structured_web_normalize.py) — tes regresi untuk deduplikasi, provenance, kapasitas, tanggal, dan data ambigu.
+- Penggunaan lokal dengan Python standar: `python scripts/structured_web_normalize.py public_records.json result.json`. Input harus berupa list JSON, tiap record menggunakan `company`, `country`, `location`, `facility_type`, `chemistry_scope`, `project_id` (opsional), `event_date` (YYYY-MM-DD), `event_type` (`announcement`, `update`, atau lainnya), `status`, `capacity_gwh_per_year`, `capacity_basis`, dan `source_url`. Missing values harus `null`, bukan angka/URL rekaan.
+- Input ini hanya aman untuk data publik. Jangan pernah memasukkan kode/identitas/data privat ke runner publik. Untuk dataset kecil, Grace dapat mengikuti aturan ini tanpa menjalankan script atau runner. Kode hanya memproses record yang sudah diekstrak — **tidak otomatis menelusuri web, membaca dokumen, menilai kebenaran sumber, atau menjalankan dirinya lintas-chat**.
+
+Kebijakan orkestrasi utamanya tersedia di private [ZEIBAEL-SYSTEM `docs/EXECUTION_ROUTING_POLICY.md`](https://github.com/zeibaelsystem/ZEIBAEL-SYSTEM/blob/main/docs/EXECUTION_ROUTING_POLICY.md), §1D.
+
 ## Pemilihan jalur otomatis oleh Grace
 
 Bos **tidak perlu** meminta “pakai GitHub Actions”, “jalankan di runner”, atau “panggil Hatchable”. Grace memilih sendiri:
