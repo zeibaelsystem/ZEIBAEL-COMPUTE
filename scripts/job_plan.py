@@ -9,6 +9,10 @@ import os
 import re
 from pathlib import Path
 try:
+    from scripts.runtime_resources import choose_reviewed_runner, CORE_VERIFIED
+except ModuleNotFoundError:
+    from runtime_resources import choose_reviewed_runner, CORE_VERIFIED
+try:
     from scripts.runtime_router import BUILTIN_RUNNERS, resolve_language, select_runner
 except ModuleNotFoundError:
     from runtime_router import BUILTIN_RUNNERS, resolve_language, select_runner
@@ -57,7 +61,7 @@ def read_manifest(root, script_id):
         raise ValueError("Expected 1–20 jobs")
     seen = set()
     for job in jobs:
-        if not isinstance(job, dict) or not {"id", "timeout_profile", "commands"}.issubset(job) or set(job) - {"id", "runtime", "runner", "language", "timeout_profile", "commands", "output_files"}:
+        if not isinstance(job, dict) or not {"id", "timeout_profile", "commands"}.issubset(job) or set(job) - {"id", "runtime", "runner", "language", "timeout_profile", "commands", "output_files", "requirements"}:
             raise ValueError("Invalid job fields")
         if not isinstance(job.get("output_files", False), bool):
             raise ValueError("output_files must be true or false")
@@ -74,7 +78,12 @@ def read_manifest(root, script_id):
             raise ValueError("Unsupported ZEIBAEL runtime")
         if job.get("runtime") in (None, "auto"):
             raise ValueError("A supported runtime or language is required")
-        if job.get("runner") in (None, "auto"):
+        if "requirements" in job:
+            reviewed = NEW_RUNTIME_RUNNERS.get(job["runtime"], CORE_VERIFIED.get(job["runtime"], {select_runner(job["runtime"])}))
+            job["runner"] = choose_reviewed_runner(
+                job["runtime"], job["requirements"], reviewed, job["timeout_profile"],
+                runner=job.get("runner"), output_files=job.get("output_files", False))
+        elif job.get("runner") in (None, "auto"):
             job["runner"] = select_runner(job["runtime"])
         if job["runtime"] not in RUNTIMES or job["runner"] not in RUNNERS or job["timeout_profile"] not in TIMEOUTS:
             raise ValueError("Unsupported runtime/runner/timeout_profile")
