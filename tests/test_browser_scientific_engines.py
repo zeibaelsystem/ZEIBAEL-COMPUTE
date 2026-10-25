@@ -26,10 +26,11 @@ class BrowserScientificContractTests(unittest.TestCase):
             commands = job["commands"]
             self.assertTrue(any(browser in args and "install" in args
                                 for args in commands))
-            self.assertTrue(any("browser_matrix.mjs" in args and browser in args
-                                for args in commands))
+            self.assertTrue(any(any(part.endswith("/browser_matrix.mjs") for part in args)
+                                and browser in args for args in commands))
         chromium_commands = by_id["browser_chromium"]["commands"]
-        self.assertTrue(any("playwright_smoke.mjs" in c for c in chromium_commands))
+        self.assertTrue(any(any(part.endswith("/playwright_smoke.mjs") for part in c)
+                            for c in chromium_commands))
 
     def test_browser_fixture_has_real_local_ui_interaction_and_screenshot(self):
         content = (ROOT / "ci/fixtures/web/browser_matrix.mjs").read_text()
@@ -48,7 +49,8 @@ class BrowserScientificContractTests(unittest.TestCase):
         self.assertEqual(job["requirements"]["os"], "linux")
         self.assertLessEqual(job["requirements"]["output_mb"], 5)
         self.assertTrue(any("pip" in command for command in job["commands"]))
-        self.assertTrue(any("scientific_compute.py" in command for command in job["commands"]))
+        self.assertTrue(any(any(part.endswith("/scientific_compute.py") for part in command)
+                            for command in job["commands"]))
 
     def test_scientific_demo_prices_are_public_synthetic_csv(self):
         path = ROOT / "ci/fixtures/science/public_demo_prices.csv"
