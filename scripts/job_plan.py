@@ -8,9 +8,13 @@ import json
 import os
 import re
 from pathlib import Path
+try:
+    from scripts.runtime_router import BUILTIN_RUNNERS, resolve_language, select_runner
+except ModuleNotFoundError:
+    from runtime_router import BUILTIN_RUNNERS, resolve_language, select_runner
 
 IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}\Z")
-RUNTIMES = {"python", "node", "go", "rust", "java", "docker", "php", "ruby", "dotnet", "kotlin", "swift"}
+RUNTIMES = set(BUILTIN_RUNNERS)
 # Internally approved combinations for NEW runtimes. Provider runners may
 # support more combinations; do not claim this ZEIBAEL policy is a GitHub limit.
 NEW_RUNTIME_RUNNERS = {
@@ -23,6 +27,14 @@ NEW_RUNTIME_RUNNERS = {
     "kotlin": {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022",
                "windows-11-arm", "macos-15-intel", "macos-15"},
     "swift": {"ubuntu-24.04", "ubuntu-24.04-arm", "macos-15-intel", "macos-15"},
+    # Conservatively approved built-in tools only. These are ZEIBAEL caps.
+    "powershell": {"ubuntu-24.04"},
+    "perl": {"ubuntu-24.04"},
+    "julia": {"ubuntu-24.04"},
+    "haskell": {"ubuntu-24.04"},
+    "fortran": {"ubuntu-24.04"},
+    "r": {"windows-2022"},
+    "scala": {"windows-2022"},
 }
 RUNNERS = {"ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "windows-11-arm",
            "macos-15", "macos-15-intel", "ubuntu-slim"}
@@ -45,7 +57,7 @@ def read_manifest(root, script_id):
         raise ValueError("Expected 1–20 jobs")
     seen = set()
     for job in jobs:
-        if not isinstance(job, dict) or not {"id", "runtime", "runner", "timeout_profile", "commands"}.issubset(job) or set(job) - {"id", "runtime", "runner", "timeout_profile", "commands", "output_files"}:
+        if not isinstance(job, dict) or not {"id", "timeout_profile", "commands"}.issubset(job) or set(job) - {"id", "runtime", "runner", "language", "timeout_profile", "commands", "output_files"}:
             raise ValueError("Invalid job fields")
         if not isinstance(job.get("output_files", False), bool):
             raise ValueError("output_files must be true or false")
@@ -53,6 +65,17 @@ def read_manifest(root, script_id):
         if not isinstance(name, str) or not IDENTIFIER.fullmatch(name) or name in seen:
             raise ValueError("Job ids must be unique safe identifiers")
         seen.add(name)
+        if "language" in job:
+            inferred = resolve_language(job["language"])
+            if job.get("runtime", "auto") not in ("auto", inferred):
+                raise ValueError("Explicit runtime conflicts with reviewed language")
+            job["runtime"] = inferred
+        if job.get("runtime") not in RUNTIMES and job.get("runtime") != "auto":
+            raise ValueError("Unsupported ZEIBAEL runtime")
+        if job.get("runtime") in (None, "auto"):
+            raise ValueError("A supported runtime or language is required")
+        if job.get("runner") in (None, "auto"):
+            job["runner"] = select_runner(job["runtime"])
         if job["runtime"] not in RUNTIMES or job["runner"] not in RUNNERS or job["timeout_profile"] not in TIMEOUTS:
             raise ValueError("Unsupported runtime/runner/timeout_profile")
         if job["runtime"] in NEW_RUNTIME_RUNNERS and job["runner"] not in NEW_RUNTIME_RUNNERS[job["runtime"]]:
@@ -70,7 +93,7 @@ def read_manifest(root, script_id):
             if any(not isinstance(a, str) or not a or len(a) > 512 or "\x00" in a or "\n" in a or "\r" in a for a in argv):
                 raise ValueError("Invalid argv argument")
             # No shell=True: arguments cannot inject shell control operators.
-            if argv[0] not in {"python", "python3", "node", "npm", "go", "cargo", "rustc", "java", "javac", "docker", "bash", "gcc", "g++", "php", "ruby", "dotnet", "kotlinc", "swift"}:
+            if argv[0] not in {"python", "python3", "node", "npm", "go", "cargo", "rustc", "java", "javac", "docker", "bash", "gcc", "g++", "php", "ruby", "dotnet", "kotlinc", "swift", "pwsh", "perl", "julia", "ghc", "runghc", "gfortran", "Rscript", "sbt"}:
                 raise ValueError("Command executable not on approved runtime list")
             if argv[0] == "bash" and (len(argv) < 2 or argv[1].startswith("-")):
                 raise ValueError("Bash must run a reviewed script file, not -c")

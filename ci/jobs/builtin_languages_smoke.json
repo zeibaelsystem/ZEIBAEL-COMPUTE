@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "powershell-auto",
+      "language": "PowerShell",
+      "runtime": "auto",
+      "runner": "auto",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "pwsh",
+          "-NoLogo",
+          "-NoProfile",
+          "-NonInteractive",
+          "-File",
+          "ci/fixtures/builtin/hello.ps1"
+        ]
+      ]
+    },
+    {
+      "id": "perl-auto",
+      "language": "Perl",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "perl",
+          "ci/fixtures/builtin/hello.pl"
+        ]
+      ]
+    },
+    {
+      "id": "julia-auto",
+      "language": "Julia",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "julia",
+          "--startup-file=no",
+          "ci/fixtures/builtin/hello.jl"
+        ]
+      ]
+    },
+    {
+      "id": "haskell-auto",
+      "language": "Haskell",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "runghc",
+          "ci/fixtures/builtin/Hello.hs"
+        ]
+      ]
+    },
+    {
+      "id": "fortran-auto",
+      "language": "Fortran",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "gfortran",
+          "-o",
+          "ci/fixtures/builtin/zeibael_f",
+          "ci/fixtures/builtin/Hello.f90"
+        ],
+        [
+          "python",
+          "ci/fixtures/python/verify_binary.py",
+          "ci/fixtures/builtin/zeibael_f",
+          "ZEIBAEL_FORTRAN_OK"
+        ]
+      ]
+    },
+    {
+      "id": "r-auto",
+      "language": "R",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/builtin/run_r.py"
+        ]
+      ]
+    },
+    {
+      "id": "scala-auto",
+      "language": "Scala",
+      "timeout_profile": "long",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/builtin/run_scala.py"
+        ]
+      ]
+    }
+  ]
+}

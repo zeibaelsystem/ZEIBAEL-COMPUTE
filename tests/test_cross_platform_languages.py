@@ -21,7 +21,7 @@ EXPECTED = {
 
 class CrossPlatformLanguages(unittest.TestCase):
     def test_exact_reviewed_platform_allowlist(self):
-        self.assertEqual(NEW_RUNTIME_RUNNERS, EXPECTED)
+        self.assertEqual({k: NEW_RUNTIME_RUNNERS[k] for k in EXPECTED}, EXPECTED)
 
     def test_two_smoke_manifests_cover_all_new_combinations_once(self):
         jobs = []

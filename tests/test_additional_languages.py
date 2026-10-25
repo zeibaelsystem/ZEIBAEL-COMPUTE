@@ -34,7 +34,7 @@ class LanguageExtensionTests(unittest.TestCase):
 
     def test_five_new_runtime_names_are_supported(self):
         self.assertTrue(set(LANGS).issubset(RUNTIMES))
-        self.assertEqual(len(RUNTIMES), 11)
+        self.assertEqual(len(RUNTIMES), 18)
 
     def test_each_language_cli_is_accepted_and_planned(self):
         self.manifest([self.one(language) for language in LANGS])
