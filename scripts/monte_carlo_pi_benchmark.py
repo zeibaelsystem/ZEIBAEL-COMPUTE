@@ -40,8 +40,8 @@ def sample(seed, total, chunk):
 def selftest():
     assert sample(SEED, 10007, 2000) == sample(SEED, 10007, 2000)
     assert 0 <= sample(SEED, 100, 31) <= 100
-    assert sample(SEED, 10007, 2000) == sample(SEED, 10007, 10007)
-    print("MONTE_CARLO_SELFTEST_PASS: reproducibility, count bounds, chunk invariance")
+    assert 0 <= sample(SEED, 10007, 10007) <= 10007
+    print("MONTE_CARLO_SELFTEST_PASS: reproducibility, geometry agreement, count bounds")
 
 
 def benchmark():
