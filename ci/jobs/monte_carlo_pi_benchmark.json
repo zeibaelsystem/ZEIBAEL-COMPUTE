@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "monte_linux_x64",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==2.2.6"
+        ],
+        [
+          "python",
+          "scripts/monte_carlo_pi_benchmark.py",
+          "--selftest"
+        ],
+        [
+          "python",
+          "scripts/monte_carlo_pi_benchmark.py"
+        ]
+      ]
+    },
+    {
+      "id": "monte_windows_x64",
+      "runtime": "python",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==2.2.6"
+        ],
+        [
+          "python",
+          "scripts/monte_carlo_pi_benchmark.py",
+          "--selftest"
+        ],
+        [
+          "python",
+          "scripts/monte_carlo_pi_benchmark.py"
+        ]
+      ]
+    },
+    {
+      "id": "monte_macos_x64",
+      "runtime": "python",
+      "runner": "macos-15-intel",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==2.2.6"
+        ],
+        [
+          "python",
+          "scripts/monte_carlo_pi_benchmark.py",
+          "--selftest"
+        ],
+        [
+          "python",
+          "scripts/monte_carlo_pi_benchmark.py"
+        ]
+      ]
+    }
+  ]
+}
