@@ -23,3 +23,14 @@ class BrowserInputTests(unittest.TestCase):
             {"action":"fill","selector":"#q","value":"public search"},
             {"action":"click","selector":"#find"},{"action":"text"}]))
         self.assertEqual(len(s),3)
+
+    def test_browser_environment_is_bounded(self):
+        raw={"ZEIBAEL_BROWSER_URL":"https://example.com/",
+             "ZEIBAEL_BROWSER_STEPS":'[{"action":"text"}]',
+             "UNRELATED_FIELD":"ignored"}
+        result=validated_browser_environment("public_browser",raw)
+        self.assertEqual(set(result),{"ZEIBAEL_BROWSER_URL","ZEIBAEL_BROWSER_STEPS"})
+        self.assertEqual(validated_browser_environment("ordinary_job",raw),{})
+        with self.assertRaises(ValueError):
+            validated_browser_environment("public_browser",
+                {"ZEIBAEL_BROWSER_URL":"http://127.0.0.1"})
