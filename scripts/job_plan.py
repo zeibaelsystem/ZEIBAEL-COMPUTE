@@ -112,6 +112,16 @@ def build_plan(root, task, script_id):
     if task not in TASKS or (task != "script" and script_id):
         raise ValueError("Invalid CI task or script_id")
     if task == "script":
+        browser_url = os.environ.get("ZEIBAEL_BROWSER_URL", "")
+        browser_steps = os.environ.get("ZEIBAEL_BROWSER_STEPS", "")
+        if script_id == "public_browser":
+            try:
+                from scripts.public_browser_input import parse_public_browser_request
+            except ModuleNotFoundError:
+                from public_browser_input import parse_public_browser_request
+            parse_public_browser_request(browser_url, browser_steps)
+        elif browser_url or (browser_steps and browser_steps != "[]"):
+            raise ValueError("Browser inputs only allowed for public_browser")
         manifest = read_manifest(root, script_id)
         if manifest:
             jobs = manifest["jobs"]
