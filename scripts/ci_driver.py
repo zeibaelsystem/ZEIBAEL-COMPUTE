@@ -181,6 +181,12 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
     if os.environ.get("ZEIBAEL_JOB_RUNTIME") != job["runtime"]:
         raise ValueError("Runner runtime differs from reviewed manifest")
     safe = safe_job_environment(os.environ)
+    if script_id == "public_browser":
+        try:
+            from scripts.public_browser_input import validated_browser_environment
+        except ModuleNotFoundError:
+            from public_browser_input import validated_browser_environment
+        safe.update(validated_browser_environment(script_id, os.environ))
     safe.update(ZEIBAEL_SOURCE_ROOT=str(root), ZEIBAEL_OUTPUT_DIR=str(output_dir),
                 ZEIBAEL_JOB_ID=job_id)
     deadline = time.monotonic() + timeout
