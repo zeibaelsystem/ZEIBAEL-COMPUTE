@@ -1,6 +1,6 @@
 import json
 import unittest
-from scripts.public_browser_input import parse_public_browser_request
+from scripts.public_browser_input import parse_public_browser_request, validated_browser_environment
 class BrowserInputTests(unittest.TestCase):
     def test_public_steps(self):
         u,s=parse_public_browser_request("https://example.com/",'[{"action":"screenshot"}]')
