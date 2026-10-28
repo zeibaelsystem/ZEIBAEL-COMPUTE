@@ -23,7 +23,9 @@ jobs:
       - name: Run regression tests
         run: python3 -m unittest discover -s tests -v
       - name: Test public browser request guard
-        run: node --test tests/test_public_browser_guard.mjs
+        run: |
+          node --check ci/fixtures/web/public_browser.mjs
+          node --test tests/test_public_browser_guard.mjs
       - name: Validate committed CI manifest schemas
         run: |
           python3 -m compileall -q scripts tests ci/fixtures
