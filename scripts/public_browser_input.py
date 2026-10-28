@@ -44,3 +44,15 @@ def parse_public_browser_request(url, steps_json):
         if action=="fill" and (not isinstance(step["value"],str) or not VALUE.fullmatch(step["value"])):
             raise ValueError("Only short plain public input")
     return url,steps
+
+def validated_browser_environment(script_id, variables):
+    """Pass only reviewed browser URL/actions into public browser job child process."""
+    if script_id != "public_browser":
+        return {}
+    url, steps = parse_public_browser_request(
+        variables.get("ZEIBAEL_BROWSER_URL", ""),
+        variables.get("ZEIBAEL_BROWSER_STEPS", "[]"))
+    return {
+        "ZEIBAEL_BROWSER_URL": url,
+        "ZEIBAEL_BROWSER_STEPS": json.dumps(steps, separators=(",", ":")),
+    }
