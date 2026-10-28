@@ -15,6 +15,16 @@ on:
           - node_tests
           - package
           - script
+      browser_url:
+        description: "Public HTTPS URL for approved public_browser only"
+        required: false
+        type: string
+        default: ""
+      browser_steps:
+        description: "Bounded browser actions JSON"
+        required: false
+        type: string
+        default: "[]"
       script_id:
         description: "Reviewed ci/jobs/<script_id>.json, .py or .sh; task=script only"
         required: false
@@ -48,6 +58,8 @@ jobs:
           ZEIBAEL_CI_ROOT: ${{ github.workspace }}/runner
           ZEIBAEL_CI_TASK: ${{ inputs.task }}
           ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
+          ZEIBAEL_BROWSER_URL: ${{ inputs.browser_url }}
+          ZEIBAEL_BROWSER_STEPS: ${{ inputs.browser_steps }}
         run: python3 runner/scripts/job_plan.py
 
   execute:
@@ -110,6 +122,8 @@ jobs:
           ZEIBAEL_CI_ROOT: ${{ github.workspace }}/runner
           ZEIBAEL_CI_TASK: ${{ inputs.task }}
           ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
+          ZEIBAEL_BROWSER_URL: ${{ inputs.browser_url }}
+          ZEIBAEL_BROWSER_STEPS: ${{ inputs.browser_steps }}
           ZEIBAEL_CI_OUTPUT: ${{ runner.temp }}/zeibael-ci-output
           ZEIBAEL_JOB_ID: ${{ matrix.id }}
           ZEIBAEL_JOB_RUNTIME: ${{ matrix.runtime }}
