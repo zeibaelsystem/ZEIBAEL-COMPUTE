@@ -45,3 +45,20 @@ export async function routeWithFallback({taskType,classification,question,candid
  }
  return fail("NO_COMPLETE_VERIFIED_FREE_RESPONSE");
 }
+
+/** Evidence is reliability/latency (not factual correctness), aggregated per task; never overrides FREE-ONLY. */
+export function rankByEvidence(task,candidates=[],records=[],now=Date.now()){
+ if(!Array.isArray(candidates)||!Array.isArray(records))return candidates;
+ const supported=planCandidates(task,candidates,now);
+ if(supported.length<2)return supported;
+ const aggregated=supported.map(c=>{
+  const eligible=records.filter(r=>r.task===task&&r.provider===c.provider&&r.model===c.model&&r.windowDays<=7);
+  return eligible.reduce((acc,r)=>({attempts:acc.attempts+Math.max(0,Number(r.attempts)||0),completed:acc.completed+Math.max(0,Number(r.completed)||0),totalLatencyMs:acc.totalLatencyMs+Math.max(0,Number(r.totalLatencyMs)||0)}),{attempts:0,completed:0,totalLatencyMs:0});
+ });
+ if(aggregated.some(r=>r.attempts<5))return supported;
+ const score=r=>(r.completed/r.attempts)*100-Math.min(r.totalLatencyMs/r.attempts/1000,20);
+ return supported.map((c,i)=>({c,i,score:score(aggregated[i])})).sort((a,b)=>b.score-a.score||a.i-b.i).map(x=>x.c);
+}
+export function telemetryRecord({task,candidate,ok,elapsedMs}){
+ return {task,provider:candidate.provider,model:candidate.model,completed:ok===true,latencyMs:Math.max(0,Math.round(Number(elapsedMs)||0))};
+}
