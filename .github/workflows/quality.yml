@@ -26,6 +26,7 @@ jobs:
         run: |
           node --check ci/fixtures/web/public_browser.mjs
           node --test tests/test_public_browser_guard.mjs
+          node --test tests/test_ai_routing_contract.mjs
       - name: Validate committed CI manifest schemas
         run: |
           python3 -m compileall -q scripts tests ci/fixtures
