@@ -20,6 +20,10 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+      - name: Install FFmpeg for media regression
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
       - name: Run regression tests
         run: python3 -m unittest discover -s tests -v
       - name: Test public browser request guard
