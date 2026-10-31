@@ -59,7 +59,7 @@ class ASRPCMTests(unittest.TestCase):
                 out.setnchannels(1)
                 out.setframerate(16000)
                 out.setsampwidth(2)
-                out.writeframes(b"\\x00\\x40" * 16000)
+                out.writeframes(b"\x00\x40" * 16000)
             x=read_pcm16_mono(f)
             self.assertEqual(x.dtype,np.float32)
             self.assertEqual(x.shape,(16000,))
@@ -75,6 +75,6 @@ class ASRPCMTests(unittest.TestCase):
                 out.setnchannels(2)
                 out.setframerate(44100)
                 out.setsampwidth(2)
-                out.writeframes(b"\\x00" * 100)
+                out.writeframes(b"\x00" * 100)
             with self.assertRaises(ValueError):
                 read_pcm16_mono(f)
