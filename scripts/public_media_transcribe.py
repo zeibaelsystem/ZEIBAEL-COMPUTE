@@ -30,23 +30,33 @@ def main():
         raise TimeoutError("ASR budget exceeded")
     signal.signal(signal.SIGALRM, timeout_handler)
     signal.alarm(240)
+    stage = "model_init"
     try:
         from faster_whisper import WhisperModel
         model = WhisperModel("Systran/faster-whisper-base",
                              device="cpu", compute_type="int8",
                              cpu_threads=2, num_workers=1)
+        stage = "transcribe"
         segments, info = model.transcribe(
             str(audio), beam_size=3, vad_filter=True,
             condition_on_previous_text=False)
+        stage = "serialize"
         result = serialize_transcript(segments, info)
-    except Exception:
-        # No provider errors or signed URLs in public job logs.
+    except Exception as exc:
+        # Safe diagnostics only: class name and HTTP status. Never raw exception
+        # messages, because remote fetch errors may include token-bearing URLs.
+        status = getattr(getattr(exc, "response", None), "status_code", None)
         result = {"schema": 1, "engine": "faster-whisper-base/cpu-int8",
-                  "status": "asr_unavailable", "text": "", "segments": []}
+                  "status": "asr_unavailable", "text": "", "segments": [],
+                  "failure_stage": stage, "failure_type": type(exc).__name__,
+                  "http_status": status if isinstance(status, int) else None}
     finally:
         signal.alarm(0)
     status_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("ZEIBAEL_PUBLIC_ASR_STATUS=" + result["status"])
+    if result["status"] == "asr_unavailable":
+        print("ZEIBAEL_PUBLIC_ASR_DIAG stage=%s type=%s http=%s" %
+              (result["failure_stage"], result["failure_type"], result["http_status"]))
     return 0
 
 if __name__ == "__main__":
