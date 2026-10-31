@@ -20,6 +20,17 @@ def serialize_transcript(segments, info):
             "language_probability": round(float(getattr(info, "language_probability", 0)), 3),
             "text": text[:12000], "segments": rows[:120]}
 
+def transcribe_with_fallback(model, source):
+    """Retry without VAD on a typed local decoder/VAD API incompatibility."""
+    try:
+        a, b = model.transcribe(source, beam_size=3, vad_filter=True,
+                                condition_on_previous_text=False)
+        return a, b, False
+    except TypeError:
+        a, b = model.transcribe(source, beam_size=3, vad_filter=False,
+                                language="id", condition_on_previous_text=False)
+        return a, b, True
+
 def main():
     root = Path(os.environ["ZEIBAEL_OUTPUT_DIR"]) / "files"
     audio = root / "speech.wav"
@@ -37,11 +48,10 @@ def main():
                              device="cpu", compute_type="int8",
                              cpu_threads=2, num_workers=1)
         stage = "transcribe"
-        segments, info = model.transcribe(
-            str(audio), beam_size=3, vad_filter=True,
-            condition_on_previous_text=False)
+        segments, info, fallback_used = transcribe_with_fallback(model, str(audio))
         stage = "serialize"
         result = serialize_transcript(segments, info)
+        result["no_vad_fallback_used"] = fallback_used
     except Exception as exc:
         # Safe diagnostics only: class name and HTTP status. Never raw exception
         # messages, because remote fetch errors may include token-bearing URLs.
