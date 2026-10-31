@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "public_instagram_media",
+      "runtime": "python",
+      "runner": "auto",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "min_memory_gb": 8,
+        "toolchains": [
+          "python"
+        ],
+        "output_mb": 3
+      },
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "yt-dlp==2026.10.26",
+          "gallery-dl==1.32.18"
+        ],
+        [
+          "bash",
+          "ci/jobs/install_media_tools.sh"
+        ],
+        [
+          "python",
+          "-m",
+          "unittest",
+          "tests.test_public_media",
+          "-v"
+        ],
+        [
+          "python",
+          "scripts/public_media.py"
+        ]
+      ]
+    }
+  ]
+}

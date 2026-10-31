@@ -120,8 +120,14 @@ def build_plan(root, task, script_id):
             except ModuleNotFoundError:
                 from public_browser_input import parse_public_browser_request
             parse_public_browser_request(browser_url, browser_steps)
+        elif script_id == "public_media":
+            try:
+                from scripts.public_media_input import validate_public_media_url
+            except ModuleNotFoundError:
+                from public_media_input import validate_public_media_url
+            validate_public_media_url(browser_url, browser_steps)
         elif browser_url or (browser_steps and browser_steps != "[]"):
-            raise ValueError("Browser inputs only allowed for public_browser")
+            raise ValueError("Media/browser inputs allowed only for their reviewed scripts")
         manifest = read_manifest(root, script_id)
         if manifest:
             jobs = manifest["jobs"]

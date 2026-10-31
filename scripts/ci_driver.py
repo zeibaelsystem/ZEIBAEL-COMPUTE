@@ -187,6 +187,12 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
         except ModuleNotFoundError:
             from public_browser_input import validated_browser_environment
         safe.update(validated_browser_environment(script_id, os.environ))
+    elif script_id == "public_media":
+        try:
+            from scripts.public_media_input import validated_public_media_environment
+        except ModuleNotFoundError:
+            from public_media_input import validated_public_media_environment
+        safe.update(validated_public_media_environment(script_id, os.environ))
     safe.update(ZEIBAEL_SOURCE_ROOT=str(root), ZEIBAEL_OUTPUT_DIR=str(output_dir),
                 ZEIBAEL_JOB_ID=job_id)
     deadline = time.monotonic() + timeout

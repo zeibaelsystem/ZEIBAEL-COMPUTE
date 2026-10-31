@@ -16,7 +16,7 @@ on:
           - package
           - script
       browser_url:
-        description: "Public HTTPS URL for approved public_browser only"
+        description: "Public HTTPS URL for approved public_browser or public_media only"
         required: false
         type: string
         default: ""
