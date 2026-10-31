@@ -7,6 +7,8 @@ may be visible, so never use this job for private or sensitive uploads.
 import json
 import os
 import signal
+import re
+import traceback
 from pathlib import Path
 
 def serialize_transcript(segments, info):
@@ -56,10 +58,19 @@ def main():
         # Safe diagnostics only: class name and HTTP status. Never raw exception
         # messages, because remote fetch errors may include token-bearing URLs.
         status = getattr(getattr(exc, "response", None), "status_code", None)
+        # Only short local type-error descriptions; strip URLs, paths and tokens.
+        message = str(exc)
+        safe_message = (message[:180] if len(message) < 181 and
+                        re.fullmatch(r"[A-Za-z0-9 .,:_()\x27-]+", message) and
+                        not any(x in message.lower() for x in ("token", "secret", "https", "key"))
+                        else "REDACTED")
+        stack = [frame.name for frame in traceback.extract_tb(exc.__traceback__)[-5:]]
         result = {"schema": 1, "engine": "faster-whisper-base/cpu-int8",
                   "status": "asr_unavailable", "text": "", "segments": [],
                   "failure_stage": stage, "failure_type": type(exc).__name__,
-                  "http_status": status if isinstance(status, int) else None}
+                  "http_status": status if isinstance(status, int) else None,
+                  "failure_message": safe_message,
+                  "failure_stack": stack}
     finally:
         signal.alarm(0)
     status_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
@@ -67,6 +78,8 @@ def main():
     if result["status"] == "asr_unavailable":
         print("ZEIBAEL_PUBLIC_ASR_DIAG stage=%s type=%s http=%s" %
               (result["failure_stage"], result["failure_type"], result["http_status"]))
+        print("ZEIBAEL_PUBLIC_ASR_SAFE_DETAIL=" + result["failure_message"])
+        print("ZEIBAEL_PUBLIC_ASR_SAFE_STACK=" + ",".join(result["failure_stack"]))
     return 0
 
 if __name__ == "__main__":
