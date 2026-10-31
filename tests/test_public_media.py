@@ -45,6 +45,26 @@ class MediaInputTests(unittest.TestCase):
         self.assertEqual(validated_public_media_environment("public_browser", {}), {})
 
 class MediaProcessorTests(unittest.TestCase):
+    def test_media_manifest_is_reviewed_and_never_exposes_private_input(self):
+        from scripts.job_plan import read_manifest, build_plan
+        from unittest.mock import patch
+        root = Path(__file__).resolve().parents[1]
+        job = read_manifest(root, "public_media")["jobs"][0]
+        self.assertTrue(job["output_files"])
+        self.assertEqual(job["runtime"], "python")
+        self.assertTrue(any("install_media_tools.sh" in arg
+                            for argv in job["commands"] for arg in argv))
+        env = {"ZEIBAEL_BROWSER_URL": "https://instagram.com/reel/DfJe39jptS8",
+               "ZEIBAEL_BROWSER_STEPS": "[]"}
+        with patch.dict("os.environ", env):
+            p = build_plan(root, "script", "public_media")
+            self.assertEqual(len(p["include"]), 1)
+        with patch.dict("os.environ", {
+                "ZEIBAEL_BROWSER_URL": "https://evil.com/reel/DfJe39jptS8",
+                "ZEIBAEL_BROWSER_STEPS": "[]"}):
+            with self.assertRaises(ValueError):
+                build_plan(root, "script", "public_media")
+
     def test_media_module_importable_and_no_side_effects(self):
         from scripts.public_media import find_approved_media
         with tempfile.TemporaryDirectory() as d:
