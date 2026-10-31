@@ -26,7 +26,8 @@
           "--disable-pip-version-check",
           "--no-input",
           "yt-dlp==2026.10.26",
-          "gallery-dl==1.32.18"
+          "gallery-dl==1.32.18",
+          "faster-whisper==1.2.1"
         ],
         [
           "bash",
@@ -42,6 +43,10 @@
         [
           "python",
           "scripts/public_media.py"
+        ],
+        [
+          "python",
+          "scripts/public_media_transcribe.py"
         ]
       ]
     }
