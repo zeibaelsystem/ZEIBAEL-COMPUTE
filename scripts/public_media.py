@@ -53,7 +53,7 @@ def capture(argv, timeout=25):
     return p.stdout
 
 def make_evidence(source, output):
-    """Make bounded, public-only artifacts suitable for later vision/speech models."""
+    """Make bounded, public-only artifacts suitable for vision and full-clip ASR."""
     output.mkdir(parents=True, exist_ok=True)
     info = json.loads(capture(["ffprobe", "-v", "error", "-show_format",
                                "-show_streams", "-of", "json", str(source)]))
@@ -66,8 +66,8 @@ def make_evidence(source, output):
     if duration < 0 or duration > 3600:
         raise ValueError("Unsafe duration")
     is_video = source.suffix.lower() in (".mp4", ".m4v", ".webm")
-    shots = [0.0] if not is_video else sorted(set([0.0, min(5.0, duration * 0.35),
-                                                          min(12.0, duration * 0.75)]))
+    shots = [0.0] if not is_video else sorted(set([0.0, min(18.0, duration * 0.35),
+                                                          min(42.0, duration * 0.75)]))
     frames = []
     for idx, seconds in enumerate(shots):
         name = "frame_%02d.jpg" % idx
@@ -86,7 +86,7 @@ def make_evidence(source, output):
     if is_video and audio:
         dest = output / "speech.wav"
         args = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
-                "-i", str(source), "-vn", "-t", "12", "-ar", "16000",
+                "-i", str(source), "-vn", "-t", "55", "-ar", "16000",
                 "-ac", "1", "-c:a", "pcm_s16le", str(dest)]
         if limited_command(args, 25) and dest.is_file() and dest.stat().st_size > 1000:
             speech = "speech.wav"
