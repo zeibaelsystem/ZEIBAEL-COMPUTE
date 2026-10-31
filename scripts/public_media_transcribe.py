@@ -61,7 +61,7 @@ def main():
         # Only short local type-error descriptions; strip URLs, paths and tokens.
         message = str(exc)
         safe_message = (message[:180] if len(message) < 181 and
-                        re.fullmatch(r"[a-zA-Z0-9 .,:_()\\\x27-]+", message) and
+                        re.fullmatch(r"[A-Za-z0-9 .,:_()\x27-]+", message) and
                         not any(x in message.lower() for x in ("token", "secret", "https", "key"))
                         else "REDACTED")
         stack = [frame.name for frame in traceback.extract_tb(exc.__traceback__)[-5:]]
