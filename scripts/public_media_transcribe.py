@@ -7,6 +7,7 @@ may be visible, so never use this job for private or sensitive uploads.
 import json
 import os
 import signal
+import wave
 import re
 import traceback
 from pathlib import Path
@@ -21,6 +22,18 @@ def serialize_transcript(segments, info):
             "language": getattr(info, "language", None),
             "language_probability": round(float(getattr(info, "language_probability", 0)), 3),
             "text": text[:12000], "segments": rows[:120]}
+
+def read_pcm16_mono(path):
+    """Convert owned FFmpeg PCM16 WAV to float32; bypass fragile PyAV open()."""
+    import numpy as np
+    with wave.open(str(path), "rb") as reader:
+        if (reader.getnchannels() != 1 or reader.getframerate() != 16000
+                or reader.getsampwidth() != 2 or reader.getcomptype() != "NONE"):
+            raise ValueError("Expected 16 kHz mono PCM16 WAV")
+        raw = reader.readframes(min(reader.getnframes(), 55 * 16000))
+    if len(raw) < 1600 or len(raw) % 2:
+        raise ValueError("Truncated or empty WAV input")
+    return np.frombuffer(raw, dtype="<i2").astype(np.float32) / 32768.0
 
 def transcribe_with_fallback(model, source):
     """Retry without VAD on a typed local decoder/VAD API incompatibility."""
@@ -49,8 +62,10 @@ def main():
         model = WhisperModel("Systran/faster-whisper-base",
                              device="cpu", compute_type="int8",
                              cpu_threads=2, num_workers=1)
+        stage = "read_pcm"
+        samples = read_pcm16_mono(audio)
         stage = "transcribe"
-        segments, info, fallback_used = transcribe_with_fallback(model, str(audio))
+        segments, info, fallback_used = transcribe_with_fallback(model, samples)
         stage = "serialize"
         result = serialize_transcript(segments, info)
         result["no_vad_fallback_used"] = fallback_used
