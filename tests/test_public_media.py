@@ -54,6 +54,8 @@ class MediaProcessorTests(unittest.TestCase):
         self.assertEqual(job["runtime"], "python")
         self.assertTrue(any("install_media_tools.sh" in arg
                             for argv in job["commands"] for arg in argv))
+        self.assertTrue(any("public_media_transcribe.py" in arg
+                            for argv in job["commands"] for arg in argv))
         env = {"ZEIBAEL_BROWSER_URL": "https://instagram.com/reel/DfJe39jptS8",
                "ZEIBAEL_BROWSER_STEPS": "[]"}
         with patch.dict("os.environ", env):
