@@ -51,9 +51,9 @@ class MediaProcessorTests(unittest.TestCase):
             root = Path(d)
             (root / "a.txt").write_text("no media")
             self.assertIsNone(find_approved_media(root))
-            (root / "photo.jpg").write_bytes(b"a")
+            (root / "photo.jpg").write_bytes(b"a" * 500)
             self.assertEqual(find_approved_media(root).suffix, ".jpg")
-            (root / "video.mp4").write_bytes(b"a")
+            (root / "video.mp4").write_bytes(b"a" * 500)
             self.assertEqual(find_approved_media(root).suffix, ".mp4")
 
     def test_ffmpeg_synthetic_video_extracts_frames_audio(self):
