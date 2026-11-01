@@ -4,6 +4,7 @@
 Never send private links or tokens to this public workflow. A failed fetch is
 not evidence of a video claim; output only sampled frames and short speech audio.
 """
+import base64
 import hashlib
 import json
 import os
@@ -46,6 +47,33 @@ def limited_command(argv, timeout):
         return p.returncode == 0
     except (subprocess.TimeoutExpired, OSError):
         return False
+
+def media_shortcode(url):
+    """Clean canonical public post ID for matching media evidence to request."""
+    return validate_public_media_url(url).rstrip("/").rsplit("/", 1)[1]
+
+
+def vision_preview_base64(frame):
+    """Generate a bounded JPEG thumb for direct model byte input from public media.
+
+    Image is a thumbnail only; original full-resolution frames remain artifacts.
+    """
+    if (not frame.is_file() or frame.is_symlink() or frame.suffix.lower() != ".jpg"
+            or frame.stat().st_size > MAX_MEDIA_BYTES):
+        raise ValueError("Expected public JPEG frame")
+    with tempfile.TemporaryDirectory(prefix="zeibael-public-frame-") as folder:
+        dest = Path(folder) / "preview.jpg"
+        command = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error",
+                   "-y", "-i", str(frame), "-frames:v", "1",
+                   "-vf", "scale='min(120,iw)':-2", "-q:v", "24", str(dest)]
+        if not limited_command(command, 20) or not dest.is_file():
+            raise ValueError("JPEG thumbnail conversion failed")
+        raw = dest.read_bytes()
+    if not 400 <= len(raw) <= 3600 or not (
+            raw.startswith(b"\\xff\\xd8\\xff") and raw.endswith(b"\\xff\\xd9")):
+        raise ValueError("JPEG thumbnail bytes failed size/signature checks")
+    return base64.b64encode(raw).decode("ascii")
+
 
 def capture(argv, timeout=25):
     p = subprocess.run(argv, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
@@ -135,6 +163,16 @@ def main():
     (destination / "media-result.json").write_text(json.dumps(result, indent=2))
     print("ZEIBAEL_PUBLIC_MEDIA_OK kind=%s frames=%d speech=%s" %
           (result["kind"], len(result["frames"]), bool(result["speech"])))
+    # Public-only, short, log-delivered model-usable JPEG bytes; no signed URLs.
+    if result["frames"]:
+        try:
+            preview = vision_preview_base64(destination / result["frames"][0])
+            visual = {"media_id": media_shortcode(url), "frame": result["frames"][0],
+                      "mime_type": "image/jpeg", "jpeg_base64": preview}
+            print("ZEIBAEL_PUBLIC_VISION_PREVIEW=" +
+                  json.dumps(visual, separators=(",", ":")))
+        except (OSError, ValueError):
+            print("ZEIBAEL_PUBLIC_VISION_PREVIEW_UNAVAILABLE")
     return 0
 
 if __name__ == "__main__":
