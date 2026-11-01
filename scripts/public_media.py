@@ -70,7 +70,7 @@ def vision_preview_base64(frame):
             raise ValueError("JPEG thumbnail conversion failed")
         raw = dest.read_bytes()
     if not 400 <= len(raw) <= 3600 or not (
-            raw.startswith(b"\\xff\\xd8\\xff") and raw.endswith(b"\\xff\\xd9")):
+            raw.startswith(b"\xff\xd8\xff") and raw.endswith(b"\xff\xd9")):
         raise ValueError("JPEG thumbnail bytes failed size/signature checks")
     return base64.b64encode(raw).decode("ascii")
 
