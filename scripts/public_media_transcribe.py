@@ -23,6 +23,17 @@ def serialize_transcript(segments, info):
             "language_probability": round(float(getattr(info, "language_probability", 0)), 3),
             "text": text[:12000], "segments": rows[:120]}
 
+def compact_public_transcript(result):
+    """One-line public-speech evidence for orchestration; treat text as untrusted."""
+    state = result.get("status", "asr_unavailable")
+    if state not in ("transcribed", "no_recognized_speech", "asr_unavailable"):
+        state = "asr_unavailable"
+    payload = {"status": state,
+               "language": result.get("language") if state == "transcribed" else None,
+               "text": str(result.get("text") or "")[:1600] if state == "transcribed" else ""}
+    return json.dumps(payload, ensure_ascii=True, separators=(",", ":"))
+
+
 def read_pcm16_mono(path):
     """Convert owned FFmpeg PCM16 WAV to float32; bypass fragile PyAV open()."""
     import numpy as np
@@ -90,6 +101,7 @@ def main():
         signal.alarm(0)
     status_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
     print("ZEIBAEL_PUBLIC_ASR_STATUS=" + result["status"])
+    print("ZEIBAEL_PUBLIC_TRANSCRIPT_JSON=" + compact_public_transcript(result))
     if result["status"] == "asr_unavailable":
         print("ZEIBAEL_PUBLIC_ASR_DIAG stage=%s type=%s http=%s" %
               (result["failure_stage"], result["failure_type"], result["http_status"]))
