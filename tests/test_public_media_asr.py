@@ -78,3 +78,22 @@ class ASRPCMTests(unittest.TestCase):
                 out.writeframes(b"\x00" * 100)
             with self.assertRaises(ValueError):
                 read_pcm16_mono(f)
+
+class PublicTranscriptBridgeTests(unittest.TestCase):
+    def test_transcript_handoff_is_one_safe_machine_readable_line(self):
+        import json
+        from scripts.public_media_transcribe import compact_public_transcript
+        result={"status":"transcribed", "language":"id",
+                "text":'Klaim "gratis"\\ncek baris kedua', "segments":[]}
+        data=compact_public_transcript(result)
+        self.assertNotIn(chr(10), data)
+        self.assertEqual(json.loads(data)["language"],"id")
+        self.assertIn("gratis",json.loads(data)["text"])
+
+    def test_transcript_handoff_is_bounded(self):
+        import json
+        from scripts.public_media_transcribe import compact_public_transcript
+        line=compact_public_transcript({"status":"transcribed",
+            "language":"id", "text":"A"*20000})
+        self.assertLess(len(line),2700)
+        self.assertEqual(len(json.loads(line)["text"]),1600)

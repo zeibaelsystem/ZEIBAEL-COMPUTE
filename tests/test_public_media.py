@@ -112,3 +112,34 @@ class MediaProcessorTests(unittest.TestCase):
             link = root / "evil.jpg"
             link.symlink_to(big)
             self.assertIsNone(find_approved_media(root))
+
+
+class BridgeTests(unittest.TestCase):
+    def test_jpeg_preview_is_small_decodable_and_represents_first_frame(self):
+        """Broken until the actual frame-to-vision-byte bridge exists."""
+        import base64
+        from scripts.public_media import vision_preview_base64
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            frame=root/"frame_00.jpg"
+            subprocess.run(["ffmpeg","-v","error","-y","-f","lavfi",
+                            "-i","testsrc=size=480x854:rate=1","-frames:v","1",
+                            str(frame)],check=True,timeout=15)
+            encoded=vision_preview_base64(frame)
+            raw=base64.b64decode(encoded,validate=True)
+            self.assertTrue(raw.startswith(b"\xff\xd8\xff"))
+            self.assertTrue(raw.endswith(b"\xff\xd9"))
+            self.assertLess(len(raw),4000)
+
+    def test_preview_fails_closed_for_non_jpeg(self):
+        from scripts.public_media import vision_preview_base64
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/"bad.jpg"
+            p.write_bytes(b"not-a-JPEG")
+            with self.assertRaises(ValueError):
+                vision_preview_base64(p)
+
+    def test_safe_shortcode_does_not_include_url_query_or_credentials(self):
+        from scripts.public_media import media_shortcode
+        self.assertEqual(media_shortcode(
+            "https://www.instagram.com/reel/DfJe39jptS8/"),"DfJe39jptS8")
