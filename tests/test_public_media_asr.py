@@ -86,7 +86,7 @@ class PublicTranscriptBridgeTests(unittest.TestCase):
         result={"status":"transcribed", "language":"id",
                 "text":'Klaim "gratis"\\ncek baris kedua', "segments":[]}
         data=compact_public_transcript(result)
-        self.assertNotIn("\\n", data)
+        self.assertNotIn(chr(10), data)
         self.assertEqual(json.loads(data)["language"],"id")
         self.assertIn("gratis",json.loads(data)["text"])
 
