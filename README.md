@@ -21,6 +21,8 @@ Kebijakan orkestrasi utamanya tersedia di private [ZEIBAEL-SYSTEM `docs/EXECUTIO
 
 ## Pemilihan jalur otomatis oleh Grace
 
+**Benchmark Python dari perintah natural:** permintaan seperti "mengapa multithreading lebih lambat daripada multiprocessing? buktikan dengan benchmark" mempunyai manifest publik siap pakai `ci/jobs/python_parallelism_benchmark.json` (Linux, Windows, macOS), skrip `scripts/python_parallelism_benchmark.py`, dan pengujian hasil identik di `tests/test_python_parallelism_benchmark.py`. Untuk benchmark hardware/performa, **cek jalur ZEIBAEL-COMPUTE sebelum memilih pengukuran Python lokal**; jika GitHub MCP tidak mempunyai `workflow_dispatch`, pakai endpoint Hatchable admin-only `/api/github-dispatch` yang sudah ada dengan `workflow=ci`, `task=script`, `script_id=python_parallelism_benchmark`. Periksa hasil workflow, job logs, dan artefak JSON yang nyata. Jangan menyatakan jalur otomatis lintas-chat sudah terbukti hanya karena manifest ini ada.
+
 Bos **tidak perlu** meminta “pakai GitHub Actions”, “jalankan di runner”, atau “panggil Hatchable”. Grace memilih sendiri:
 
 1. **GitHub Native Plugin** untuk pekerjaan repository yang dapat dilakukan langsung.

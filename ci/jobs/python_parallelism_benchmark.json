@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "parallel_linux_x64",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        ["python", "-m", "unittest", "discover", "-s", "tests", "-p", "test_python_parallelism_benchmark.py", "-v"],
+        ["python", "scripts/python_parallelism_benchmark.py", "--workers", "4", "--iterations", "4000000", "--repeats", "3"]
+      ]
+    },
+    {
+      "id": "parallel_windows_x64",
+      "runtime": "python",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        ["python", "-m", "unittest", "discover", "-s", "tests", "-p", "test_python_parallelism_benchmark.py", "-v"],
+        ["python", "scripts/python_parallelism_benchmark.py", "--workers", "4", "--iterations", "4000000", "--repeats", "3"]
+      ]
+    },
+    {
+      "id": "parallel_macos_arm64",
+      "runtime": "python",
+      "runner": "macos-15",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        ["python", "-m", "unittest", "discover", "-s", "tests", "-p", "test_python_parallelism_benchmark.py", "-v"],
+        ["python", "scripts/python_parallelism_benchmark.py", "--workers", "4", "--iterations", "4000000", "--repeats", "3"]
+      ]
+    }
+  ]
+}
