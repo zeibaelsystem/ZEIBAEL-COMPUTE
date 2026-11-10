@@ -115,9 +115,19 @@ def make_evidence_v2(source, output, limited_command, capture):
         raise ValueError("Unsafe duration")
     is_video = source.suffix.lower() in (".mp4", ".m4v", ".webm")
     window = min(duration, MAX_FULL_ANALYSIS_SECONDS)
+    # Container duration can exceed the visible stream (e.g. audio-only tail).
+    # The stream duration is evidence; do not seek pixels after it ends.
+    try:
+        video_stream_end = (float(video_track.get("start_time") or 0)
+                            + float(video_track.get("duration") or 0))
+    except (TypeError, ValueError):
+        video_stream_end = 0.0
+    if not math.isfinite(video_stream_end) or video_stream_end <= 0:
+        video_stream_end = duration
+    visual_window = min(window, max(0, video_stream_end))
     if is_video:
-        scenes, scene_status = discover_scenes(source, window)
-        timestamps = select_frame_seconds(window, scenes, fps=fps)
+        scenes, scene_status = discover_scenes(source, visual_window)
+        timestamps = select_frame_seconds(visual_window, scenes, fps=fps)
     else:
         scenes, scene_status, timestamps = [], "not_video", [0.0]
 
@@ -125,12 +135,24 @@ def make_evidence_v2(source, output, limited_command, capture):
     for idx, second in enumerate(timestamps):
         name = "frame_%02d.jpg" % idx
         dest = output / name
-        args = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y"]
-        if second:
-            args += ["-ss", str(second)]
-        args += ["-i", str(source), "-frames:v", "1",
-                 "-vf", "scale='min(480,iw)':-2", "-q:v", "7", str(dest)]
-        if not limited_command(args, 25) or not dest.is_file() or dest.stat().st_size < 500:
+        attempts = [second]
+        # Some MP4s have an inaccurate declared visual end or sparse keyframes.
+        # Retry bounded earlier timestamps, preserving the actual requested seek.
+        if idx == len(timestamps) - 1 and second > 0:
+            attempts += [round(max(0.0, second - delta), 3)
+                         for delta in (0.5, 1.0, 2.0, 3.5, 5.0)]
+        success = False
+        for seek in dict.fromkeys(attempts):
+            dest.unlink(missing_ok=True)
+            args = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y"]
+            if seek:
+                args += ["-ss", str(seek)]
+            args += ["-i", str(source), "-frames:v", "1",
+                     "-vf", "scale='min(480,iw)':-2", "-q:v", "7", str(dest)]
+            if limited_command(args, 25) and dest.is_file() and dest.stat().st_size >= 500:
+                second, success = seek, True
+                break
+        if not success:
             failures.append(round(second, 3))
             if idx == 0:
                 raise ValueError("Could not decode the first frame")
@@ -168,7 +190,13 @@ def make_evidence_v2(source, output, limited_command, capture):
     coverage = {
         "video_seconds": round(duration, 3),
         "window_seconds": round(window, 3),
-        "visual_full_window_sampled": bool(frame_records and frame_records[-1]["seconds"] >= max(0, window - 0.3) and not failures),
+        "visual_stream_end_seconds": round(video_stream_end, 3),
+        "visual_window_seconds": round(visual_window, 3),
+        "visual_last_sample_seconds": frame_records[-1]["seconds"] if frame_records else None,
+        "visual_gap_seconds": round(max(0, window - frame_records[-1]["seconds"]), 3) if frame_records else round(window, 3),
+        "visual_track_shorter_than_media": video_stream_end + 0.75 < duration,
+        "visual_full_window_sampled": bool(frame_records and frame_records[-1]["seconds"] >= max(0, window - max(0.75, 1.5 / fps))
+                                         and video_stream_end + 0.75 >= window and not failures),
         "audio_seconds_available": round(window if speech_full else min(window, 55) if speech else 0, 3),
         "duration_limited": duration > MAX_FULL_ANALYSIS_SECONDS,
         "frames_failed": failures,
