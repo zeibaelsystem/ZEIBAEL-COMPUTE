@@ -82,6 +82,29 @@ class VideoSamplingTests(unittest.TestCase):
             self.assertEqual(status, "completed")
             self.assertIn("HELLO", txt.upper())
 
+    def test_short_video_stream_and_longer_audio_are_reported_separately(self):
+        if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
+            self.skipTest("video tools unavailable")
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "audio_tail.mp4"
+            out = Path(tmp) / "out"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi",
+                            "-i", "testsrc=size=160x90:rate=2:duration=4",
+                            "-f", "lavfi",
+                            "-i", "sine=frequency=440:sample_rate=16000:duration=7",
+                            "-map", "0:v", "-map", "1:a",
+                            "-c:v", "mpeg4", "-c:a", "aac",
+                            str(src)], check=True, timeout=40)
+            with patch("scripts.public_video_intelligence.extract_ocr",
+                       return_value=("", "unavailable")):
+                report = make_evidence_v2(src, out, limited_command, capture)
+            c = report["coverage"]
+            self.assertTrue(c["visual_track_shorter_than_media"])
+            self.assertGreater(c["visual_gap_seconds"], 2)
+            self.assertEqual(c["audio_seconds_available"], 7)
+            self.assertFalse(c["visual_full_window_sampled"])
+            self.assertLessEqual(report["sampled_seconds"][-1], c["visual_stream_end_seconds"])
+
     def test_media_frame_failure_does_not_shift_timestamps(self):
         if not shutil.which("ffmpeg"):
             self.skipTest("ffmpeg unavailable")
