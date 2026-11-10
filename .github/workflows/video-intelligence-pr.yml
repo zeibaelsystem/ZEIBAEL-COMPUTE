@@ -34,6 +34,8 @@ jobs:
           bash ci/jobs/install_media_tools.sh
       - name: Run public video regression suite
         run: python -m unittest tests.test_public_video_intelligence tests.test_public_media tests.test_public_media_asr -v
+      - name: Run full repository Python regression suite
+        run: python -m unittest discover -s tests -v
       - name: Verify source and media manifest
         run: |
           python -m compileall -q scripts/public_media.py scripts/public_media_transcribe.py scripts/public_video_intelligence.py scripts/public_video_timeline.py
