@@ -1,0 +1,40 @@
+name: Video Intelligence PR Verification
+on:
+  pull_request:
+    paths:
+      - 'scripts/public_media.py'
+      - 'scripts/public_media_transcribe.py'
+      - 'scripts/public_video_intelligence.py'
+      - 'scripts/public_video_timeline.py'
+      - 'ci/jobs/public_media.json'
+      - 'ci/jobs/install_media_tools.sh'
+      - 'tests/test_public_video_intelligence.py'
+      - 'tests/test_public_media.py'
+      - 'tests/test_public_media_asr.py'
+      - '.github/workflows/video-intelligence-pr.yml'
+permissions:
+  contents: read
+jobs:
+  video-regression:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Setup Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install reviewed media tools
+        run: |
+          python -m pip install --disable-pip-version-check --no-input scenedetect==0.7.3
+          bash ci/jobs/install_media_tools.sh
+      - name: Run public video regression suite
+        run: python -m unittest tests.test_public_video_intelligence tests.test_public_media tests.test_public_media_asr -v
+      - name: Verify source and media manifest
+        run: |
+          python -m compileall -q scripts/public_media.py scripts/public_media_transcribe.py scripts/public_video_intelligence.py scripts/public_video_timeline.py
+          python -m json.tool ci/jobs/public_media.json >/dev/null
