@@ -33,6 +33,55 @@ class VideoSamplingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             select_frame_seconds(90, [], limit=1)
 
+    def test_long_video_reserves_scenes_even_with_dense_regular_samples(self):
+        stamps = select_frame_seconds(
+            300, [{"start": 123.0, "end": 125.0},
+                  {"start": 253.0, "end": 255.0}])
+        self.assertLessEqual(len(stamps), MAX_FRAMES)
+        self.assertTrue(any(abs(v - 123.1) < 0.5 or abs(v - 124) < 0.5
+                            for v in stamps))
+        self.assertTrue(any(abs(v - 253.1) < 0.5 or abs(v - 254) < 0.5
+                            for v in stamps))
+        self.assertGreater(stamps[-1], 299)
+
+    def test_real_141_second_media_uses_full_window_and_scene_package(self):
+        if not shutil.which("ffmpeg") or not shutil.which("tesseract"):
+            self.skipTest("video/OCR tools unavailable")
+        with tempfile.TemporaryDirectory() as tmp:
+            src = Path(tmp) / "clip.mp4"
+            out = Path(tmp) / "out"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi",
+                            "-i", "testsrc=size=160x90:rate=1", "-f", "lavfi",
+                            "-i", "sine=frequency=440:sample_rate=16000",
+                            "-t", "141", "-c:v", "mpeg4", "-c:a", "aac",
+                            str(src)], check=True, timeout=60)
+            report = make_evidence_v2(src, out, limited_command, capture)
+            self.assertEqual(report["scene_detection"], "completed")
+            self.assertGreater(len(report["frame_records"]), 15)
+            self.assertGreater(report["sampled_seconds"][-1], 139.0)
+            self.assertEqual(report["coverage"]["audio_seconds_available"], 141)
+            self.assertTrue((out / report["speech_full"]).is_file())
+            self.assertLess(sum(p.stat().st_size for p in out.iterdir()), 12_000_000)
+
+    def test_ocr_extracts_actual_on_screen_text(self):
+        if not shutil.which("ffmpeg") or not shutil.which("tesseract"):
+            self.skipTest("video/OCR tools unavailable")
+        font = Path("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")
+        if not font.is_file():
+            self.skipTest("test font not installed")
+        from scripts.public_video_intelligence import extract_ocr
+        with tempfile.TemporaryDirectory() as tmp:
+            image = Path(tmp) / "text.jpg"
+            drawtext = ("drawtext=fontfile=%s:text=HELLO:"
+                        "fontcolor=white:fontsize=90:x=(w-text_w)/2:y=(h-text_h)/2"
+                        % font)
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi",
+                            "-i", "color=c=black:s=640x160", "-vf", drawtext,
+                            "-frames:v", "1", str(image)], check=True, timeout=20)
+            txt, status = extract_ocr(image)
+            self.assertEqual(status, "completed")
+            self.assertIn("HELLO", txt.upper())
+
     def test_media_frame_failure_does_not_shift_timestamps(self):
         if not shutil.which("ffmpeg"):
             self.skipTest("ffmpeg unavailable")
