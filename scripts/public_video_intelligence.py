@@ -26,7 +26,9 @@ def select_frame_seconds(duration, scenes, limit=MAX_FRAMES, fps=30.0):
         return [0.0]
     last = max(0.0, duration - max(0.15, 1.2 / float(fps)))
     # Evenly spaced samples prevent a scene detector miss from omitting long spans.
-    base_count = min(limit, max(2, math.ceil(duration / 5.0) + 1))
+    # Reserve capacity for scene cuts, even in five-minute videos.
+    uniform_budget = max(2, limit - max(4, limit // 4))
+    base_count = min(uniform_budget, max(2, math.ceil(duration / 5.0) + 1))
     base = [last * i / (base_count - 1) for i in range(base_count)]
     cut_points = []
     for scene in scenes:
@@ -47,7 +49,13 @@ def select_frame_seconds(duration, scenes, limit=MAX_FRAMES, fps=30.0):
         if remaining > 0:
             candidates = [v for v in result if v not in must]
             cuts = [v for v in candidates if any(abs(v - p) < 0.02 for p in cut_points)]
-            chosen = (cuts + [v for v in candidates if v not in cuts])[:remaining]
+            if len(cuts) > remaining:
+                # Choose cuts across the whole video, not just its opening.
+                indexes = [round(i * (len(cuts) - 1) / (remaining - 1))
+                           for i in range(remaining)] if remaining > 1 else [len(cuts) // 2]
+                chosen = [cuts[i] for i in indexes]
+            else:
+                chosen = (cuts + [v for v in candidates if v not in cuts])[:remaining]
             must.update(chosen)
         result = sorted(must)
     return result[:limit]
