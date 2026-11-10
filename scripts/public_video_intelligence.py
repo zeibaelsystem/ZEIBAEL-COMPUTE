@@ -15,14 +15,16 @@ MAX_FULL_ANALYSIS_SECONDS = 300.0
 MAX_EVIDENCE_BYTES = 12_000_000
 
 
-def select_frame_seconds(duration, scenes, limit=MAX_FRAMES):
-    """Cover the whole clip, preferring scene cuts while preserving both ends."""
+def select_frame_seconds(duration, scenes, limit=MAX_FRAMES, fps=30.0):
+    """Cover the whole clip and avoid seeking beyond low-FPS final frames."""
     duration = max(0.0, float(duration))
-    if duration == 0:
-        return [0.0]
-    last = max(0.0, duration - 0.15)
     if limit < 2:
         raise ValueError("Frame limit must be at least 2")
+    if not math.isfinite(float(fps)) or not 0 < float(fps) <= 240:
+        raise ValueError("Invalid video frame rate")
+    if duration == 0:
+        return [0.0]
+    last = max(0.0, duration - max(0.15, 1.2 / float(fps)))
     # Evenly spaced samples prevent a scene detector miss from omitting long spans.
     base_count = min(limit, max(2, math.ceil(duration / 5.0) + 1))
     base = [last * i / (base_count - 1) for i in range(base_count)]
@@ -91,6 +93,15 @@ def make_evidence_v2(source, output, limited_command, capture):
     if not any(v.get("codec_type") == "video" for v in tracks):
         raise ValueError("Media has no visual stream")
     audio = any(v.get("codec_type") == "audio" for v in tracks)
+    video_track = next(v for v in tracks if v.get("codec_type") == "video")
+    rate = str(video_track.get("avg_frame_rate") or video_track.get("r_frame_rate") or "30/1")
+    try:
+        numerator, denominator = rate.split("/")
+        fps = float(numerator) / float(denominator)
+        if not math.isfinite(fps) or not 0 < fps <= 240:
+            fps = 30.0
+    except (ValueError, ZeroDivisionError):
+        fps = 30.0
     duration = float(probe.get("format", {}).get("duration") or 0)
     if not math.isfinite(duration) or duration < 0 or duration > 3600:
         raise ValueError("Unsafe duration")
@@ -98,7 +109,7 @@ def make_evidence_v2(source, output, limited_command, capture):
     window = min(duration, MAX_FULL_ANALYSIS_SECONDS)
     if is_video:
         scenes, scene_status = discover_scenes(source, window)
-        timestamps = select_frame_seconds(window, scenes)
+        timestamps = select_frame_seconds(window, scenes, fps=fps)
     else:
         scenes, scene_status, timestamps = [], "not_video", [0.0]
 
