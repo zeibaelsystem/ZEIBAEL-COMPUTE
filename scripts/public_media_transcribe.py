@@ -21,16 +21,16 @@ def serialize_transcript(segments, info):
             "status": "transcribed" if rows else "no_recognized_speech",
             "language": getattr(info, "language", None),
             "language_probability": round(float(getattr(info, "language_probability", 0)), 3),
-            "text": text[:12000], "segments": rows[:120]}
+            "text": text[:60000], "segments": rows[:800], "transcript_truncated": len(rows) > 800 or len(text) > 60000}
 
 def compact_public_transcript(result):
     """One-line public-speech evidence for orchestration; treat text as untrusted."""
     state = result.get("status", "asr_unavailable")
-    if state not in ("transcribed", "no_recognized_speech", "asr_unavailable"):
+    if state not in ("transcribed", "transcribed_partial_coverage", "no_recognized_speech", "asr_unavailable"):
         state = "asr_unavailable"
     payload = {"status": state,
-               "language": result.get("language") if state == "transcribed" else None,
-               "text": str(result.get("text") or "")[:1600] if state == "transcribed" else ""}
+               "language": result.get("language") if state in ("transcribed", "transcribed_partial_coverage") else None,
+               "text": str(result.get("text") or "")[:1600] if state in ("transcribed", "transcribed_partial_coverage") else ""}
     return json.dumps(payload, ensure_ascii=True, separators=(",", ":"))
 
 
@@ -59,8 +59,16 @@ def transcribe_with_fallback(model, source):
 
 def main():
     root = Path(os.environ["ZEIBAEL_OUTPUT_DIR"]) / "files"
-    audio = root / "speech.wav"
-    if not audio.is_file() or audio.is_symlink() or audio.stat().st_size > 3_000_000:
+    full_audio = root / "speech_full.opus"
+    legacy_audio = root / "speech.wav"
+    audio = full_audio if (full_audio.is_file() and not full_audio.is_symlink()
+                           and full_audio.stat().st_size <= 12_000_000) else legacy_audio
+    if not audio.is_file() or audio.is_symlink() or audio.stat().st_size > 12_000_000:
+        try:
+            from scripts.public_video_timeline import write_timeline
+        except ModuleNotFoundError:
+            from public_video_timeline import write_timeline
+        write_timeline(root, {"status": "no_audio", "segments": []})
         return 0
     status_file = root / "transcript.json"
     def timeout_handler(*_):
@@ -73,13 +81,35 @@ def main():
         model = WhisperModel("Systran/faster-whisper-base",
                              device="cpu", compute_type="int8",
                              cpu_threads=2, num_workers=1)
-        stage = "read_pcm"
-        samples = read_pcm16_mono(audio)
-        stage = "transcribe"
-        segments, info, fallback_used = transcribe_with_fallback(model, samples)
-        stage = "serialize"
-        result = serialize_transcript(segments, info)
-        result["no_vad_fallback_used"] = fallback_used
+        if audio.suffix == ".opus":
+            try:
+                from scripts.public_video_timeline import transcribe_full
+            except ModuleNotFoundError:
+                from public_video_timeline import transcribe_full
+            meta = json.loads((root / "media-result.json").read_text(encoding="utf-8"))
+            seconds = float(meta.get("coverage", {}).get("audio_seconds_available") or 0)
+            stage = "transcribe_full_window"
+            result = transcribe_full(model, audio, seconds,
+                                     read_pcm16_mono, transcribe_with_fallback,
+                                     serialize_transcript)
+            if float(meta.get("duration_seconds") or 0) > seconds:
+                if result["status"] == "transcribed":
+                    result["status"] = "transcribed_partial_coverage"
+        else:
+            stage = "read_pcm"
+            samples = read_pcm16_mono(audio)
+            stage = "transcribe"
+            segments, info, fallback_used = transcribe_with_fallback(model, samples)
+            stage = "serialize"
+            result = serialize_transcript(segments, info)
+            result["no_vad_fallback_used"] = fallback_used
+            meta_path = root / "media-result.json"
+            if meta_path.is_file():
+                meta = json.loads(meta_path.read_text(encoding="utf-8"))
+                if float(meta.get("duration_seconds") or 0) > 55:
+                    if result["status"] == "transcribed":
+                        result["status"] = "transcribed_partial_coverage"
+                result["audio_coverage_seconds"] = min(55, float(meta.get("duration_seconds") or 0))
     except Exception as exc:
         # Safe diagnostics only: class name and HTTP status. Never raw exception
         # messages, because remote fetch errors may include token-bearing URLs.
@@ -100,6 +130,11 @@ def main():
     finally:
         signal.alarm(0)
     status_file.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    try:
+        from scripts.public_video_timeline import write_timeline
+    except ModuleNotFoundError:
+        from public_video_timeline import write_timeline
+    write_timeline(root, result)
     print("ZEIBAEL_PUBLIC_ASR_STATUS=" + result["status"])
     print("ZEIBAEL_PUBLIC_TRANSCRIPT_JSON=" + compact_public_transcript(result))
     if result["status"] == "asr_unavailable":
