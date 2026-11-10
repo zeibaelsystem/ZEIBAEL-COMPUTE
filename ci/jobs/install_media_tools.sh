@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Ubuntu GitHub-hosted runner only; approved public FFmpeg packages.
-if command -v ffmpeg >/dev/null && command -v ffprobe >/dev/null; then
-  ffmpeg -version | head -1
-  exit 0
+# GitHub-hosted Ubuntu runner: approved public utilities, never provider credentials.
+missing=()
+if ! command -v ffmpeg >/dev/null || ! command -v ffprobe >/dev/null; then
+  missing+=(ffmpeg)
 fi
-sudo apt-get update -qq
-sudo apt-get install -y -qq ffmpeg
+if ! command -v tesseract >/dev/null; then
+  missing+=(tesseract-ocr tesseract-ocr-eng tesseract-ocr-ind)
+elif ! tesseract --list-langs 2>/dev/null | grep -qx ind; then
+  missing+=(tesseract-ocr-ind)
+fi
+if ((${#missing[@]})); then
+  sudo apt-get update -qq
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq "${missing[@]}"
+fi
 command -v ffmpeg
 command -v ffprobe
+command -v tesseract
+tesseract --list-langs 2>/dev/null | grep -qx ind
