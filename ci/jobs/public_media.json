@@ -15,7 +15,7 @@
         "toolchains": [
           "python"
         ],
-        "output_mb": 3
+        "output_mb": 12
       },
       "commands": [
         [
@@ -27,7 +27,8 @@
           "--no-input",
           "yt-dlp==2026.10.26",
           "gallery-dl==1.32.18",
-          "faster-whisper==1.2.1"
+          "faster-whisper==1.2.1",
+          "scenedetect==0.7.3"
         ],
         [
           "bash",
@@ -38,6 +39,14 @@
           "-m",
           "unittest",
           "tests.test_public_media",
+          "-v"
+        ],
+        [
+          "python",
+          "-m",
+          "unittest",
+          "tests.test_public_video_intelligence",
+          "tests.test_public_media_asr",
           "-v"
         ],
         [

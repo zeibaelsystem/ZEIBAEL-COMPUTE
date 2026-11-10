@@ -2,7 +2,7 @@
 """Public Instagram media evidence on a standard GitHub runner; NO login/cookies.
 
 Never send private links or tokens to this public workflow. A failed fetch is
-not evidence of a video claim; output only sampled frames and short speech audio.
+not evidence of a video claim; output is bounded multimodal evidence.
 """
 import base64
 import hashlib
@@ -81,52 +81,13 @@ def capture(argv, timeout=25):
     return p.stdout
 
 def make_evidence(source, output):
-    """Make bounded, public-only artifacts suitable for vision and full-clip ASR."""
-    output.mkdir(parents=True, exist_ok=True)
-    info = json.loads(capture(["ffprobe", "-v", "error", "-show_format",
-                               "-show_streams", "-of", "json", str(source)]))
-    streams = info.get("streams") or []
-    video = next((s for s in streams if s.get("codec_type") == "video"), None)
-    audio = any(s.get("codec_type") == "audio" for s in streams)
-    if video is None:
-        raise ValueError("Media has no visual stream")
-    duration = float(info.get("format", {}).get("duration") or 0.0)
-    if duration < 0 or duration > 3600:
-        raise ValueError("Unsafe duration")
-    is_video = source.suffix.lower() in (".mp4", ".m4v", ".webm")
-    shots = [0.0] if not is_video else sorted(set([0.0, min(18.0, duration * 0.35),
-                                                          min(42.0, duration * 0.75)]))
-    frames = []
-    for idx, seconds in enumerate(shots):
-        name = "frame_%02d.jpg" % idx
-        dest = output / name
-        args = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y"]
-        if seconds:
-            args += ["-ss", str(seconds)]
-        args += ["-i", str(source), "-frames:v", "1",
-                 "-vf", "scale='min(480,iw)':-2", "-q:v", "6", str(dest)]
-        if not limited_command(args, 25) or not dest.is_file() or dest.stat().st_size < 500:
-            if idx == 0:
-                raise ValueError("Could not decode the first frame")
-            continue
-        frames.append(name)
-    speech = None
-    if is_video and audio:
-        dest = output / "speech.wav"
-        args = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
-                "-i", str(source), "-vn", "-t", "55", "-ar", "16000",
-                "-ac", "1", "-c:a", "pcm_s16le", str(dest)]
-        if limited_command(args, 25) and dest.is_file() and dest.stat().st_size > 1000:
-            speech = "speech.wav"
-    paths = [output / x for x in frames + ([speech] if speech else [])]
-    if sum(p.stat().st_size for p in paths) > MAX_EVIDENCE_BYTES:
-        raise ValueError("Evidence exceeds public artifact limit")
-    return {"kind": "video" if is_video else "image",
-            "frames": frames, "speech": speech,
-            "sampled_seconds": [round(x, 3) for x in shots[:len(frames)]],
-            "media_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
-            "artifacts": [{"name": p.name, "size": p.stat().st_size}
-                          for p in paths]}
+    """Produce full-window bounded evidence, keeping the original entry point."""
+    try:
+        from scripts.public_video_intelligence import make_evidence_v2
+    except ModuleNotFoundError:
+        from public_video_intelligence import make_evidence_v2
+    return make_evidence_v2(source, output, limited_command, capture)
+
 
 def fetch_public_media(url, folder):
     """Two independent public extractors; no credentials, no paid access, no bypass."""
@@ -158,7 +119,7 @@ def main():
         if not extractor or not media:
             raise RuntimeError("SOURCE_MEDIA_UNAVAILABLE: public extractors returned no usable media")
         result = make_evidence(media, destination)
-    result.update({"schema": 1, "source": "public_instagram", "extractor": extractor,
+    result.update({"schema": 2, "source": "public_instagram", "extractor": extractor,
                    "status": "media_decoded_not_claim_verified"})
     (destination / "media-result.json").write_text(json.dumps(result, indent=2))
     print("ZEIBAEL_PUBLIC_MEDIA_OK kind=%s frames=%d speech=%s" %
