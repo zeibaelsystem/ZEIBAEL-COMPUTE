@@ -105,7 +105,7 @@ def public_extractor_commands(url, folder, window=None):
         ytdlp += ["--download-sections", f"*{window[0]}-{window[1]}", "--force-keyframes-at-cuts"]
     ytdlp.append(canonical)
     commands = [("yt-dlp", ytdlp)]
-    if platform == "instagram" and not window:
+    if platform == "tiktok" or (platform == "instagram" and not window):
         gal = [sys.executable, "-m", "gallery_dl", "--config-ignore",
                "--no-input", "--no-part", "--quiet", "--retries", "1",
                "--http-timeout", "12", "--filesize-max", "28M",
@@ -164,6 +164,10 @@ def offset_video_records(report, window):
     report["sampled_seconds"] = [round(start + a, 3) for a in report["sampled_seconds"]]
 
 
+def needs_local_window_trim(extractor, window):
+    return bool(window and extractor in {"threads-open-graph", "gallery-dl"})
+
+
 def main():
     url = validate_public_media_url(os.environ.get("ZEIBAEL_MEDIA_URL", ""))
     platform, media_id, _ = identify_public_media(url)
@@ -178,7 +182,7 @@ def main():
         media = find_approved_media(source_dir)
         if not extractor or not media:
             raise RuntimeError("SOURCE_MEDIA_UNAVAILABLE: public extractors returned no usable media")
-        if window and platform == "threads":
+        if needs_local_window_trim(extractor, window):
             segment = source_dir / "segment.mp4"
             if not limited_command(["ffmpeg", "-nostdin", "-v", "error", "-y",
                                     "-ss", str(window[0]), "-i", str(media),
