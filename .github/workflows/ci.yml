@@ -25,6 +25,11 @@ on:
         required: false
         type: string
         default: "[]"
+      media_window:
+        description: "Optional public_media clip start:end in seconds, at most 300 seconds"
+        required: false
+        type: string
+        default: ""
       script_id:
         description: "Reviewed ci/jobs/<script_id>.json, .py or .sh; task=script only"
         required: false
@@ -60,6 +65,7 @@ jobs:
           ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
           ZEIBAEL_BROWSER_URL: ${{ inputs.browser_url }}
           ZEIBAEL_BROWSER_STEPS: ${{ inputs.browser_steps }}
+          ZEIBAEL_MEDIA_WINDOW: ${{ inputs.media_window }}
         run: python3 runner/scripts/job_plan.py
 
   execute:
@@ -124,6 +130,7 @@ jobs:
           ZEIBAEL_SCRIPT_ID: ${{ inputs.script_id }}
           ZEIBAEL_BROWSER_URL: ${{ inputs.browser_url }}
           ZEIBAEL_BROWSER_STEPS: ${{ inputs.browser_steps }}
+          ZEIBAEL_MEDIA_WINDOW: ${{ inputs.media_window }}
           ZEIBAEL_CI_OUTPUT: ${{ runner.temp }}/zeibael-ci-output
           ZEIBAEL_JOB_ID: ${{ matrix.id }}
           ZEIBAEL_JOB_RUNTIME: ${{ matrix.runtime }}
