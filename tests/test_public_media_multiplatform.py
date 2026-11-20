@@ -42,10 +42,35 @@ class PublicLinkTests(unittest.TestCase):
                 ("https://www.tiktok.com/@creator/video/7345678901234567890", "tiktok", "7345678901234567890")):
             self.assertEqual(media_shortcode(url), vid)
             commands = public_extractor_commands(url, base)
-            self.assertEqual([name for name, _ in commands], ["yt-dlp"])
+            self.assertEqual([name for name, _ in commands], ["yt-dlp", "gallery-dl"] if selector == "tiktok" else ["yt-dlp"])
             cmd = commands[0][1]
             self.assertEqual(cmd[cmd.index("--use-extractors")+1], selector)
             self.assertNotIn("--cookies", cmd)
+
+    def test_tiktok_gallery_fallback_stays_public_and_capped(self):
+        from scripts.public_media import fetch_public_media
+        url = "https://www.tiktok.com/@creator/video/7345678901234567890"
+        with tempfile.TemporaryDirectory() as directory:
+            folder = Path(directory)
+            def attempt(argv, timeout):
+                if "yt_dlp" in argv:
+                    return False
+                self.assertEqual(argv[-1], url)
+                self.assertIn("--config-ignore", argv)
+                self.assertIn("--no-input", argv)
+                self.assertEqual(argv[argv.index("--filesize-max")+1], "28M")
+                self.assertNotIn("--cookies", argv)
+                (folder / "sample.mp4").write_bytes(b"test" * 128)
+                return True
+            with patch("scripts.public_media.limited_command", side_effect=attempt):
+                self.assertEqual(fetch_public_media(url, folder, (7, 15)), "gallery-dl")
+
+    def test_window_trims_whole_tiktok_fallback_file_only(self):
+        from scripts.public_media import needs_local_window_trim
+        self.assertTrue(needs_local_window_trim("gallery-dl", (7, 15)))
+        self.assertTrue(needs_local_window_trim("threads-open-graph", (7, 15)))
+        self.assertFalse(needs_local_window_trim("yt-dlp", (7, 15)))
+        self.assertFalse(needs_local_window_trim("gallery-dl", None))
 
     def test_threads_requires_matching_post_and_public_video_metadata(self):
         from scripts.public_threads_media import threads_video_url
