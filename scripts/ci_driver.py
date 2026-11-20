@@ -211,6 +211,15 @@ def manifest_job(root, script_id, job_id, output_dir, timeout):
     if job.get("output_files", False):
         nfiles, nbytes = inspect_public_files(output_dir / "files")
         logs.append(f"ZEIBAEL_PUBLIC_OUTPUT_OK {nfiles} files / {nbytes} bytes")
+        if script_id == "public_media":
+            item = output_dir / "files" / "vision-frames.json"
+            if item.is_file() and not item.is_symlink() and item.stat().st_size <= 36_000:
+                bundle = json.loads(item.read_text(encoding="utf-8"))
+                # The media worker produced these validated JPEGs. Each frame is a
+                # separate line so the CI summary's 4 KB tail doesn't erase them.
+                for frame in bundle["frames"]:
+                    obj = {"media_id": bundle["media_id"], "platform": bundle["platform"], **frame}
+                    print("ZEIBAEL_PUBLIC_VISION_FRAME=" + json.dumps(obj, separators=(",", ":")))
     return 0, "\n".join(logs)[-MAX_OUTPUT:]
 
 def main():

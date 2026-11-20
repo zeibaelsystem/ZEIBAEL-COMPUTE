@@ -39,6 +39,7 @@
           "-m",
           "unittest",
           "tests.test_public_media",
+          "tests.test_public_media_multiplatform",
           "-v"
         ],
         [

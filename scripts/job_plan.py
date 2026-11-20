@@ -111,6 +111,8 @@ def read_manifest(root, script_id):
 def build_plan(root, task, script_id):
     if task not in TASKS or (task != "script" and script_id):
         raise ValueError("Invalid CI task or script_id")
+    if os.environ.get("ZEIBAEL_MEDIA_WINDOW") and (task != "script" or script_id != "public_media"):
+        raise ValueError("Media window only allowed for public_media")
     if task == "script":
         browser_url = os.environ.get("ZEIBAEL_BROWSER_URL", "")
         browser_steps = os.environ.get("ZEIBAEL_BROWSER_STEPS", "")
@@ -122,10 +124,10 @@ def build_plan(root, task, script_id):
             parse_public_browser_request(browser_url, browser_steps)
         elif script_id == "public_media":
             try:
-                from scripts.public_media_input import validate_public_media_url
+                from scripts.public_media_input import validated_public_media_environment
             except ModuleNotFoundError:
-                from public_media_input import validate_public_media_url
-            validate_public_media_url(browser_url, browser_steps)
+                from public_media_input import validated_public_media_environment
+            validated_public_media_environment(script_id, os.environ)
         elif browser_url or (browser_steps and browser_steps != "[]"):
             raise ValueError("Media/browser inputs allowed only for their reviewed scripts")
         manifest = read_manifest(root, script_id)

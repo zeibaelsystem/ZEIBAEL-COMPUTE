@@ -3,6 +3,11 @@ on:
   pull_request:
     paths:
       - 'scripts/public_media.py'
+      - 'scripts/job_plan.py'
+      - 'scripts/ci_driver.py'
+      - '.github/workflows/ci.yml'
+      - 'scripts/public_media_input.py'
+      - 'scripts/public_threads_media.py'
       - 'scripts/public_media_transcribe.py'
       - 'scripts/public_video_intelligence.py'
       - 'scripts/public_video_timeline.py'
@@ -10,6 +15,7 @@ on:
       - 'ci/jobs/install_media_tools.sh'
       - 'tests/test_public_video_intelligence.py'
       - 'tests/test_public_media.py'
+      - 'tests/test_public_media_multiplatform.py'
       - 'tests/test_public_media_asr.py'
       - '.github/workflows/video-intelligence-pr.yml'
 permissions:
@@ -33,10 +39,10 @@ jobs:
           python -m pip install --disable-pip-version-check --no-input scenedetect==0.7.3
           bash ci/jobs/install_media_tools.sh
       - name: Run public video regression suite
-        run: python -m unittest tests.test_public_video_intelligence tests.test_public_media tests.test_public_media_asr -v
+        run: python -m unittest tests.test_public_video_intelligence tests.test_public_media tests.test_public_media_multiplatform tests.test_public_media_asr -v
       - name: Run full repository Python regression suite
         run: python -m unittest discover -s tests -v
       - name: Verify source and media manifest
         run: |
-          python -m compileall -q scripts/public_media.py scripts/public_media_transcribe.py scripts/public_video_intelligence.py scripts/public_video_timeline.py
+          python -m compileall -q scripts/public_media.py scripts/public_media_input.py scripts/public_threads_media.py scripts/public_media_transcribe.py scripts/public_video_intelligence.py scripts/public_video_timeline.py
           python -m json.tool ci/jobs/public_media.json >/dev/null
