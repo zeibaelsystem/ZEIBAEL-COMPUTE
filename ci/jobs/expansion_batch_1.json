@@ -1,0 +1,446 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "thermo",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "thermo==0.4.2",
+          "chemicals==1.3.3",
+          "fluids==1.1.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "thermo"
+        ]
+      ]
+    },
+    {
+      "id": "chemicals",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "chemicals==1.3.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "chemicals"
+        ]
+      ]
+    },
+    {
+      "id": "fluids",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "fluids==1.1.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "fluids"
+        ]
+      ]
+    },
+    {
+      "id": "ht",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ht==1.1.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "ht"
+        ]
+      ]
+    },
+    {
+      "id": "pybamm",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pybamm==25.10.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pybamm"
+        ]
+      ]
+    },
+    {
+      "id": "rdkit",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "rdkit==2025.3.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "rdkit"
+        ]
+      ]
+    },
+    {
+      "id": "cadquery",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "cadquery==2.5.2",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "cadquery"
+        ]
+      ]
+    },
+    {
+      "id": "wntr",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "wntr==1.3.2",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "wntr"
+        ]
+      ]
+    },
+    {
+      "id": "pandapower",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pandapower==3.1.2",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pandapower"
+        ]
+      ]
+    },
+    {
+      "id": "opendss",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "dss-python==0.15.7"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "opendss"
+        ]
+      ]
+    },
+    {
+      "id": "pyvista",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyvista==0.45.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pyvista"
+        ]
+      ]
+    },
+    {
+      "id": "openmdao",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openmdao==3.39.0",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "openmdao"
+        ]
+      ]
+    },
+    {
+      "id": "ortools",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ortools==9.12.4544"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "ortools"
+        ]
+      ]
+    },
+    {
+      "id": "pyomo",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyomo==6.9.2",
+          "highspy==1.10.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pyomo"
+        ]
+      ]
+    },
+    {
+      "id": "highs",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "highspy==1.10.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "highs"
+        ]
+      ]
+    },
+    {
+      "id": "cvxpy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "cvxpy==1.6.5"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "cvxpy"
+        ]
+      ]
+    },
+    {
+      "id": "casadi",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "casadi==3.7.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "casadi"
+        ]
+      ]
+    },
+    {
+      "id": "salib",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "SALib==1.5.1",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "salib"
+        ]
+      ]
+    }
+  ]
+}

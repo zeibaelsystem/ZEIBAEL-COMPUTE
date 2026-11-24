@@ -1,0 +1,94 @@
+# Expansion program: 90 candidates
+
+Canonical candidate ledger: [ci/expansion_candidates.json](../ci/expansion_candidates.json). Each candidate is a distinct capability, not necessarily a new backend. The current branch is a development and review branch; do not route any candidate as active until actual reference fixture, public distribution/eligibility and regression proof are recorded. Existing dispatcher and old engine routes unchanged. Only standard public Ubuntu x64, no secrets, no private input, no paid API, no GPU. Individual reviewed jobs and audit batches (max 18 jobs) use the existing ci.yml. Model-bearing and native solver candidates without sufficient evidence are blocked with reasons. PyPI exact versions are public distribution candidates; license metadata does not by itself audit all dependencies. No production validation or new-chat selection claim.
+
+- idaes — blocked: Open solver binaries and supported OS/architecture must be audited separately; no claim from Python import.
+- watertap — blocked: IDAES solver binaries and nonlinear water-treatment validation not yet qualified.
+- phreeqc — blocked: IPhreeqc native library and licensed database distribution path not yet validated.
+- thermo — candidate
+- chemicals — candidate
+- fluids — candidate
+- ht — candidate
+- pybamm — candidate
+- rmg_py — blocked: Native compiled dependencies and reaction database license/installation need dedicated integration.
+- rdkit — candidate
+- cadquery — candidate
+- freecad — blocked: Headless executable and Ubuntu package/runtime compatibility not yet qualified.
+- openseespy — blocked: Research, education and internal use free; commercial redistribution license restriction needs explicit scope review.
+- fenicsx — blocked: MPI/PETSc native stack and compatible container release need validation.
+- su2 — blocked: Native build and solver fixture require a separate verified distribution path.
+- wntr — candidate
+- pandapower — candidate
+- opendss — candidate
+- pyvista — candidate
+- openmdao — candidate
+- ortools — candidate
+- pyomo — candidate
+- highs — candidate
+- cvxpy — candidate
+- casadi — candidate
+- salib — candidate
+- simpy — candidate
+- pint — candidate
+- pymc — candidate
+- deap — candidate
+- talib — candidate
+- backtrader — candidate
+- statsmodels — candidate
+- qlib — blocked: Python 3.12 wheel and local dataset initialization workflow not yet validated.
+- optuna — candidate
+- riskfolio — candidate
+- arch — candidate
+- pyportfolioopt — candidate
+- statsforecast — candidate
+- shap — candidate
+- scikit_learn — candidate
+- xgboost — candidate
+- lightgbm — candidate
+- catboost — candidate
+- tensorflow — candidate
+- jax — candidate
+- llama_cpp — blocked: No verified public model weight/license and memory/runtime budget; no model inference claim.
+- transformers — blocked: No selected verified model weights or CPU inference fixture yet.
+- sentence_transformers — blocked: No selected verified embedding model weights or CPU fixture yet.
+- faiss — candidate
+- docling — blocked: Layout/OCR model weights and dependencies require explicit CPU/local license audit.
+- paddleocr — blocked: PaddlePaddle CPU wheel and model weight sources/license not yet verified.
+- ocrmypdf — candidate
+- pdfplumber — candidate
+- marker — blocked: Code and model weights have separate licensing restrictions; not admitted.
+- libreoffice — candidate
+- pandoc — candidate
+- tika — blocked: Java artifact distribution, transitive dependencies and local CLI fixture not yet validated.
+- tabula — blocked: Java artifact and local PDF fixture not yet validated.
+- tesseract_multilingual — candidate
+- scenedetect — candidate
+- librosa — candidate
+- demucs — blocked: Public model weights/license and CPU source separation budget not verified.
+- silero_vad — blocked: Bundled model artifact/license and CPU runtime proof needed.
+- whisperx — blocked: ASR/alignment model weights and CPU runtime; no diarization credentials.
+- mediapipe — blocked: Model asset provenance and CPU fixture not verified; no face identity processing.
+- sam2 — blocked: CPU-only performance and model weights/license not yet validated.
+- imagemagick — candidate
+- blender — candidate
+- open3d — candidate
+- arrow — candidate
+- dask — candidate
+- ray — blocked: Distributed local-only lifecycle, memory and no cluster/service path need dedicated test.
+- networkx — candidate
+- gdal — candidate
+- geopandas — candidate
+- xarray — candidate
+- rasterio — candidate
+- orjson — candidate
+- great_expectations — candidate
+- hypothesis — candidate
+- locust — candidate
+- k6 — blocked: Official CLI release distribution/digest and localhost-only test not yet verified.
+- appium — blocked: No verified emulator/simulator execution on standard runner.
+- maestro — blocked: No verified mobile emulator/simulator and CLI distribution path.
+- trivy — blocked: Public vulnerability DB distribution/cache and bounded offline scan not yet validated.
+- semgrep — candidate
+- z3 — candidate
+- scrapy — candidate
+- trafilatura — candidate

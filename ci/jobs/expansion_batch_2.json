@@ -1,0 +1,455 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "simpy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "simpy==4.1.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "simpy"
+        ]
+      ]
+    },
+    {
+      "id": "pint",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pint==0.24.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pint"
+        ]
+      ]
+    },
+    {
+      "id": "pymc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pymc==5.22.0",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pymc"
+        ]
+      ]
+    },
+    {
+      "id": "deap",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "deap==1.4.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "deap"
+        ]
+      ]
+    },
+    {
+      "id": "talib",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "TA-Lib==0.6.5",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "talib"
+        ]
+      ]
+    },
+    {
+      "id": "backtrader",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "backtrader==1.9.78.123",
+          "pandas==2.2.3",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "backtrader"
+        ]
+      ]
+    },
+    {
+      "id": "statsmodels",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "statsmodels==0.14.4",
+          "numpy==1.26.4",
+          "scipy==1.15.3",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "statsmodels"
+        ]
+      ]
+    },
+    {
+      "id": "optuna",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "optuna==4.3.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "optuna"
+        ]
+      ]
+    },
+    {
+      "id": "riskfolio",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "riskfolio-lib==7.0.0",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "riskfolio"
+        ]
+      ]
+    },
+    {
+      "id": "arch",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "arch==7.2.0",
+          "numpy==1.26.4",
+          "statsmodels==0.14.4",
+          "scipy==1.15.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "arch"
+        ]
+      ]
+    },
+    {
+      "id": "pyportfolioopt",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyportfolioopt==1.5.6",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pyportfolioopt"
+        ]
+      ]
+    },
+    {
+      "id": "statsforecast",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "statsforecast==2.0.1",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "statsforecast"
+        ]
+      ]
+    },
+    {
+      "id": "shap",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "shap==0.47.2",
+          "numpy==1.26.4",
+          "scikit-learn==1.6.1",
+          "numba==0.61.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "shap"
+        ]
+      ]
+    },
+    {
+      "id": "scikit_learn",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "scikit-learn==1.6.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "scikit_learn"
+        ]
+      ]
+    },
+    {
+      "id": "xgboost",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "xgboost==3.0.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "xgboost"
+        ]
+      ]
+    },
+    {
+      "id": "lightgbm",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "lightgbm==4.6.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "lightgbm"
+        ]
+      ]
+    },
+    {
+      "id": "catboost",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "catboost==1.2.8"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "catboost"
+        ]
+      ]
+    },
+    {
+      "id": "tensorflow",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "tensorflow-cpu==2.19.0",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "tensorflow"
+        ]
+      ]
+    }
+  ]
+}

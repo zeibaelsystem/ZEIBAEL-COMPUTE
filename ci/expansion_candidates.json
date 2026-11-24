@@ -1,0 +1,750 @@
+{
+  "schema": 1,
+  "scope": "90 candidates; candidate != approved runtime",
+  "candidates": [
+    {
+      "id": "idaes",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "Open solver binaries and supported OS/architecture must be audited separately; no claim from Python import."
+    },
+    {
+      "id": "watertap",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "IDAES solver binaries and nonlinear water-treatment validation not yet qualified."
+    },
+    {
+      "id": "phreeqc",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "IPhreeqc native library and licensed database distribution path not yet validated."
+    },
+    {
+      "id": "thermo",
+      "group": "chemical",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "thermo==0.4.2",
+      "source": "https://pypi.org/project/thermo/0.4.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "chemicals",
+      "group": "chemical",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "chemicals==1.3.3",
+      "source": "https://pypi.org/project/chemicals/1.3.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "fluids",
+      "group": "chemical",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "fluids==1.1.0",
+      "source": "https://pypi.org/project/fluids/1.1.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "ht",
+      "group": "chemical",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "ht==1.1.0",
+      "source": "https://pypi.org/project/ht/1.1.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pybamm",
+      "group": "chemical",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "pybamm==25.10.2",
+      "source": "https://pypi.org/project/pybamm/25.10.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "rmg_py",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "Native compiled dependencies and reaction database license/installation need dedicated integration."
+    },
+    {
+      "id": "rdkit",
+      "group": "chemical",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "rdkit==2025.3.3",
+      "source": "https://pypi.org/project/rdkit/2025.3.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "cadquery",
+      "group": "engineering",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "cadquery==2.5.2",
+      "source": "https://pypi.org/project/cadquery/2.5.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "freecad",
+      "group": "engineering",
+      "status": "blocked",
+      "reason": "Headless executable and Ubuntu package/runtime compatibility not yet qualified."
+    },
+    {
+      "id": "openseespy",
+      "group": "engineering",
+      "status": "blocked",
+      "reason": "Research, education and internal use free; commercial redistribution license restriction needs explicit scope review."
+    },
+    {
+      "id": "fenicsx",
+      "group": "engineering",
+      "status": "blocked",
+      "reason": "MPI/PETSc native stack and compatible container release need validation."
+    },
+    {
+      "id": "su2",
+      "group": "engineering",
+      "status": "blocked",
+      "reason": "Native build and solver fixture require a separate verified distribution path."
+    },
+    {
+      "id": "wntr",
+      "group": "engineering",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "wntr==1.3.2",
+      "source": "https://pypi.org/project/wntr/1.3.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pandapower",
+      "group": "engineering",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "pandapower==3.1.2",
+      "source": "https://pypi.org/project/pandapower/3.1.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "opendss",
+      "group": "engineering",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "dss-python==0.15.7",
+      "source": "https://pypi.org/project/dss-python/0.15.7/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pyvista",
+      "group": "engineering",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "pyvista==0.45.2",
+      "source": "https://pypi.org/project/pyvista/0.45.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "openmdao",
+      "group": "engineering",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "openmdao==3.39.0",
+      "source": "https://pypi.org/project/openmdao/3.39.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "ortools",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "ortools==9.12.4544",
+      "source": "https://pypi.org/project/ortools/9.12.4544/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pyomo",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "pyomo==6.9.2",
+      "source": "https://pypi.org/project/pyomo/6.9.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "highs",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "highspy==1.10.0",
+      "source": "https://pypi.org/project/highspy/1.10.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "cvxpy",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "cvxpy==1.6.5",
+      "source": "https://pypi.org/project/cvxpy/1.6.5/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "casadi",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "LGPL-3.0+",
+      "distribution": "casadi==3.7.0",
+      "source": "https://pypi.org/project/casadi/3.7.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "salib",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "SALib==1.5.1",
+      "source": "https://pypi.org/project/SALib/1.5.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "simpy",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "simpy==4.1.1",
+      "source": "https://pypi.org/project/simpy/4.1.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pint",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "pint==0.24.4",
+      "source": "https://pypi.org/project/pint/0.24.4/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pymc",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "pymc==5.22.0",
+      "source": "https://pypi.org/project/pymc/5.22.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "deap",
+      "group": "optimization",
+      "status": "candidate",
+      "license": "LGPL",
+      "distribution": "deap==1.4.3",
+      "source": "https://pypi.org/project/deap/1.4.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "talib",
+      "group": "finance",
+      "status": "candidate",
+      "license": "BSD-2-Clause",
+      "distribution": "TA-Lib==0.6.5",
+      "source": "https://pypi.org/project/TA-Lib/0.6.5/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "backtrader",
+      "group": "finance",
+      "status": "candidate",
+      "license": "GPL-3.0+",
+      "distribution": "backtrader==1.9.78.123",
+      "source": "https://pypi.org/project/backtrader/1.9.78.123/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "statsmodels",
+      "group": "finance",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "statsmodels==0.14.4",
+      "source": "https://pypi.org/project/statsmodels/0.14.4/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "qlib",
+      "group": "finance",
+      "status": "blocked",
+      "reason": "Python 3.12 wheel and local dataset initialization workflow not yet validated."
+    },
+    {
+      "id": "optuna",
+      "group": "finance",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "optuna==4.3.0",
+      "source": "https://pypi.org/project/optuna/4.3.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "riskfolio",
+      "group": "finance",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "riskfolio-lib==7.0.0",
+      "source": "https://pypi.org/project/riskfolio-lib/7.0.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "arch",
+      "group": "finance",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "arch==7.2.0",
+      "source": "https://pypi.org/project/arch/7.2.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pyportfolioopt",
+      "group": "finance",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "pyportfolioopt==1.5.6",
+      "source": "https://pypi.org/project/pyportfolioopt/1.5.6/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "statsforecast",
+      "group": "finance",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "statsforecast==2.0.1",
+      "source": "https://pypi.org/project/statsforecast/2.0.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "shap",
+      "group": "finance",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "shap==0.47.2",
+      "source": "https://pypi.org/project/shap/0.47.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "scikit_learn",
+      "group": "ai",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "scikit-learn==1.6.1",
+      "source": "https://pypi.org/project/scikit-learn/1.6.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "xgboost",
+      "group": "ai",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "xgboost==3.0.2",
+      "source": "https://pypi.org/project/xgboost/3.0.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "lightgbm",
+      "group": "ai",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "lightgbm==4.6.0",
+      "source": "https://pypi.org/project/lightgbm/4.6.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "catboost",
+      "group": "ai",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "catboost==1.2.8",
+      "source": "https://pypi.org/project/catboost/1.2.8/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "tensorflow",
+      "group": "ai",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "tensorflow-cpu==2.19.0",
+      "source": "https://pypi.org/project/tensorflow-cpu/2.19.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "jax",
+      "group": "ai",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "jax==0.5.3",
+      "source": "https://pypi.org/project/jax/0.5.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "llama_cpp",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No verified public model weight/license and memory/runtime budget; no model inference claim."
+    },
+    {
+      "id": "transformers",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No selected verified model weights or CPU inference fixture yet."
+    },
+    {
+      "id": "sentence_transformers",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No selected verified embedding model weights or CPU fixture yet."
+    },
+    {
+      "id": "faiss",
+      "group": "ai",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "faiss-cpu==1.11.0",
+      "source": "https://pypi.org/project/faiss-cpu/1.11.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "docling",
+      "group": "documents",
+      "status": "blocked",
+      "reason": "Layout/OCR model weights and dependencies require explicit CPU/local license audit."
+    },
+    {
+      "id": "paddleocr",
+      "group": "documents",
+      "status": "blocked",
+      "reason": "PaddlePaddle CPU wheel and model weight sources/license not yet verified."
+    },
+    {
+      "id": "ocrmypdf",
+      "group": "documents",
+      "status": "candidate",
+      "license": "MPL-2.0",
+      "distribution": "ocrmypdf==16.10.0",
+      "source": "https://pypi.org/project/ocrmypdf/16.10.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pdfplumber",
+      "group": "documents",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "pdfplumber==0.11.6",
+      "source": "https://pypi.org/project/pdfplumber/0.11.6/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "marker",
+      "group": "documents",
+      "status": "blocked",
+      "reason": "Code and model weights have separate licensing restrictions; not admitted."
+    },
+    {
+      "id": "libreoffice",
+      "group": "documents",
+      "status": "candidate",
+      "license": "MPL-2.0/LGPL",
+      "distribution": [
+        "libreoffice-writer"
+      ],
+      "source": "https://www.libreoffice.org/about-us/licenses/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "pandoc",
+      "group": "documents",
+      "status": "candidate",
+      "license": "GPL-2.0+",
+      "distribution": [
+        "pandoc"
+      ],
+      "source": "https://pandoc.org/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "tika",
+      "group": "documents",
+      "status": "blocked",
+      "reason": "Java artifact distribution, transitive dependencies and local CLI fixture not yet validated."
+    },
+    {
+      "id": "tabula",
+      "group": "documents",
+      "status": "blocked",
+      "reason": "Java artifact and local PDF fixture not yet validated."
+    },
+    {
+      "id": "tesseract_multilingual",
+      "group": "documents",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": [
+        "tesseract-ocr",
+        "tesseract-ocr-ind",
+        "fonts-dejavu-core",
+        "imagemagick"
+      ],
+      "source": "https://github.com/tesseract-ocr/tessdata",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "scenedetect",
+      "group": "multimedia",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "scenedetect==0.6.6",
+      "source": "https://pypi.org/project/scenedetect/0.6.6/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "librosa",
+      "group": "multimedia",
+      "status": "candidate",
+      "license": "ISC",
+      "distribution": "librosa==0.11.0",
+      "source": "https://pypi.org/project/librosa/0.11.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "demucs",
+      "group": "multimedia",
+      "status": "blocked",
+      "reason": "Public model weights/license and CPU source separation budget not verified."
+    },
+    {
+      "id": "silero_vad",
+      "group": "multimedia",
+      "status": "blocked",
+      "reason": "Bundled model artifact/license and CPU runtime proof needed."
+    },
+    {
+      "id": "whisperx",
+      "group": "multimedia",
+      "status": "blocked",
+      "reason": "ASR/alignment model weights and CPU runtime; no diarization credentials."
+    },
+    {
+      "id": "mediapipe",
+      "group": "multimedia",
+      "status": "blocked",
+      "reason": "Model asset provenance and CPU fixture not verified; no face identity processing."
+    },
+    {
+      "id": "sam2",
+      "group": "multimedia",
+      "status": "blocked",
+      "reason": "CPU-only performance and model weights/license not yet validated."
+    },
+    {
+      "id": "imagemagick",
+      "group": "multimedia",
+      "status": "candidate",
+      "license": "ImageMagick License",
+      "distribution": [
+        "imagemagick"
+      ],
+      "source": "https://imagemagick.org/script/license.php",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "blender",
+      "group": "multimedia",
+      "status": "candidate",
+      "license": "GPL-3.0+",
+      "distribution": [
+        "blender"
+      ],
+      "source": "https://www.blender.org/about/license/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "open3d",
+      "group": "multimedia",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "open3d==0.19.0",
+      "source": "https://pypi.org/project/open3d/0.19.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "arrow",
+      "group": "data",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "pyarrow==20.0.0",
+      "source": "https://pypi.org/project/pyarrow/20.0.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "dask",
+      "group": "data",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "dask==2025.5.1",
+      "source": "https://pypi.org/project/dask/2025.5.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "ray",
+      "group": "data",
+      "status": "blocked",
+      "reason": "Distributed local-only lifecycle, memory and no cluster/service path need dedicated test."
+    },
+    {
+      "id": "networkx",
+      "group": "data",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "networkx==3.4.2",
+      "source": "https://pypi.org/project/networkx/3.4.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "gdal",
+      "group": "data",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": [
+        "gdal-bin"
+      ],
+      "source": "https://gdal.org/en/stable/license.html",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "geopandas",
+      "group": "data",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "geopandas==1.0.1",
+      "source": "https://pypi.org/project/geopandas/1.0.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "xarray",
+      "group": "data",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "xarray==2025.4.0",
+      "source": "https://pypi.org/project/xarray/2025.4.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "rasterio",
+      "group": "data",
+      "status": "candidate",
+      "license": "BSD",
+      "distribution": "rasterio==1.4.3",
+      "source": "https://pypi.org/project/rasterio/1.4.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "orjson",
+      "group": "data",
+      "status": "candidate",
+      "license": "Apache-2.0 OR MIT",
+      "distribution": "orjson==3.10.18",
+      "source": "https://pypi.org/project/orjson/3.10.18/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "great_expectations",
+      "group": "data",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "great-expectations==1.5.0",
+      "source": "https://pypi.org/project/great-expectations/1.5.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "hypothesis",
+      "group": "software",
+      "status": "candidate",
+      "license": "MPL-2.0",
+      "distribution": "hypothesis==6.131.9",
+      "source": "https://pypi.org/project/hypothesis/6.131.9/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "locust",
+      "group": "software",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "locust==2.37.10",
+      "source": "https://pypi.org/project/locust/2.37.10/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "k6",
+      "group": "software",
+      "status": "blocked",
+      "reason": "Official CLI release distribution/digest and localhost-only test not yet verified."
+    },
+    {
+      "id": "appium",
+      "group": "software",
+      "status": "blocked",
+      "reason": "No verified emulator/simulator execution on standard runner."
+    },
+    {
+      "id": "maestro",
+      "group": "software",
+      "status": "blocked",
+      "reason": "No verified mobile emulator/simulator and CLI distribution path."
+    },
+    {
+      "id": "trivy",
+      "group": "software",
+      "status": "blocked",
+      "reason": "Public vulnerability DB distribution/cache and bounded offline scan not yet validated."
+    },
+    {
+      "id": "semgrep",
+      "group": "software",
+      "status": "candidate",
+      "license": "LGPL-2.1",
+      "distribution": "semgrep==1.121.0",
+      "source": "https://pypi.org/project/semgrep/1.121.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "z3",
+      "group": "software",
+      "status": "candidate",
+      "license": "MIT",
+      "distribution": "z3-solver==4.14.1.0",
+      "source": "https://pypi.org/project/z3-solver/4.14.1.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "scrapy",
+      "group": "software",
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "distribution": "scrapy==2.13.1",
+      "source": "https://pypi.org/project/scrapy/2.13.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    },
+    {
+      "id": "trafilatura",
+      "group": "software",
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "distribution": "trafilatura==2.0.0",
+      "source": "https://pypi.org/project/trafilatura/2.0.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required"
+    }
+  ]
+}

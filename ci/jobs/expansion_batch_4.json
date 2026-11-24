@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "rasterio",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "rasterio==1.4.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "rasterio"
+        ]
+      ]
+    },
+    {
+      "id": "orjson",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "orjson==3.10.18"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "orjson"
+        ]
+      ]
+    },
+    {
+      "id": "great_expectations",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "great-expectations==1.5.0",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "great_expectations"
+        ]
+      ]
+    },
+    {
+      "id": "hypothesis",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "hypothesis==6.131.9"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "hypothesis"
+        ]
+      ]
+    },
+    {
+      "id": "locust",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "locust==2.37.10"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "locust"
+        ]
+      ]
+    },
+    {
+      "id": "semgrep",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "semgrep==1.121.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "semgrep"
+        ]
+      ]
+    },
+    {
+      "id": "z3",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "z3-solver==4.14.1.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "z3"
+        ]
+      ]
+    },
+    {
+      "id": "scrapy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "scrapy==2.13.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "scrapy"
+        ]
+      ]
+    },
+    {
+      "id": "trafilatura",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "trafilatura==2.0.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "trafilatura"
+        ]
+      ]
+    }
+  ]
+}

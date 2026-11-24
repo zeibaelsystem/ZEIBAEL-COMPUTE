@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "statsmodels",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "statsmodels==0.14.4",
+          "numpy==1.26.4",
+          "scipy==1.15.3",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "statsmodels"
+        ]
+      ]
+    }
+  ]
+}

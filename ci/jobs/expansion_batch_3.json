@@ -1,0 +1,421 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "jax",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "jax==0.5.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "jax"
+        ]
+      ]
+    },
+    {
+      "id": "faiss",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "faiss-cpu==1.11.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "faiss"
+        ]
+      ]
+    },
+    {
+      "id": "ocrmypdf",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "ocrmypdf"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ocrmypdf==16.10.0",
+          "pypdf==5.5.0",
+          "pillow==11.2.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "ocrmypdf"
+        ]
+      ]
+    },
+    {
+      "id": "pdfplumber",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pdfplumber==0.11.6",
+          "reportlab==4.4.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pdfplumber"
+        ]
+      ]
+    },
+    {
+      "id": "libreoffice",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "libreoffice"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "libreoffice"
+        ]
+      ]
+    },
+    {
+      "id": "pandoc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "pandoc"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "pandoc"
+        ]
+      ]
+    },
+    {
+      "id": "tesseract_multilingual",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "tesseract_multilingual"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "tesseract_multilingual"
+        ]
+      ]
+    },
+    {
+      "id": "scenedetect",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "scenedetect==0.6.6",
+          "opencv-python-headless==4.11.0.86",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "scenedetect"
+        ]
+      ]
+    },
+    {
+      "id": "librosa",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "librosa==0.11.0",
+          "numpy==1.26.4",
+          "numba==0.61.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "librosa"
+        ]
+      ]
+    },
+    {
+      "id": "imagemagick",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "imagemagick"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "imagemagick"
+        ]
+      ]
+    },
+    {
+      "id": "blender",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "blender"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "blender"
+        ]
+      ]
+    },
+    {
+      "id": "open3d",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "open3d==0.19.0",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "open3d"
+        ]
+      ]
+    },
+    {
+      "id": "arrow",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyarrow==20.0.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "arrow"
+        ]
+      ]
+    },
+    {
+      "id": "dask",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "dask==2025.5.1",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "dask"
+        ]
+      ]
+    },
+    {
+      "id": "networkx",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "networkx==3.4.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "networkx"
+        ]
+      ]
+    },
+    {
+      "id": "gdal",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "gdal"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "gdal"
+        ]
+      ]
+    },
+    {
+      "id": "geopandas",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "geopandas==1.0.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "geopandas"
+        ]
+      ]
+    },
+    {
+      "id": "xarray",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "xarray==2025.4.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "xarray"
+        ]
+      ]
+    }
+  ]
+}
