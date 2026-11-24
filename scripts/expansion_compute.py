@@ -731,23 +731,6 @@ def run(engine, work):
         check(out.pred_masks.numel()>0 and torch.isfinite(out.pred_masks).all().item(),"Invalid segmentation masks")
         check(torch.isfinite(out.iou_scores).all().item(),"Invalid scores")
         return {"mask_shape":list(out.pred_masks.shape),"device":"cpu"}
-    if engine == "whisperx":
-        model=hf("facebook/wav2vec2-base-960h","22aad52d435eb6dbaf354bdad9b0da84ce7d6156",work/"align",["*.json","model.safetensors","vocab.json"])
-        import whisperx
-        cmd(["espeak-ng","-w",str(work/"speech.wav"),"hello world"],work)
-        cmd(["ffmpeg","-loglevel","error","-i",str(work/"speech.wav"),"-ar","16000","-ac","1",str(work/"audio.wav")],work)
-        audio=whisperx.load_audio(str(work/"audio.wav")); duration=len(audio)/16000
-        m,meta=whisperx.load_align_model(language_code="en",device="cpu",model_name=model)
-        v=whisperx.align([{"start":0.0,"end":duration,"text":"hello world"}],m,meta,audio,"cpu",return_char_alignments=False)
-        words=[w for w in v["word_segments"] if "start" in w and "end" in w]
-        check(len(words)>=1 and all(0<=w["start"]<=w["end"]<=duration+.1 for w in words),"Invalid alignment")
-        return {"words":len(words),"duration_s":duration,"device":"cpu"}
-    if engine == "rmg_py":
-        image="reactionmechanismgenerator/rmg@sha256:30ef9094a74b090cd6623747dfff85bf9d763429544f75f26515d4d61804fde8"
-        code="from rmgpy.kinetics import Arrhenius; print(Arrhenius(A=(1e7,'s^-1'),n=0,Ea=(0,'J/mol'),T0=(1,'K')).get_rate_coefficient(300))"
-        v=float(cmd(["docker","run","--rm","--network","none","--entrypoint","/opt/conda/bin/python",image,"-c",code],work,timeout=180).strip().splitlines()[-1])
-        close(v,1e7,.01)
-        return {"arrhenius_rate_s_inv":v}
     if engine == "su2":
         import zipfile
         download("https://github.com/su2code/SU2/releases/download/v8.3.0/SU2-v8.3.0-linux64.zip",work/"su2.zip",100000000,"7fabe31817f42eb2b96ffe540d0693b7087b31fcc0547033e2a6db3a64360424")
