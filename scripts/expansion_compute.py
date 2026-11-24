@@ -490,7 +490,8 @@ def run(engine, work):
     if engine == "semgrep":
         (work/"rule.yml").write_text("rules:\n- id: public-print\n  languages: [python]\n  message: public fixture\n  severity: INFO\n  pattern: print(...)\n")
         (work/"sample.py").write_text("print('public')\n")
-        v=json.loads(cmd(["semgrep","scan","--config","rule.yml","--metrics=off","--disable-version-check","--json","sample.py"],work))
+        cmd(["semgrep","scan","--config","rule.yml","--metrics=off","--disable-version-check","--json","--output",str(work/"semgrep.json"),"sample.py"],work)
+        v=json.loads((work/"semgrep.json").read_text())
         check(len(v["results"])==1,"Rule did not match")
         return {"matches":1}
     if engine == "z3":
@@ -594,11 +595,16 @@ def run(engine, work):
         archive=work/"llama.tar.gz"
         download("https://github.com/ggml-org/llama.cpp/releases/download/b11865/llama-b11865-bin-ubuntu-x64.tar.gz",archive,30000000,"b59572aebe7df4de33b87d58a84a183d4ee0be4d5c8fe82df77b68ea65bc8bd6")
         with tarfile.open(archive) as a: a.extractall(work/"llama",filter="data")
-        binary=next((work/"llama").rglob("llama-cli"))
+        binary=next((work/"llama").rglob("llama-completion"),None) or next((work/"llama").rglob("llama-cli"))
         model=hf("bartowski/SmolLM2-135M-Instruct-GGUF","09816acd5d99df7be770d85ea30822623dab342c",work/"model",["SmolLM2-135M-Instruct-Q4_K_M.gguf"])
         gguf=Path(model)/"SmolLM2-135M-Instruct-Q4_K_M.gguf"
         os.environ["LD_LIBRARY_PATH"]=str(binary.parent)
-        v=cmd([str(binary),"-m",str(gguf),"-p","The capital of France is","-n","8","-t","2","-ngl","0","-no-cnv","--temp","0"],work,timeout=180)
+        help_text=cmd([str(binary),"--help"],work)
+        flags=[]
+        if "--no-conversation" in help_text: flags=["--no-conversation"]
+        elif "-no-cnv" in help_text: flags=["-no-cnv"]
+        elif "--single-turn" in help_text: flags=["--single-turn"]
+        v=cmd([str(binary),"-m",str(gguf),"-p","The capital of France is","-n","8","-t","2","-ngl","0","--temp","0",*flags],work,timeout=180)
         check("Paris" in v,"Expected token absent")
         return {"model":"SmolLM2-135M-Instruct Q4_K_M","answer_has_paris":True,"cpu_only":True}
     if engine == "transformers":
@@ -713,10 +719,10 @@ def run(engine, work):
         check(not v.multi_hand_landmarks,"Unexpected hand on blank frame")
         return {"blank_frame_hands":0,"local_inference":True}
     if engine == "sam2":
+        model=hf("facebook/sam2.1-hiera-tiny","de431c4043854a71d8101e17995dfe596bf101a5",work/"model",["*.json","model.safetensors"])
         import torch
         from PIL import Image,ImageDraw
         from transformers import Sam2Model,Sam2Processor
-        model=hf("facebook/sam2.1-hiera-tiny","de431c4043854a71d8101e17995dfe596bf101a5",work/"model",["*.json","model.safetensors"])
         im=Image.new("RGB",(128,128),"white"); ImageDraw.Draw(im).rectangle((32,32,96,96),fill="red")
         p=Sam2Processor.from_pretrained(model,local_files_only=True)
         m=Sam2Model.from_pretrained(model,local_files_only=True).eval()
@@ -726,8 +732,8 @@ def run(engine, work):
         check(torch.isfinite(out.iou_scores).all().item(),"Invalid scores")
         return {"mask_shape":list(out.pred_masks.shape),"device":"cpu"}
     if engine == "whisperx":
-        import whisperx
         model=hf("facebook/wav2vec2-base-960h","22aad52d435eb6dbaf354bdad9b0da84ce7d6156",work/"align",["*.json","model.safetensors","vocab.json"])
+        import whisperx
         cmd(["espeak-ng","-w",str(work/"speech.wav"),"hello world"],work)
         cmd(["ffmpeg","-loglevel","error","-i",str(work/"speech.wav"),"-ar","16000","-ac","1",str(work/"audio.wav")],work)
         audio=whisperx.load_audio(str(work/"audio.wav")); duration=len(audio)/16000
@@ -748,7 +754,17 @@ def run(engine, work):
         with zipfile.ZipFile(work/"su2.zip") as z:
             check(all((work/"su2"/n).resolve().is_relative_to(work/"su2") for n in z.namelist()),"Invalid archive")
             z.extractall(work/"su2")
-        exe=next((work/"su2").rglob("SU2_CFD")); exe.chmod(0o700)
+        import tarfile
+        root=work/"su2"
+        for archive in list(root.rglob("*.tar.gz"))+list(root.rglob("*.tgz"))+list(root.rglob("*.tar")):
+            with tarfile.open(archive) as t: t.extractall(root,filter="data")
+        for archive in list(root.rglob("*.zip")):
+            with zipfile.ZipFile(archive) as z:
+                check(all((root/n).resolve().is_relative_to(root) for n in z.namelist()),"Invalid nested archive")
+                z.extractall(root)
+        exe=next((x for x in root.rglob("*") if x.is_file() and x.name.lower() in ("su2_cfd","su2_cfd.exe")),None)
+        check(exe is not None,"SU2_CFD absent: "+str([str(x.relative_to(root)) for x in root.rglob("*")][:60]))
+        exe.chmod(0o700)
         os.environ["LD_LIBRARY_PATH"]=str(exe.parent)+":"+str(exe.parent.parent/"lib")
         (work/"mesh.su2").write_text("NDIME= 2\nNELEM= 4\n9 0 1 4 3 0\n9 1 2 5 4 1\n9 3 4 7 6 2\n9 4 5 8 7 3\nNPOIN= 9\n0 0 0\n1 0 1\n2 0 2\n0 1 3\n1 1 4\n2 1 5\n0 2 6\n1 2 7\n2 2 8\nNMARK= 1\nMARKER_TAG= far\nMARKER_ELEMS= 8\n3 0 1\n3 1 2\n3 2 5\n3 5 8\n3 8 7\n3 7 6\n3 6 3\n3 3 0\n")
         (work/"flow.cfg").write_text("SOLVER= EULER\nMATH_PROBLEM= DIRECT\nMACH_NUMBER= 0.3\nAOA= 0\nFREESTREAM_TEMPERATURE= 288.15\nFREESTREAM_PRESSURE= 101325\nMARKER_FAR= ( far )\nNUM_METHOD_GRAD= GREEN_GAUSS\nCONV_NUM_METHOD_FLOW= ROE\nMUSCL_FLOW= NO\nTIME_DISCRE_FLOW= EULER_IMPLICIT\nITER= 5\nCFL_NUMBER= 1\nMESH_FILENAME= mesh.su2\nMESH_FORMAT= SU2\nOUTPUT_FILES= ( RESTART )\nHISTORY_OUTPUT= ( ITER, RMS_RES )\nCONV_FILENAME= history\n")

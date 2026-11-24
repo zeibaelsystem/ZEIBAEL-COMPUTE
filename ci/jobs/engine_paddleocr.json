@@ -43,11 +43,14 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
-          "paddlepaddle==3.0.0",
-          "paddleocr==3.0.0",
+          "paddlepaddle==3.2.2",
+          "paddleocr==3.3.2",
           "huggingface-hub==0.31.4",
           "numpy==1.26.4",
-          "pillow==11.2.1"
+          "pillow==11.2.1",
+          "paddlex==3.3.13",
+          "pandas==2.2.3",
+          "protobuf==5.29.4"
         ],
         [
           "python",
