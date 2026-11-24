@@ -66,7 +66,7 @@
           "--only-binary=:all:",
           "great-expectations==1.5.0",
           "numpy==1.26.4",
-          "pandas==2.2.3"
+          "pandas==2.1.4"
         ],
         [
           "python",
@@ -216,6 +216,236 @@
           "python",
           "scripts/expansion_compute.py",
           "trafilatura"
+        ]
+      ]
+    },
+    {
+      "id": "idaes",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "idaes-pse==2.8.0",
+          "pyomo==6.9.2",
+          "pandas==2.2.3",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "idaes"
+        ]
+      ]
+    },
+    {
+      "id": "watertap",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "watertap==1.3.0",
+          "idaes-pse==2.8.0",
+          "pyomo==6.9.2",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "watertap"
+        ]
+      ]
+    },
+    {
+      "id": "phreeqc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "phreeqpy==0.6.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "phreeqc"
+        ]
+      ]
+    },
+    {
+      "id": "freecad",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "freecad"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "freecad"
+        ]
+      ]
+    },
+    {
+      "id": "openseespy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openseespy==3.7.1.2",
+          "openseespylinux==3.7.1.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "openseespy"
+        ]
+      ]
+    },
+    {
+      "id": "fenicsx",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "fenicsx"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "fenicsx"
+        ]
+      ]
+    },
+    {
+      "id": "qlib",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyqlib==0.9.6",
+          "pandas==2.2.3",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "qlib"
+        ]
+      ]
+    },
+    {
+      "id": "llama_cpp",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "huggingface-hub==0.31.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "llama_cpp"
+        ]
+      ]
+    },
+    {
+      "id": "transformers",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "transformers==4.52.4",
+          "huggingface-hub==0.31.4",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "transformers"
         ]
       ]
     }

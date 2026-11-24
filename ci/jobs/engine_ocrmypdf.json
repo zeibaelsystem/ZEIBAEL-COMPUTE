@@ -23,7 +23,8 @@
           "--only-binary=:all:",
           "ocrmypdf==16.10.0",
           "pypdf==5.5.0",
-          "pillow==11.2.1"
+          "pillow==11.2.1",
+          "pikepdf==9.8.1"
         ],
         [
           "python",

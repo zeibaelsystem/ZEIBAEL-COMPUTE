@@ -15,6 +15,30 @@ def cmd(args, work, timeout=120):
     check(p.returncode==0,f"Command failed: {p.stdout[-4000:]}")
     return p.stdout
 
+def download(url, path, cap, digest=None):
+    # URLs are fixed in reviewed fixture code, never taken from input.
+    import urllib.request, hashlib
+    request=urllib.request.Request(url,headers={"User-Agent":"ZEIBAEL-public-fixture"})
+    with urllib.request.urlopen(request,timeout=60) as r:
+        data=r.read(cap+1)
+    check(len(data)<=cap,"Asset size limit exceeded")
+    if digest:
+        actual=(hashlib.sha512 if len(digest)==128 else hashlib.sha256)(data).hexdigest()
+        check(actual==digest,"Public asset digest mismatch")
+    path.write_bytes(data)
+    return data
+
+def hf(repo, revision, target, allow):
+    # Anonymous pinned public files only. No provider inference, no token.
+    os.environ["HF_HUB_OFFLINE"]="0"
+    os.environ["HF_HUB_DISABLE_IMPLICIT_TOKEN"]="1"
+    os.environ["HF_HUB_DISABLE_TELEMETRY"]="1"
+    from huggingface_hub import snapshot_download
+    try:
+        return snapshot_download(repo_id=repo,revision=revision,local_dir=str(target),allow_patterns=allow,token=False,max_workers=2,local_files_only=False)
+    finally:
+        os.environ["HF_HUB_OFFLINE"]="1"
+
 def run(engine, work):
     work=Path(work).resolve()
     if engine == "thermo":
@@ -485,6 +509,180 @@ def run(engine, work):
         html="<html><body><article><h1>Public fixture</h1><p>"+("ZEIBAEL public data processing example. "*30)+"</p></article></body></html>"
         v=trafilatura.extract(html); check(v and "ZEIBAEL public data" in v,"Content extraction failed")
         return {"characters":len(v)}
+    if engine == "idaes":
+        from pyomo.environ import ConcreteModel,value
+        from idaes.core import FlowsheetBlock
+        from idaes.models.properties.examples.saponification_thermo import SaponificationParameterBlock
+        m=ConcreteModel(); m.fs=FlowsheetBlock(dynamic=False)
+        m.fs.props=SaponificationParameterBlock()
+        m.fs.state=m.fs.props.build_state_block([0],defined_state=True)
+        s=m.fs.state[0]; s.flow_vol.set_value(.01); s.conc_mol_comp["NaOH"].set_value(100)
+        v=value(s.get_material_flow_terms("Liq","NaOH")); close(v,1)
+        return {"molar_flow_mol_s":v,"scope":"property-model material-flow calculation; not IPOPT process optimization"}
+    if engine == "watertap":
+        from pyomo.environ import ConcreteModel,value
+        from pyomo.util.calc_var_value import calculate_variable_from_constraint
+        from idaes.core import FlowsheetBlock
+        from watertap.property_models.NaCl_prop_pack import NaClParameterBlock
+        m=ConcreteModel(); m.fs=FlowsheetBlock(dynamic=False); m.fs.props=NaClParameterBlock()
+        m.fs.state=m.fs.props.build_state_block([0],defined_state=True); s=m.fs.state[0]
+        s.flow_mass_phase_comp["Liq","H2O"].set_value(.965); s.flow_mass_phase_comp["Liq","NaCl"].set_value(.035)
+        for j in ["H2O","NaCl"]:
+            calculate_variable_from_constraint(s.mass_frac_phase_comp["Liq",j],s.eq_mass_frac_phase_comp["Liq",j])
+        calculate_variable_from_constraint(s.dens_mass_phase["Liq"],s.eq_dens_mass_phase["Liq"])
+        v=value(s.dens_mass_phase["Liq"]); close(value(s.mass_frac_phase_comp["Liq","NaCl"]),.035)
+        close(v,1021.46,.05)
+        return {"salt_mass_fraction":.035,"density_kg_m3":v,"scope":"NaCl property model only; not treatment flowsheet optimization"}
+    if engine == "phreeqc":
+        from phreeqpy.iphreeqc.phreeqc_dll import IPhreeqc
+        import hashlib
+        db=download("https://raw.githubusercontent.com/usgs-coupled-subtrees/phreeqc3-database/master/phreeqc.dat",work/"phreeqc.dat",1000000)
+        blob=hashlib.sha1(b"blob "+str(len(db)).encode()+b"\0"+db).hexdigest()
+        check(blob=="33f1d5a3c3cf7fccd00bdba300f9b280b696b20f","PHREEQC database blob changed")
+        p=IPhreeqc(); p.load_database(str(work/"phreeqc.dat"))
+        p.run_string("SOLUTION 1\n temp 25\n pH 7\n units mol/kgw\n Na 0.01\n Cl 0.01\nSELECTED_OUTPUT\n -reset false\n -pH true\n -totals Na Cl\nEND")
+        rows=p.get_selected_output_array()
+        check(len(rows)>=2,"No speciation output")
+        v=[float(x) for x in rows[-1]]; close(v[0],7,.01); close(v[1],.01,1e-6); close(v[2],.01,1e-6)
+        return {"pH":v[0],"Na_mol_kg":v[1],"Cl_mol_kg":v[2],"database_blob":blob}
+    if engine == "freecad":
+        macro=work/"fixture.FCMacro"
+        macro.write_text("import FreeCAD, Part\np=Part.makeBox(2,3,4)\nassert abs(p.Volume-24)<1e-6\np.exportStep("+repr(str(work/"part.step"))+")\nopen("+repr(str(work/"proof.txt"))+",'w').write(str(p.Volume))\n")
+        import shutil
+        exe=shutil.which("freecadcmd") or shutil.which("FreeCADCmd")
+        check(exe is not None,"FreeCAD headless CLI unavailable")
+        os.environ["QT_QPA_PLATFORM"]="offscreen"
+        cmd([exe,str(macro)],work,timeout=120)
+        v=float((work/"proof.txt").read_text()); close(v,24)
+        check((work/"part.step").stat().st_size>100,"STEP missing")
+        return {"volume_mm3":v,"step_bytes":(work/"part.step").stat().st_size}
+    if engine == "openseespy":
+        import openseespy.opensees as o
+        o.wipe(); o.model("basic","-ndm",1,"-ndf",1)
+        o.node(1,0); o.node(2,1); o.fix(1,1)
+        o.uniaxialMaterial("Elastic",1,1000.); o.element("truss",1,1,2,1.,1)
+        o.timeSeries("Linear",1); o.pattern("Plain",1,1); o.load(2,10.)
+        o.system("BandGeneral"); o.numberer("Plain"); o.constraints("Plain")
+        o.integrator("LoadControl",1); o.algorithm("Linear"); o.analysis("Static")
+        check(o.analyze(1)==0,"Structural solve failed"); v=o.nodeDisp(2,1); close(v,.01,1e-8); o.wipe()
+        return {"displacement":v,"license_scope":"research/education/internal use only; no redistribution"}
+    if engine == "fenicsx":
+        f=work/"fenics.py"
+        f.write_text("from mpi4py import MPI\nfrom dolfinx import mesh,fem\nimport ufl\nm=mesh.create_unit_square(MPI.COMM_WORLD,4,4)\nv=fem.assemble_scalar(fem.form(1*ufl.dx(domain=m)))\nprint(float(v))\n")
+        v=float(cmd(["/usr/bin/python3",str(f)],work).strip().splitlines()[-1])
+        close(v,1,1e-9)
+        return {"integrated_unit_square_area":v}
+    if engine == "qlib":
+        from qlib.contrib.evaluate import risk_analysis
+        import pandas as pd
+        v=risk_analysis(pd.Series([.01,-.02,.03,.02]),freq="day")
+        mean=float(v.loc["mean","risk"]); close(mean,.01)
+        return {"mean_return":mean,"scope":"synthetic risk metric; not trading performance"}
+    if engine == "llama_cpp":
+        import tarfile
+        archive=work/"llama.tar.gz"
+        download("https://github.com/ggml-org/llama.cpp/releases/download/b11865/llama-b11865-bin-ubuntu-x64.tar.gz",archive,30000000,"b59572aebe7df4de33b87d58a84a183d4ee0be4d5c8fe82df77b68ea65bc8bd6")
+        with tarfile.open(archive) as a: a.extractall(work/"llama",filter="data")
+        binary=next((work/"llama").rglob("llama-cli"))
+        model=hf("bartowski/SmolLM2-135M-Instruct-GGUF","09816acd5d99df7be770d85ea30822623dab342c",work/"model",["SmolLM2-135M-Instruct-Q4_K_M.gguf"])
+        gguf=Path(model)/"SmolLM2-135M-Instruct-Q4_K_M.gguf"
+        os.environ["LD_LIBRARY_PATH"]=str(binary.parent)
+        v=cmd([str(binary),"-m",str(gguf),"-p","The capital of France is","-n","8","-t","2","-ngl","0","--no-conversation","--temp","0"],work,timeout=180)
+        check("Paris" in v,"Expected token absent")
+        return {"model":"SmolLM2-135M-Instruct Q4_K_M","answer_has_paris":True,"cpu_only":True}
+    if engine == "transformers":
+        model=hf("sentence-transformers/all-MiniLM-L6-v2","1110a243fdf4706b3f48f1d95db1a4f5529b4d41",work/"model",["*.json","*.txt","model.safetensors","1_Pooling/config.json"])
+        from transformers import AutoModel,AutoTokenizer
+        import torch
+        t=AutoTokenizer.from_pretrained(model,local_files_only=True,trust_remote_code=False)
+        m=AutoModel.from_pretrained(model,local_files_only=True,trust_remote_code=False,use_safetensors=True).eval()
+        with torch.no_grad(): v=m(**t("Public synthetic compute",return_tensors="pt")).last_hidden_state
+        check(v.shape[-1]==384 and torch.isfinite(v).all().item(),"Invalid embedding")
+        return {"hidden_size":v.shape[-1],"token_count":v.shape[1],"device":"cpu"}
+    if engine == "sentence_transformers":
+        model=hf("sentence-transformers/all-MiniLM-L6-v2","1110a243fdf4706b3f48f1d95db1a4f5529b4d41",work/"model",["*.json","*.txt","model.safetensors","1_Pooling/config.json"])
+        from sentence_transformers import SentenceTransformer
+        import numpy as np
+        m=SentenceTransformer(model,device="cpu",local_files_only=True,trust_remote_code=False)
+        v=m.encode(["public chemical process","public chemical process","blue sky"],normalize_embeddings=True)
+        close(float(v[0]@v[1]),1,1e-5); check(float(v[0]@v[2])<.9,"Similarity reference failed")
+        return {"dimension":v.shape[1],"same_text_similarity":float(v[0]@v[1]),"different_text_similarity":float(v[0]@v[2])}
+    if engine == "docling":
+        from docling.document_converter import DocumentConverter
+        from docling.datamodel.base_models import InputFormat
+        p=work/"sample.md"; p.write_text("# Public fixture\n\n| Name | Value |\n|---|---|\n| ZEIBAEL | 123 |\n")
+        v=DocumentConverter(allowed_formats=[InputFormat.MD]).convert(p).document
+        text=v.export_to_markdown()
+        check("ZEIBAEL" in text and "123" in text and len(v.tables)==1,"Markdown structure mismatch")
+        return {"tables":len(v.tables),"scope":"Markdown structured document; PDF neural layout not yet tested"}
+    if engine == "paddleocr":
+        from PIL import Image,ImageDraw,ImageFont
+        im=Image.new("RGB",(1000,200),"white"); d=ImageDraw.Draw(im); d.text((50,60),"ZEIBAEL 12345",font=ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",60),fill="black"); im.save(work/"sample.png")
+        det=hf("PaddlePaddle/PP-OCRv5_mobile_det","0d63e78e2b680928f6b1747d76a08db6e645efb7",work/"det",["inference.*","*.json","*.yml"])
+        rec=hf("PaddlePaddle/PP-OCRv5_mobile_rec","682f20538d8c086cb2128e5cfac775e6c4904e85",work/"rec",["inference.*","*.json","*.yml"])
+        from paddleocr import PaddleOCR
+        m=PaddleOCR(text_detection_model_name="PP-OCRv5_mobile_det",text_detection_model_dir=det,text_recognition_model_name="PP-OCRv5_mobile_rec",text_recognition_model_dir=rec,use_doc_orientation_classify=False,use_doc_unwarping=False,use_textline_orientation=False,device="cpu")
+        v=" ".join(str(t) for x in m.predict(str(work/"sample.png")) for t in x.json["res"]["rec_texts"])
+        check("ZEIBAEL" in v.upper() and "12345" in v,"OCR text mismatch")
+        return {"text":v,"device":"cpu"}
+    if engine == "tika":
+        from reportlab.pdfgen import canvas
+        p=work/"sample.pdf"; c=canvas.Canvas(str(p)); c.drawString(72,720,"ZEIBAEL PUBLIC 123"); c.save()
+        download("https://archive.apache.org/dist/tika/3.1.0/tika-app-3.1.0.jar",work/"tika.jar",150000000,"66ae3805a3888bdf48dacd849ca15e51b35dae480495a41df9886deabb2475b4d58c7a2c336f18de0d2dac1cf449eee0cc9dde4f82441e3a42b8193175a3247f")
+        v=cmd(["java","-Xmx512m","-jar",str(work/"tika.jar"),"-t",str(p)],work,timeout=180)
+        check("ZEIBAEL PUBLIC 123" in v,"PDF extraction mismatch")
+        return {"text":"ZEIBAEL PUBLIC 123","scope":"synthetic local PDF only; no untrusted parser input"}
+    if engine == "silero_vad":
+        import torch
+        from silero_vad import load_silero_vad,get_speech_timestamps,read_audio
+        m=load_silero_vad(onnx=True)
+        silence=torch.zeros(16000)
+        check(not get_speech_timestamps(silence,m,sampling_rate=16000),"Silence falsely classified")
+        cmd(["espeak-ng","-w",str(work/"speech.wav"),"This is a public synthetic speech fixture."],work)
+        cmd(["ffmpeg","-v","error","-y","-i",str(work/"speech.wav"),"-ar","16000","-ac","1",str(work/"speech16.wav")],work)
+        a=read_audio(str(work/"speech16.wav"),sampling_rate=16000)
+        v=get_speech_timestamps(a,m,sampling_rate=16000)
+        check(len(v)>0,"Generated speech not detected")
+        return {"speech_segments":len(v),"silence_segments":0}
+    if engine == "ray":
+        import ray
+        os.environ["RAY_USAGE_STATS_ENABLED"]="0"
+        ray.init(num_cpus=2,include_dashboard=False,object_store_memory=80*1024*1024,_temp_dir=str(work/"ray"),_node_ip_address="127.0.0.1",log_to_driver=False)
+        try:
+            @ray.remote
+            def f(x): return x*x
+            v=ray.get([f.remote(x) for x in range(4)],timeout=60)
+            check(v==[0,1,4,9],"Parallel result mismatch")
+            return {"results":v,"cpus":2,"scope":"single ephemeral runner"}
+        finally: ray.shutdown()
+    if engine == "k6":
+        import tarfile
+        download("https://github.com/grafana/k6/releases/download/v1.0.0/k6-v1.0.0-linux-amd64.tar.gz",work/"k6.tar.gz",40000000,"5eb2236bc76a3c5cced12aaf0fd76c4b1ceac5ea040c70388a3d272b46595b59")
+        with tarfile.open(work/"k6.tar.gz") as a: a.extractall(work/"k6dir",filter="data")
+        binary=next((work/"k6dir").rglob("k6"))
+        import threading
+        from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self): self.send_response(200); self.end_headers(); self.wfile.write(b"ok")
+            def log_message(self,*args): pass
+        server=ThreadingHTTPServer(("127.0.0.1",0),Handler); threading.Thread(target=server.serve_forever,daemon=True).start()
+        try:
+            (work/"test.js").write_text("import http from 'k6/http'; import {check} from 'k6'; export const options={vus:1,iterations:3,thresholds:{checks:['rate==1']}}; export default function(){check(http.get('http://127.0.0.1:"+str(server.server_port)+"/'),{'status 200':r=>r.status===200});}")
+            os.environ["K6_NO_USAGE_REPORT"]="true"
+            cmd([str(binary),"run","--summary-export",str(work/"summary.json"),str(work/"test.js")],work)
+            v=json.loads((work/"summary.json").read_text())["metrics"]["checks"]["value"]; close(v,1)
+            return {"check_rate":v,"iterations":3}
+        finally: server.shutdown(); server.server_close()
+    if engine == "trivy":
+        import tarfile
+        download("https://github.com/aquasecurity/trivy/releases/download/v0.76.2/trivy_0.76.2_Linux-64bit.tar.gz",work/"trivy.tar.gz",60000000,"bc0fc726e017b8927a62b2d3531d7a84ee01769daf5c99ed866dced54089fdbf")
+        with tarfile.open(work/"trivy.tar.gz") as a: a.extractall(work/"trivybin",filter="data")
+        binary=next((work/"trivybin").rglob("trivy"))
+        sample=work/"sample"; sample.mkdir()
+        (sample/"Dockerfile").write_text("FROM ubuntu:latest\nRUN apt-get update\n")
+        v=json.loads(cmd([str(binary),"config","--skip-check-update","--skip-version-check","--format","json",str(sample)],work,timeout=120))
+        n=sum(len(x.get("Misconfigurations") or []) for x in v.get("Results",[])); check(n>0,"No fixture misconfiguration detected")
+        return {"misconfigurations":n,"scope":"offline misconfiguration; vulnerability DB scan not tested"}
     raise ValueError("Unapproved engine")
 
 def main():

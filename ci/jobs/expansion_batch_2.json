@@ -244,7 +244,8 @@
           "arch==7.2.0",
           "numpy==1.26.4",
           "statsmodels==0.14.4",
-          "scipy==1.15.3"
+          "scipy==1.15.3",
+          "pandas==2.2.3"
         ],
         [
           "python",
@@ -294,7 +295,10 @@
           "--no-input",
           "--only-binary=:all:",
           "statsforecast==2.0.1",
-          "numpy==1.26.4"
+          "numpy==1.26.4",
+          "pandas==2.2.3",
+          "pyarrow==20.0.0",
+          "numba==0.61.2"
         ],
         [
           "python",
@@ -369,7 +373,10 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
-          "xgboost==3.0.2"
+          "xgboost==3.0.2",
+          "scikit-learn==1.6.1",
+          "numpy==2.2.6",
+          "scipy==1.15.3"
         ],
         [
           "python",
@@ -393,7 +400,10 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
-          "lightgbm==4.6.0"
+          "lightgbm==4.6.0",
+          "scikit-learn==1.6.1",
+          "numpy==2.2.6",
+          "scipy==1.15.3"
         ],
         [
           "python",

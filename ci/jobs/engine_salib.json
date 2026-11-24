@@ -17,7 +17,8 @@
           "--no-input",
           "--only-binary=:all:",
           "SALib==1.5.1",
-          "numpy==1.26.4"
+          "numpy==1.26.4",
+          "pandas==2.2.3"
         ],
         [
           "python",

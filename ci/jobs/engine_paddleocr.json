@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "paddleocr",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "paddleocr"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "paddlepaddle==3.0.0",
+          "paddleocr==3.0.0",
+          "huggingface-hub==0.31.4",
+          "numpy==1.26.4",
+          "pillow==11.2.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "paddleocr"
+        ]
+      ]
+    }
+  ]
+}

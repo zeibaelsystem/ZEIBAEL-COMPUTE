@@ -19,7 +19,8 @@
           "arch==7.2.0",
           "numpy==1.26.4",
           "statsmodels==0.14.4",
-          "scipy==1.15.3"
+          "scipy==1.15.3",
+          "pandas==2.2.3"
         ],
         [
           "python",

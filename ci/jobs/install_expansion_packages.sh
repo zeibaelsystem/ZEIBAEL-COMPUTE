@@ -9,6 +9,10 @@ case "${1:-}" in
   blender) packages=(blender) ;;
   gdal) packages=(gdal-bin) ;;
   ocrmypdf) packages=(tesseract-ocr tesseract-ocr-eng ghostscript fonts-dejavu-core) ;;
+  freecad) packages=(freecad) ;;
+  fenicsx) packages=(python3-dolfinx-real) ;;
+  paddleocr) packages=(fonts-dejavu-core libgl1 libglib2.0-0) ;;
+  silero_vad) packages=(espeak-ng ffmpeg) ;;
   *) echo "Unapproved package ID" >&2; exit 2 ;;
 esac
 sudo apt-get update -qq

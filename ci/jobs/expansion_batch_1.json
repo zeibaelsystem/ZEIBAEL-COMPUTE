@@ -163,7 +163,7 @@
           "--no-input",
           "--only-binary=:all:",
           "cadquery==2.5.2",
-          "numpy==1.26.4"
+          "numpy==2.2.6"
         ],
         [
           "python",
@@ -188,7 +188,9 @@
           "--no-input",
           "--only-binary=:all:",
           "wntr==1.3.2",
-          "numpy==1.26.4"
+          "numpy==1.26.4",
+          "six==1.17.0",
+          "pandas==2.2.3"
         ],
         [
           "python",
@@ -433,7 +435,8 @@
           "--no-input",
           "--only-binary=:all:",
           "SALib==1.5.1",
-          "numpy==1.26.4"
+          "numpy==1.26.4",
+          "pandas==2.2.3"
         ],
         [
           "python",

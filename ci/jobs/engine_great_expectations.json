@@ -18,7 +18,7 @@
           "--only-binary=:all:",
           "great-expectations==1.5.0",
           "numpy==1.26.4",
-          "pandas==2.2.3"
+          "pandas==2.1.4"
         ],
         [
           "python",

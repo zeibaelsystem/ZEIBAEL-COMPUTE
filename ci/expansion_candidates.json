@@ -5,20 +5,35 @@
     {
       "id": "idaes",
       "group": "chemical",
-      "status": "blocked",
-      "reason": "Open solver binaries and supported OS/architecture must be audited separately; no claim from Python import."
+      "status": "candidate",
+      "license": "BSD",
+      "source": "https://github.com/IDAES/idaes-pse/tree/2.8.0",
+      "scope": "Property-model material flow only; full process optimization not yet proven",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: idaes-pse==2.8.0 pyomo==6.9.2 pandas==2.2.3 numpy==1.26.4"
+      ]
     },
     {
       "id": "watertap",
       "group": "chemical",
-      "status": "blocked",
-      "reason": "IDAES solver binaries and nonlinear water-treatment validation not yet qualified."
+      "status": "candidate",
+      "license": "BSD",
+      "source": "https://github.com/watertap-org/watertap/tree/1.3.0",
+      "scope": "NaCl property model; no RO plant optimization claim",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: watertap==1.3.0 idaes-pse==2.8.0 pyomo==6.9.2 numpy==1.26.4 pandas==2.2.3"
+      ]
     },
     {
       "id": "phreeqc",
       "group": "chemical",
-      "status": "blocked",
-      "reason": "IPhreeqc native library and licensed database distribution path not yet validated."
+      "status": "candidate",
+      "license": "BSD-3-Clause / USGS public domain",
+      "source": "https://www.usgs.gov/software/phreeqc-version-3",
+      "scope": "Aqueous speciation with checked public USGS database",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: phreeqpy==0.6.0"
+      ]
     },
     {
       "id": "thermo",
@@ -92,20 +107,35 @@
     {
       "id": "freecad",
       "group": "engineering",
-      "status": "blocked",
-      "reason": "Headless executable and Ubuntu package/runtime compatibility not yet qualified."
+      "status": "candidate",
+      "license": "LGPL-2.0+",
+      "source": "https://github.com/FreeCAD/FreeCAD",
+      "scope": "Headless CAD fixture",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh freecad"
+      ]
     },
     {
       "id": "openseespy",
       "group": "engineering",
-      "status": "blocked",
-      "reason": "Research, education and internal use free; commercial redistribution license restriction needs explicit scope review."
+      "status": "candidate",
+      "license": "Free for research, education and internal use; no commercial redistribution",
+      "source": "https://openseespydoc.readthedocs.io/en/latest/",
+      "scope": "Internal research only; public source fixture does not redistribute library or create service",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: openseespy==3.7.1.2 openseespylinux==3.7.1.2"
+      ]
     },
     {
       "id": "fenicsx",
       "group": "engineering",
-      "status": "blocked",
-      "reason": "MPI/PETSc native stack and compatible container release need validation."
+      "status": "candidate",
+      "license": "LGPL-3.0+",
+      "source": "https://github.com/FEniCS/dolfinx",
+      "scope": "Finite element integration on public unit mesh",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh fenicsx"
+      ]
     },
     {
       "id": "su2",
@@ -278,8 +308,13 @@
     {
       "id": "qlib",
       "group": "finance",
-      "status": "blocked",
-      "reason": "Python 3.12 wheel and local dataset initialization workflow not yet validated."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://github.com/microsoft/qlib/tree/v0.9.6",
+      "scope": "Qlib quantitative risk analysis; not local historical data pipeline",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: pyqlib==0.9.6 pandas==2.2.3 numpy==1.26.4"
+      ]
     },
     {
       "id": "optuna",
@@ -392,20 +427,37 @@
     {
       "id": "llama_cpp",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No verified public model weight/license and memory/runtime budget; no model inference claim."
+      "status": "candidate",
+      "license": "MIT / Apache-2.0 model",
+      "source": "https://github.com/ggml-org/llama.cpp/releases/tag/b11865",
+      "scope": "CPU public GGUF inference; no hosted model",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: huggingface-hub==0.31.4"
+      ]
     },
     {
       "id": "transformers",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No selected verified model weights or CPU inference fixture yet."
+      "status": "candidate",
+      "license": "Apache-2.0 / Apache-2.0 model",
+      "source": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/tree/1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "scope": "Local pretrained encoder",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: transformers==4.52.4 huggingface-hub==0.31.4 numpy==1.26.4"
+      ]
     },
     {
       "id": "sentence_transformers",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No selected verified embedding model weights or CPU fixture yet."
+      "status": "candidate",
+      "license": "Apache-2.0 / Apache-2.0 model",
+      "source": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/tree/1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "scope": "Local pretrained embedding",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: sentence-transformers==4.1.0 transformers==4.52.4 huggingface-hub==0.31.4 numpy==1.26.4"
+      ]
     },
     {
       "id": "faiss",
@@ -419,14 +471,26 @@
     {
       "id": "docling",
       "group": "documents",
-      "status": "blocked",
-      "reason": "Layout/OCR model weights and dependencies require explicit CPU/local license audit."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://github.com/docling-project/docling/tree/v2.34.0",
+      "scope": "Document structure on Markdown; no PDF neural layout claim",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: docling==2.34.0 pandas==2.2.3 numpy==1.26.4"
+      ]
     },
     {
       "id": "paddleocr",
       "group": "documents",
-      "status": "blocked",
-      "reason": "PaddlePaddle CPU wheel and model weight sources/license not yet verified."
+      "status": "candidate",
+      "license": "Apache-2.0 code and weights",
+      "source": "https://huggingface.co/PaddlePaddle/PP-OCRv5_mobile_rec",
+      "scope": "CPU local pretrained OCR",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh paddleocr",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: paddlepaddle==3.0.0 paddleocr==3.0.0 huggingface-hub==0.31.4 numpy==1.26.4 pillow==11.2.1"
+      ]
     },
     {
       "id": "ocrmypdf",
@@ -477,8 +541,13 @@
     {
       "id": "tika",
       "group": "documents",
-      "status": "blocked",
-      "reason": "Java artifact distribution, transitive dependencies and local CLI fixture not yet validated."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://archive.apache.org/dist/tika/3.1.0/",
+      "scope": "Local synthetic PDF parsing only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: reportlab==4.4.1"
+      ]
     },
     {
       "id": "tabula",
@@ -527,8 +596,15 @@
     {
       "id": "silero_vad",
       "group": "multimedia",
-      "status": "blocked",
-      "reason": "Bundled model artifact/license and CPU runtime proof needed."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://github.com/snakers4/silero-vad",
+      "scope": "Bundled MIT VAD model on CPU",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh silero_vad",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: silero-vad==5.1.2 onnxruntime==1.22.1 numpy==1.26.4"
+      ]
     },
     {
       "id": "whisperx",
@@ -600,8 +676,13 @@
     {
       "id": "ray",
       "group": "data",
-      "status": "blocked",
-      "reason": "Distributed local-only lifecycle, memory and no cluster/service path need dedicated test."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://github.com/ray-project/ray",
+      "scope": "Local ephemeral single-node workers only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ray==2.46.0 numpy==1.26.4"
+      ]
     },
     {
       "id": "networkx",
@@ -689,8 +770,11 @@
     {
       "id": "k6",
       "group": "software",
-      "status": "blocked",
-      "reason": "Official CLI release distribution/digest and localhost-only test not yet verified."
+      "status": "candidate",
+      "license": "AGPL-3.0",
+      "source": "https://github.com/grafana/k6/releases/tag/v1.0.0",
+      "scope": "Bounded loopback-only load test",
+      "distribution": []
     },
     {
       "id": "appium",
@@ -707,8 +791,11 @@
     {
       "id": "trivy",
       "group": "software",
-      "status": "blocked",
-      "reason": "Public vulnerability DB distribution/cache and bounded offline scan not yet validated."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://github.com/aquasecurity/trivy/releases/tag/v0.76.2",
+      "scope": "Offline configuration scan only",
+      "distribution": []
     },
     {
       "id": "semgrep",

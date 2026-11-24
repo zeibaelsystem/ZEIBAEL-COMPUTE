@@ -17,7 +17,7 @@
           "--no-input",
           "--only-binary=:all:",
           "cadquery==2.5.2",
-          "numpy==1.26.4"
+          "numpy==2.2.6"
         ],
         [
           "python",

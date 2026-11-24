@@ -84,7 +84,7 @@ jobs:
       fail-fast: false
       max-parallel: 18
       matrix:
-        engine: [thermo, chemicals, fluids, ht, pybamm, rdkit, cadquery, wntr, pandapower, opendss, pyvista, openmdao, ortools, pyomo, highs, cvxpy, casadi, salib, simpy, pint, pymc, deap, talib, backtrader, statsmodels, optuna, riskfolio, arch, pyportfolioopt, statsforecast, shap, scikit_learn, xgboost, lightgbm, catboost, tensorflow, jax, faiss, ocrmypdf, pdfplumber, libreoffice, pandoc, tesseract_multilingual, scenedetect, librosa, imagemagick, blender, open3d, arrow, dask, networkx, gdal, geopandas, xarray, rasterio, orjson, great_expectations, hypothesis, locust, semgrep, z3, scrapy, trafilatura]
+        engine: [wntr, cadquery, salib, arch, statsforecast, lightgbm, xgboost, ocrmypdf, great_expectations, idaes, watertap, phreeqc, freecad, openseespy, fenicsx, qlib, llama_cpp, transformers, sentence_transformers, docling, paddleocr, tika, silero_vad, ray, k6, trivy]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

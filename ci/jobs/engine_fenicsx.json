@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "fenicsx",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "fenicsx"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "fenicsx"
+        ]
+      ]
+    }
+  ]
+}
