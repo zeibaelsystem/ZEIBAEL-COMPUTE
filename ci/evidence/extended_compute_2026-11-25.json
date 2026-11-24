@@ -1,0 +1,245 @@
+{
+  "schema": 1,
+  "scope": "Public synthetic smoke tests on Ubuntu 24.04 x64 GitHub-hosted standard runners",
+  "run_id": 45453112160,
+  "run_url": "https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/45453112160",
+  "tested_commit": "92012898baa9fca2c9c2a574c0642e8fb5076a34",
+  "engine_count": 15,
+  "engine_pass_count": 15,
+  "regression": {
+    "job_id": 138655255298,
+    "status": "success",
+    "python_discovered": 165,
+    "python_pass": 163,
+    "python_skipped": 2,
+    "node_pass": 14,
+    "node_fail": 0
+  },
+  "results": [
+    {
+      "engine": "coolprop",
+      "job_id": 138655256446,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "density_kg_m3": 997.047636760347,
+        "boiling_K": 373.1242958476665
+      },
+      "exit_code": 0,
+      "duration_seconds": 3.063
+    },
+    {
+      "engine": "duckdb",
+      "job_id": 138655256355,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "rows": 10000,
+        "sum": 50005000
+      },
+      "exit_code": 0,
+      "duration_seconds": 2.071
+    },
+    {
+      "engine": "dwsim",
+      "job_id": 138655256187,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "mass_flow_kg_s": 1,
+        "temperature_K": 298.15000001899875,
+        "tool_count": 58,
+        "image_digest": "ghcr.io/danwbr/dwsim-mcp@sha256:518f042e16bae711eaba2772d999232f1247810afbbe432c2fea05c608b58757"
+      },
+      "exit_code": 0,
+      "duration_seconds": 8.021
+    },
+    {
+      "engine": "gmsh",
+      "job_id": 138655256298,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "nodes": 98,
+        "elements": 198
+      },
+      "exit_code": 0,
+      "duration_seconds": 38.655
+    },
+    {
+      "engine": "lammps",
+      "job_id": 138655256501,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "steps": 10,
+        "atoms": 32,
+        "energy_initial": -4.6808681,
+        "energy_final": -4.675769
+      },
+      "exit_code": 0,
+      "duration_seconds": 30.383
+    },
+    {
+      "engine": "onnxruntime",
+      "job_id": 138655256374,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "output": [
+          4,
+          6
+        ],
+        "provider": "CPUExecutionProvider"
+      },
+      "exit_code": 0,
+      "duration_seconds": 12.213
+    },
+    {
+      "engine": "opencv",
+      "job_id": 138655256332,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "foreground_pixels": 1600,
+        "components": 1
+      },
+      "exit_code": 0,
+      "duration_seconds": 6.205
+    },
+    {
+      "engine": "openfoam",
+      "job_id": 138655256272,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "cells": 10,
+        "min": 0.0499999,
+        "max": 0.95,
+        "fixture": "1D diffusion"
+      },
+      "exit_code": 0,
+      "duration_seconds": 47.141
+    },
+    {
+      "engine": "openmodelica",
+      "job_id": 138655256736,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "x_at_t1": 0.3678794515339768,
+        "expected": 0.36787944117144233,
+        "image_digest": "openmodelica/openmodelica@sha256:ac9a0223e69b8055d444b42f58ccb9680342b56848c68b81385bf83d7c0ba824"
+      },
+      "exit_code": 0,
+      "duration_seconds": 13.769
+    },
+    {
+      "engine": "polars",
+      "job_id": 138655255764,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "group": [
+          "a",
+          "b"
+        ],
+        "x": [
+          5,
+          7
+        ]
+      },
+      "exit_code": 0,
+      "duration_seconds": 2.247
+    },
+    {
+      "engine": "pytorch",
+      "job_id": 138655256520,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "loss": 14,
+        "gradient": [
+          2,
+          4,
+          6
+        ],
+        "device": "cpu"
+      },
+      "exit_code": 0,
+      "duration_seconds": 24.976
+    },
+    {
+      "engine": "quantlib",
+      "job_id": 138655256331,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "discount_factor": 0.9512294245007139,
+        "zero_rate": 0.05
+      },
+      "exit_code": 0,
+      "duration_seconds": 5.221
+    },
+    {
+      "engine": "sympy",
+      "job_id": 138655256492,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "roots": [
+          2,
+          3
+        ],
+        "integral": 9
+      },
+      "exit_code": 0,
+      "duration_seconds": 8.863
+    },
+    {
+      "engine": "tesseract",
+      "job_id": 138655256408,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "recognized": "ZEIBAEL 12345"
+      },
+      "exit_code": 0,
+      "duration_seconds": 10.169
+    },
+    {
+      "engine": "vectorbt",
+      "job_id": 138655256234,
+      "run_id": 45453112160,
+      "status": "success",
+      "values": {
+        "synthetic_total_return": 0.3,
+        "fees": 0,
+        "not_market_evidence": true
+      },
+      "exit_code": 0,
+      "duration_seconds": 39.416
+    }
+  ],
+  "prior_failures": [
+    {
+      "run_id": 45452587222,
+      "reason": "RED contract tests: 3 expected missing implementation errors"
+    },
+    {
+      "run_id": 45452858854,
+      "reason": "DWSIM MCP call name collision; VectorBT incompatible Plotly 6 template"
+    },
+    {
+      "run_id": 45452933434,
+      "reason": "DWSIM fixed; VectorBT Plotly dependency still incompatible"
+    }
+  ],
+  "limitations": [
+    "Smoke fixture success is not production validation",
+    "No GPU",
+    "No PaddleOCR",
+    "No confidential inputs",
+    "No claim of cross-chat automatic dispatch"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "opencv",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==2.2.6",
+          "opencv-python-headless==4.11.0.86"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "opencv"
+        ]
+      ]
+    }
+  ]
+}

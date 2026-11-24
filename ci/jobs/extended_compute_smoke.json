@@ -1,0 +1,344 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "openfoam",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_extended_engines.sh",
+          "openfoam"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "openfoam"
+        ]
+      ]
+    },
+    {
+      "id": "coolprop",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "CoolProp==7.1.0"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "coolprop"
+        ]
+      ]
+    },
+    {
+      "id": "dwsim",
+      "runtime": "docker",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "commands": [
+        [
+          "docker",
+          "pull",
+          "ghcr.io/danwbr/dwsim-mcp:10.2"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "dwsim"
+        ]
+      ]
+    },
+    {
+      "id": "sympy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "sympy==1.14.0"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "sympy"
+        ]
+      ]
+    },
+    {
+      "id": "opencv",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==2.2.6",
+          "opencv-python-headless==4.11.0.86"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "opencv"
+        ]
+      ]
+    },
+    {
+      "id": "tesseract",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_extended_engines.sh",
+          "tesseract"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "tesseract"
+        ]
+      ]
+    },
+    {
+      "id": "duckdb",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "duckdb==1.3.2"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "duckdb"
+        ]
+      ]
+    },
+    {
+      "id": "polars",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "polars==1.31.0"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "polars"
+        ]
+      ]
+    },
+    {
+      "id": "quantlib",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "QuantLib==1.38"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "quantlib"
+        ]
+      ]
+    },
+    {
+      "id": "vectorbt",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==1.26.4",
+          "vectorbt==0.28.1",
+          "plotly==5.24.1",
+          "pandas==2.2.3",
+          "numba==0.61.2"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "vectorbt"
+        ]
+      ]
+    },
+    {
+      "id": "pytorch",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "pytorch"
+        ]
+      ]
+    },
+    {
+      "id": "onnxruntime",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numpy==2.2.6",
+          "onnx==1.17.0",
+          "onnxruntime==1.22.1"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "onnxruntime"
+        ]
+      ]
+    },
+    {
+      "id": "openmodelica",
+      "runtime": "docker",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "commands": [
+        [
+          "docker",
+          "pull",
+          "openmodelica/openmodelica:v1.27.1-minimal"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "openmodelica"
+        ]
+      ]
+    },
+    {
+      "id": "gmsh",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_extended_engines.sh",
+          "gmsh"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "gmsh"
+        ]
+      ]
+    },
+    {
+      "id": "lammps",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_extended_engines.sh",
+          "lammps"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "lammps"
+        ]
+      ]
+    }
+  ]
+}
