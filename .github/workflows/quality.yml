@@ -84,7 +84,7 @@ jobs:
       fail-fast: false
       max-parallel: 18
       matrix:
-        engine: [wntr, cadquery, salib, arch, statsforecast, lightgbm, xgboost, ocrmypdf, great_expectations, idaes, watertap, phreeqc, freecad, openseespy, fenicsx, qlib, llama_cpp, transformers, sentence_transformers, docling, paddleocr, tika, silero_vad, ray, k6, trivy]
+        engine: [wntr, semgrep, openseespy, phreeqc, llama_cpp, trivy, fenicsx, qlib, paddleocr, freecad, tabula, mediapipe, sam2, whisperx, rmg_py, su2]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

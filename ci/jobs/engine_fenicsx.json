@@ -9,9 +9,9 @@
       "output_files": true,
       "commands": [
         [
-          "bash",
-          "ci/jobs/install_expansion_packages.sh",
-          "fenicsx"
+          "docker",
+          "pull",
+          "dolfinx/dolfinx@sha256:61f17eb5de64721e8bbfc06b0e715bd8d0c3b6f8ec37d30f6985016c6ac68472"
         ],
         [
           "python",

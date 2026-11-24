@@ -83,8 +83,13 @@
     {
       "id": "rmg_py",
       "group": "chemical",
-      "status": "blocked",
-      "reason": "Native compiled dependencies and reaction database license/installation need dedicated integration."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://github.com/ReactionMechanismGenerator/RMG-Py",
+      "scope": "Pinned public Docker; Arrhenius kinetics fixture only, full mechanism generation not verified",
+      "distribution": [
+        "docker pull reactionmechanismgenerator/rmg@sha256:30ef9094a74b090cd6623747dfff85bf9d763429544f75f26515d4d61804fde8"
+      ]
     },
     {
       "id": "rdkit",
@@ -123,6 +128,7 @@
       "source": "https://openseespydoc.readthedocs.io/en/latest/",
       "scope": "Internal research only; public source fixture does not redistribute library or create service",
       "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh openseespy",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: openseespy==3.7.1.2 openseespylinux==3.7.1.2"
       ]
     },
@@ -134,21 +140,26 @@
       "source": "https://github.com/FEniCS/dolfinx",
       "scope": "Finite element integration on public unit mesh",
       "distribution": [
-        "bash ci/jobs/install_expansion_packages.sh fenicsx"
+        "docker pull dolfinx/dolfinx@sha256:61f17eb5de64721e8bbfc06b0e715bd8d0c3b6f8ec37d30f6985016c6ac68472"
       ]
     },
     {
       "id": "su2",
       "group": "engineering",
-      "status": "blocked",
-      "reason": "Native build and solver fixture require a separate verified distribution path."
+      "status": "candidate",
+      "license": "LGPL-2.1",
+      "source": "https://github.com/su2code/SU2",
+      "scope": "Pinned public serial CFD executable; uniform Euler flow on synthetic mesh",
+      "distribution": []
     },
     {
       "id": "wntr",
       "group": "engineering",
       "status": "candidate",
       "license": "BSD",
-      "distribution": "wntr==1.3.2",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: wntr==1.3.2 numpy==1.26.4 six==1.17.0 pandas==2.2.3 setuptools==80.9.0"
+      ],
       "source": "https://pypi.org/project/wntr/1.3.2/",
       "scope": "public synthetic local smoke; runtime and dependency verification required"
     },
@@ -313,6 +324,8 @@
       "source": "https://github.com/microsoft/qlib/tree/v0.9.6",
       "scope": "Qlib quantitative risk analysis; not local historical data pipeline",
       "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 gym-notices==0.0.8 cloudpickle==3.1.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/ab/b1/eb05a423eb801ab7d0715d6a3b28d92589e30b437052553df19ca2087240/gym-0.26.2.tar.gz#sha256=e0d882f4b54f0c65f203104c24ab8a38b039f1289986803c7d02cdbe214fbcc4",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: pyqlib==0.9.6 pandas==2.2.3 numpy==1.26.4"
       ]
     },
@@ -489,6 +502,8 @@
       "scope": "CPU local pretrained OCR",
       "distribution": [
         "bash ci/jobs/install_expansion_packages.sh paddleocr",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/ed/0e/5c61eedde9f6c87713e89d794f01e378cfd9565847d4576fa627d758c554/GPUtil-1.4.0.tar.gz#sha256=099e52c65e512cdfa8c8763fca67f5a5c2afb63469602d5dcb4d296b3661efb9",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: paddlepaddle==3.0.0 paddleocr==3.0.0 huggingface-hub==0.31.4 numpy==1.26.4 pillow==11.2.1"
       ]
     },
@@ -552,8 +567,13 @@
     {
       "id": "tabula",
       "group": "documents",
-      "status": "blocked",
-      "reason": "Java artifact and local PDF fixture not yet validated."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://github.com/tabulapdf/tabula-java",
+      "scope": "Synthetic ruled PDF table extraction",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: reportlab==4.4.1"
+      ]
     },
     {
       "id": "tesseract_multilingual",
@@ -609,20 +629,38 @@
     {
       "id": "whisperx",
       "group": "multimedia",
-      "status": "blocked",
-      "reason": "ASR/alignment model weights and CPU runtime; no diarization credentials."
+      "status": "candidate",
+      "license": "BSD-2-Clause / Apache-2.0 model",
+      "source": "https://github.com/m-bain/whisperX",
+      "scope": "Pinned local Wav2Vec2 alignment on synthetic audio; no hosted inference or diarization",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh whisperx",
+        "python -m pip install --disable-pip-version-check --no-input --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: whisperx==3.3.4 transformers==4.52.4 huggingface-hub==0.31.4 numpy==2.2.6"
+      ]
     },
     {
       "id": "mediapipe",
       "group": "multimedia",
-      "status": "blocked",
-      "reason": "Model asset provenance and CPU fixture not verified; no face identity processing."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://github.com/google-ai-edge/mediapipe",
+      "scope": "Local bundled hand model inference on synthetic blank frame; negative case only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: mediapipe==0.10.21 numpy==1.26.4"
+      ]
     },
     {
       "id": "sam2",
       "group": "multimedia",
-      "status": "blocked",
-      "reason": "CPU-only performance and model weights/license not yet validated."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://huggingface.co/facebook/sam2.1-hiera-tiny",
+      "scope": "Pinned SAM2.1 local CPU prompted image segmentation; video tracking not verified",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: transformers==4.57.1 huggingface-hub==0.36.0 pillow==11.2.1 numpy==1.26.4"
+      ]
     },
     {
       "id": "imagemagick",
@@ -802,7 +840,9 @@
       "group": "software",
       "status": "candidate",
       "license": "LGPL-2.1",
-      "distribution": "semgrep==1.121.0",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: semgrep==1.121.0 setuptools==80.9.0"
+      ],
       "source": "https://pypi.org/project/semgrep/1.121.0/",
       "scope": "public synthetic local smoke; runtime and dependency verification required"
     },

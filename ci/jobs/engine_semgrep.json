@@ -16,7 +16,8 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
-          "semgrep==1.121.0"
+          "semgrep==1.121.0",
+          "setuptools==80.9.0"
         ],
         [
           "python",

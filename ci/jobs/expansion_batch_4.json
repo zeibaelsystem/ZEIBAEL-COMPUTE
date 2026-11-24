@@ -138,7 +138,8 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
-          "semgrep==1.121.0"
+          "semgrep==1.121.0",
+          "setuptools==80.9.0"
         ],
         [
           "python",
@@ -325,6 +326,11 @@
       "output_files": true,
       "commands": [
         [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "openseespy"
+        ],
+        [
           "python",
           "-m",
           "pip",
@@ -350,9 +356,9 @@
       "output_files": true,
       "commands": [
         [
-          "bash",
-          "ci/jobs/install_expansion_packages.sh",
-          "fenicsx"
+          "docker",
+          "pull",
+          "dolfinx/dolfinx@sha256:61f17eb5de64721e8bbfc06b0e715bd8d0c3b6f8ec37d30f6985016c6ac68472"
         ],
         [
           "python",
@@ -368,6 +374,30 @@
       "timeout_profile": "standard",
       "output_files": true,
       "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1",
+          "gym-notices==0.0.8",
+          "cloudpickle==3.1.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/ab/b1/eb05a423eb801ab7d0715d6a3b28d92589e30b437052553df19ca2087240/gym-0.26.2.tar.gz#sha256=e0d882f4b54f0c65f203104c24ab8a38b039f1289986803c7d02cdbe214fbcc4"
+        ],
         [
           "python",
           "-m",

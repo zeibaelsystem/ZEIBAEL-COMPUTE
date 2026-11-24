@@ -536,9 +536,9 @@ def run(engine, work):
     if engine == "phreeqc":
         from phreeqpy.iphreeqc.phreeqc_dll import IPhreeqc
         import hashlib
-        db=download("https://raw.githubusercontent.com/usgs-coupled-subtrees/phreeqc3-database/master/phreeqc.dat",work/"phreeqc.dat",1000000)
+        db=download("https://raw.githubusercontent.com/phreeqc-dev/phreeqc3/v3.7.3/database/phreeqc.dat",work/"phreeqc.dat",1000000)
         blob=hashlib.sha1(b"blob "+str(len(db)).encode()+b"\0"+db).hexdigest()
-        check(blob=="33f1d5a3c3cf7fccd00bdba300f9b280b696b20f","PHREEQC database blob changed")
+        check(blob=="9e69a1875801b8fe41c363030e9139bbb635a35c","PHREEQC database blob changed")
         p=IPhreeqc(); p.load_database(str(work/"phreeqc.dat"))
         p.run_string("SOLUTION 1\n temp 25\n pH 7\n units mol/kgw\n Na 0.01\n Cl 0.01\nSELECTED_OUTPUT\n -reset false\n -pH true\n -totals Na Cl\nEND")
         rows=p.get_selected_output_array()
@@ -548,11 +548,21 @@ def run(engine, work):
     if engine == "freecad":
         macro=work/"fixture.FCMacro"
         macro.write_text("import FreeCAD, Part\np=Part.makeBox(2,3,4)\nassert abs(p.Volume-24)<1e-6\np.exportStep("+repr(str(work/"part.step"))+")\nopen("+repr(str(work/"proof.txt"))+",'w').write(str(p.Volume))\n")
-        import shutil
-        exe=shutil.which("freecadcmd") or shutil.which("FreeCADCmd")
-        check(exe is not None,"FreeCAD headless CLI unavailable")
+        import shutil, urllib.request, hashlib
+        check(shutil.disk_usage(work).free>5*1024**3,"Insufficient disk for verified AppImage")
+        app=work/"freecad.AppImage"; h=hashlib.sha256(); size=0
+        with urllib.request.urlopen("https://github.com/FreeCAD/FreeCAD/releases/download/1.1.4/FreeCAD_1.1.4-Linux-x86_64-py311.AppImage",timeout=60) as response, app.open("wb") as output:
+            while chunk:=response.read(1024*1024):
+                size+=len(chunk); check(size<=850000000,"AppImage exceeds bound")
+                h.update(chunk); output.write(chunk)
+        check(h.hexdigest()=="f6dc6ba676e5ac96a565ebc8d657232f94c6158e85b4352141bd1a46f6b43434","FreeCAD digest mismatch")
+        app.chmod(0o700); cmd([str(app),"--appimage-extract"],work,timeout=240)
+        root=work/"squashfs-root"
         os.environ["QT_QPA_PLATFORM"]="offscreen"
-        cmd([exe,str(macro)],work,timeout=120)
+        os.environ["LD_LIBRARY_PATH"]=str(root/"usr/lib")
+        exe=next((x for x in root.rglob("*") if x.name.lower() in ("freecadcmd","freecadcmd.bin") and x.is_file()),None)
+        check(exe is not None,"FreeCAD headless CLI absent from AppImage")
+        cmd([str(exe),str(macro)],work,timeout=180)
         v=float((work/"proof.txt").read_text()); close(v,24)
         check((work/"part.step").stat().st_size>100,"STEP missing")
         return {"volume_mm3":v,"step_bytes":(work/"part.step").stat().st_size}
@@ -569,7 +579,8 @@ def run(engine, work):
     if engine == "fenicsx":
         f=work/"fenics.py"
         f.write_text("from mpi4py import MPI\nfrom dolfinx import mesh,fem\nimport ufl\nm=mesh.create_unit_square(MPI.COMM_WORLD,4,4)\nv=fem.assemble_scalar(fem.form(1*ufl.dx(domain=m)))\nprint(float(v))\n")
-        v=float(cmd(["/usr/bin/python3",str(f)],work).strip().splitlines()[-1])
+        image="dolfinx/dolfinx@sha256:61f17eb5de64721e8bbfc06b0e715bd8d0c3b6f8ec37d30f6985016c6ac68472"
+        v=float(cmd(["docker","run","--rm","--network","none","--entrypoint","python",image,"-c",f.read_text()],work,timeout=180).strip().splitlines()[-1])
         close(v,1,1e-9)
         return {"integrated_unit_square_area":v}
     if engine == "qlib":
@@ -587,7 +598,7 @@ def run(engine, work):
         model=hf("bartowski/SmolLM2-135M-Instruct-GGUF","09816acd5d99df7be770d85ea30822623dab342c",work/"model",["SmolLM2-135M-Instruct-Q4_K_M.gguf"])
         gguf=Path(model)/"SmolLM2-135M-Instruct-Q4_K_M.gguf"
         os.environ["LD_LIBRARY_PATH"]=str(binary.parent)
-        v=cmd([str(binary),"-m",str(gguf),"-p","The capital of France is","-n","8","-t","2","-ngl","0","--no-conversation","--temp","0"],work,timeout=180)
+        v=cmd([str(binary),"-m",str(gguf),"-p","The capital of France is","-n","8","-t","2","-ngl","0","-no-cnv","--temp","0"],work,timeout=180)
         check("Paris" in v,"Expected token absent")
         return {"model":"SmolLM2-135M-Instruct Q4_K_M","answer_has_paris":True,"cpu_only":True}
     if engine == "transformers":
@@ -680,9 +691,70 @@ def run(engine, work):
         binary=next((work/"trivybin").rglob("trivy"))
         sample=work/"sample"; sample.mkdir()
         (sample/"Dockerfile").write_text("FROM ubuntu:latest\nRUN apt-get update\n")
-        v=json.loads(cmd([str(binary),"config","--skip-check-update","--skip-version-check","--format","json",str(sample)],work,timeout=120))
+        cmd([str(binary),"config","--skip-check-update","--skip-version-check","--format","json","--output",str(work/"trivy.json"),str(sample)],work,timeout=120)
+        v=json.loads((work/"trivy.json").read_text())
         n=sum(len(x.get("Misconfigurations") or []) for x in v.get("Results",[])); check(n>0,"No fixture misconfiguration detected")
         return {"misconfigurations":n,"scope":"offline misconfiguration; vulnerability DB scan not tested"}
+    if engine == "tabula":
+        from reportlab.pdfgen import canvas
+        p=work/"table.pdf"; c=canvas.Canvas(str(p))
+        for x in (72,172,272): c.line(x,650,x,710)
+        for y in (650,680,710): c.line(72,y,272,y)
+        for x,y,t in [(85,690,"A"),(185,690,"B"),(85,660,"1"),(185,660,"2")]: c.drawString(x,y,t)
+        c.save()
+        download("https://github.com/tabulapdf/tabula-java/releases/download/v1.0.5/tabula-1.0.5-jar-with-dependencies.jar",work/"tabula.jar",20000000,"2161e3fff65939d7ce0812479cf9ca36860db5697f7fc1fa01161ed4092a0745")
+        v=cmd(["java","-Xmx512m","-jar",str(work/"tabula.jar"),"-l","-p","1","-f","CSV",str(p)],work)
+        check("A,B" in v and "1,2" in v,"Table extraction mismatch: "+v[-500:])
+        return {"columns":["A","B"],"row":[1,2]}
+    if engine == "mediapipe":
+        import mediapipe as mp, numpy as np
+        with mp.solutions.hands.Hands(static_image_mode=True,max_num_hands=1) as m:
+            v=m.process(np.zeros((128,128,3),dtype=np.uint8))
+        check(not v.multi_hand_landmarks,"Unexpected hand on blank frame")
+        return {"blank_frame_hands":0,"local_inference":True}
+    if engine == "sam2":
+        import torch
+        from PIL import Image,ImageDraw
+        from transformers import Sam2Model,Sam2Processor
+        model=hf("facebook/sam2.1-hiera-tiny","de431c4043854a71d8101e17995dfe596bf101a5",work/"model",["*.json","model.safetensors"])
+        im=Image.new("RGB",(128,128),"white"); ImageDraw.Draw(im).rectangle((32,32,96,96),fill="red")
+        p=Sam2Processor.from_pretrained(model,local_files_only=True)
+        m=Sam2Model.from_pretrained(model,local_files_only=True).eval()
+        with torch.inference_mode():
+            out=m(**p(images=im,input_boxes=[[[30,30,98,98]]],return_tensors="pt"))
+        check(out.pred_masks.numel()>0 and torch.isfinite(out.pred_masks).all().item(),"Invalid segmentation masks")
+        check(torch.isfinite(out.iou_scores).all().item(),"Invalid scores")
+        return {"mask_shape":list(out.pred_masks.shape),"device":"cpu"}
+    if engine == "whisperx":
+        import whisperx
+        model=hf("facebook/wav2vec2-base-960h","22aad52d435eb6dbaf354bdad9b0da84ce7d6156",work/"align",["*.json","model.safetensors","vocab.json"])
+        cmd(["espeak-ng","-w",str(work/"speech.wav"),"hello world"],work)
+        cmd(["ffmpeg","-loglevel","error","-i",str(work/"speech.wav"),"-ar","16000","-ac","1",str(work/"audio.wav")],work)
+        audio=whisperx.load_audio(str(work/"audio.wav")); duration=len(audio)/16000
+        m,meta=whisperx.load_align_model(language_code="en",device="cpu",model_name=model)
+        v=whisperx.align([{"start":0.0,"end":duration,"text":"hello world"}],m,meta,audio,"cpu",return_char_alignments=False)
+        words=[w for w in v["word_segments"] if "start" in w and "end" in w]
+        check(len(words)>=1 and all(0<=w["start"]<=w["end"]<=duration+.1 for w in words),"Invalid alignment")
+        return {"words":len(words),"duration_s":duration,"device":"cpu"}
+    if engine == "rmg_py":
+        image="reactionmechanismgenerator/rmg@sha256:30ef9094a74b090cd6623747dfff85bf9d763429544f75f26515d4d61804fde8"
+        code="from rmgpy.kinetics import Arrhenius; print(Arrhenius(A=(1e7,'s^-1'),n=0,Ea=(0,'J/mol'),T0=(1,'K')).get_rate_coefficient(300))"
+        v=float(cmd(["docker","run","--rm","--network","none",image,"python","-c",code],work,timeout=180).strip().splitlines()[-1])
+        close(v,1e7,.01)
+        return {"arrhenius_rate_s_inv":v}
+    if engine == "su2":
+        import zipfile
+        download("https://github.com/su2code/SU2/releases/download/v8.3.0/SU2-v8.3.0-linux64.zip",work/"su2.zip",100000000,"7fabe31817f42eb2b96ffe540d0693b7087b31fcc0547033e2a6db3a64360424")
+        with zipfile.ZipFile(work/"su2.zip") as z:
+            check(all((work/"su2"/n).resolve().is_relative_to(work/"su2") for n in z.namelist()),"Invalid archive")
+            z.extractall(work/"su2")
+        exe=next((work/"su2").rglob("SU2_CFD")); exe.chmod(0o700)
+        os.environ["LD_LIBRARY_PATH"]=str(exe.parent)+":"+str(exe.parent.parent/"lib")
+        (work/"mesh.su2").write_text("NDIME= 2\nNELEM= 4\n9 0 1 4 3 0\n9 1 2 5 4 1\n9 3 4 7 6 2\n9 4 5 8 7 3\nNPOIN= 9\n0 0 0\n1 0 1\n2 0 2\n0 1 3\n1 1 4\n2 1 5\n0 2 6\n1 2 7\n2 2 8\nNMARK= 1\nMARKER_TAG= far\nMARKER_ELEMS= 8\n3 0 1\n3 1 2\n3 2 5\n3 5 8\n3 8 7\n3 7 6\n3 6 3\n3 3 0\n")
+        (work/"flow.cfg").write_text("SOLVER= EULER\nMATH_PROBLEM= DIRECT\nMACH_NUMBER= 0.3\nAOA= 0\nFREESTREAM_TEMPERATURE= 288.15\nFREESTREAM_PRESSURE= 101325\nMARKER_FAR= ( far )\nNUM_METHOD_GRAD= GREEN_GAUSS\nCONV_NUM_METHOD_FLOW= ROE\nMUSCL_FLOW= NO\nTIME_DISCRE_FLOW= EULER_IMPLICIT\nITER= 5\nCFL_NUMBER= 1\nMESH_FILENAME= mesh.su2\nMESH_FORMAT= SU2\nOUTPUT_FILES= ( RESTART )\nHISTORY_OUTPUT= ( ITER, RMS_RES )\nCONV_FILENAME= history\n")
+        v=cmd([str(exe),"flow.cfg"],work,timeout=120)
+        check((work/"history.csv").is_file(),"Missing CFD convergence history")
+        return {"history_bytes":(work/"history.csv").stat().st_size,"cells":4}
     raise ValueError("Unapproved engine")
 
 def main():

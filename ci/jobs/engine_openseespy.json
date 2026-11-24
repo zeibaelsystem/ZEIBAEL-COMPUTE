@@ -9,6 +9,11 @@
       "output_files": true,
       "commands": [
         [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "openseespy"
+        ],
+        [
           "python",
           "-m",
           "pip",
