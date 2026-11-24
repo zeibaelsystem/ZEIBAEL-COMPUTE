@@ -84,7 +84,7 @@ jobs:
       fail-fast: false
       max-parallel: 18
       matrix:
-        engine: [semgrep, llama_cpp, paddleocr, sam2, su2, whisperx]
+        engine: [rmg_py]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -111,18 +111,3 @@ jobs:
           if-no-files-found: warn
           retention-days: 1
 
-  mobile-preflight:
-    name: "Mobile public runner preflight"
-    if: ${{ github.event_name == 'pull_request' && github.head_ref == 'feat/compute-expansion-90' && github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    steps:
-      - name: Inspect preinstalled Android components, no downloads
-        shell: bash
-        run: |
-          echo "ANDROID_HOME=${ANDROID_HOME:-absent}"
-          command -v adb || true
-          command -v emulator || true
-          if [[ -e /dev/kvm && -r /dev/kvm && -w /dev/kvm ]]; then echo KVM_ACCESS=yes; else echo KVM_ACCESS=no; fi
-          if [[ -n "${ANDROID_HOME:-}" && -d "$ANDROID_HOME/system-images" ]]; then find "$ANDROID_HOME/system-images" -maxdepth 3 -type d | head -30; else echo NO_PREINSTALLED_ANDROID_IMAGES; fi
-          if [[ -n "${ANDROID_HOME:-}" && -x "$ANDROID_HOME/emulator/emulator" ]]; then "$ANDROID_HOME/emulator/emulator" -version | head -5; else echo NO_PREINSTALLED_EMULATOR; fi

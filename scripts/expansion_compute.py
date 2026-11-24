@@ -745,7 +745,7 @@ def run(engine, work):
     if engine == "rmg_py":
         image="reactionmechanismgenerator/rmg@sha256:30ef9094a74b090cd6623747dfff85bf9d763429544f75f26515d4d61804fde8"
         code="from rmgpy.kinetics import Arrhenius; print(Arrhenius(A=(1e7,'s^-1'),n=0,Ea=(0,'J/mol'),T0=(1,'K')).get_rate_coefficient(300))"
-        v=float(cmd(["docker","run","--rm","--network","none",image,"python","-c",code],work,timeout=180).strip().splitlines()[-1])
+        v=float(cmd(["docker","run","--rm","--network","none","--entrypoint","/opt/conda/bin/python",image,"-c",code],work,timeout=180).strip().splitlines()[-1])
         close(v,1e7,.01)
         return {"arrhenius_rate_s_inv":v}
     if engine == "su2":
