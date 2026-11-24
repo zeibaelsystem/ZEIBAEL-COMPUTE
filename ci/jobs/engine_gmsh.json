@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "gmsh",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_extended_engines.sh",
+          "gmsh"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "gmsh"
+        ]
+      ]
+    }
+  ]
+}

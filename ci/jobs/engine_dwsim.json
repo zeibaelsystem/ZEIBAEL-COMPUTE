@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "dwsim",
+      "runtime": "docker",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "commands": [
+        [
+          "docker",
+          "pull",
+          "ghcr.io/danwbr/dwsim-mcp:10.2"
+        ],
+        [
+          "python",
+          "scripts/extended_compute.py",
+          "dwsim"
+        ]
+      ]
+    }
+  ]
+}
