@@ -229,14 +229,14 @@ def dwsim(work):
                 buffer+=chunk
                 check(len(buffer)<2_000_000,"MCP response too large")
         raise RuntimeError("MCP response timeout")
-    def call(name,**kwargs):
-        result=request("tools/call",{"name":name,"arguments":kwargs})
-        check(not result.get("isError"),f"DWSIM tool {name} failed: {result}")
+    def call(tool_name,**kwargs):
+        result=request("tools/call",{"name":tool_name,"arguments":kwargs})
+        check(not result.get("isError"),f"DWSIM tool {tool_name} failed: {result}")
         value=result.get("structuredContent")
         if value is None:
             value=json.loads(next(c["text"] for c in result["content"] if c["type"]=="text"))
-        check(isinstance(value,dict),f"Unexpected result from {name}")
-        check(value.get("ok") is not False and not value.get("error"),f"{name}: {value}")
+        check(isinstance(value,dict),f"Unexpected result from {tool_name}")
+        check(value.get("ok") is not False and not value.get("error"),f"{tool_name}: {value}")
         return value
     try:
         request("initialize",{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"zeibael-smoke","version":"1"}})
@@ -278,6 +278,11 @@ def main():
     engine=sys.argv[1]
     with tempfile.TemporaryDirectory(prefix="zeibael-engine-") as directory:
         values=run_engine(engine, Path(directory))
+        if engine in {"dwsim", "openmodelica"}:
+            image = {"dwsim":"ghcr.io/danwbr/dwsim-mcp:10.2", "openmodelica":"openmodelica/openmodelica:v1.27.1-minimal"}[engine]
+            digest = command(["docker", "image", "inspect", "--format", "{{index .RepoDigests 0}}", image], Path(directory)).strip()
+            check("@sha256:" in digest, "Missing upstream image digest")
+            values["image_digest"] = digest
     output=Path(os.environ["ZEIBAEL_OUTPUT_DIR"])/"files"
     output.mkdir(parents=True,exist_ok=True)
     result={"engine":engine,"status":"success","input":"public_synthetic","values":values}
