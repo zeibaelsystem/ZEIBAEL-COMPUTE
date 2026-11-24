@@ -1,0 +1,483 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "rasterio",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "rasterio==1.4.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "rasterio"
+        ]
+      ]
+    },
+    {
+      "id": "orjson",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "orjson==3.10.18"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "orjson"
+        ]
+      ]
+    },
+    {
+      "id": "great_expectations",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "great-expectations==1.5.0",
+          "numpy==1.26.4",
+          "pandas==2.1.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "great_expectations"
+        ]
+      ]
+    },
+    {
+      "id": "hypothesis",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "hypothesis==6.131.9"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "hypothesis"
+        ]
+      ]
+    },
+    {
+      "id": "locust",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "locust==2.37.10"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "locust"
+        ]
+      ]
+    },
+    {
+      "id": "semgrep",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "semgrep==1.121.0",
+          "setuptools==80.9.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "semgrep"
+        ]
+      ]
+    },
+    {
+      "id": "z3",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "z3-solver==4.14.1.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "z3"
+        ]
+      ]
+    },
+    {
+      "id": "scrapy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "scrapy==2.13.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "scrapy"
+        ]
+      ]
+    },
+    {
+      "id": "trafilatura",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "trafilatura==2.0.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "trafilatura"
+        ]
+      ]
+    },
+    {
+      "id": "idaes",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "idaes-pse==2.8.0",
+          "pyomo==6.9.2",
+          "pandas==2.2.3",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "idaes"
+        ]
+      ]
+    },
+    {
+      "id": "watertap",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "watertap==1.3.0",
+          "idaes-pse==2.8.0",
+          "pyomo==6.9.2",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "watertap"
+        ]
+      ]
+    },
+    {
+      "id": "phreeqc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "phreeqpy==0.6.0"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "phreeqc"
+        ]
+      ]
+    },
+    {
+      "id": "freecad",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "freecad"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "freecad"
+        ]
+      ]
+    },
+    {
+      "id": "openseespy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "openseespy"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openseespy==3.7.1.2",
+          "openseespylinux==3.7.1.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "openseespy"
+        ]
+      ]
+    },
+    {
+      "id": "fenicsx",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "docker",
+          "pull",
+          "dolfinx/dolfinx@sha256:61f17eb5de64721e8bbfc06b0e715bd8d0c3b6f8ec37d30f6985016c6ac68472"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "fenicsx"
+        ]
+      ]
+    },
+    {
+      "id": "qlib",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1",
+          "gym-notices==0.0.8",
+          "cloudpickle==3.1.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/ab/b1/eb05a423eb801ab7d0715d6a3b28d92589e30b437052553df19ca2087240/gym-0.26.2.tar.gz#sha256=e0d882f4b54f0c65f203104c24ab8a38b039f1289986803c7d02cdbe214fbcc4"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyqlib==0.9.6",
+          "pandas==2.2.3",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "qlib"
+        ]
+      ]
+    },
+    {
+      "id": "llama_cpp",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "huggingface-hub==0.31.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "llama_cpp"
+        ]
+      ]
+    },
+    {
+      "id": "transformers",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "transformers==4.52.4",
+          "huggingface-hub==0.31.4",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "transformers"
+        ]
+      ]
+    }
+  ]
+}

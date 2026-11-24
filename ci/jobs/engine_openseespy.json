@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "openseespy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "openseespy"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openseespy==3.7.1.2",
+          "openseespylinux==3.7.1.2"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "openseespy"
+        ]
+      ]
+    }
+  ]
+}

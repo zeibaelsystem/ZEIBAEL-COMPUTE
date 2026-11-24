@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "tika",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "reportlab==4.4.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "tika"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1469 @@
+{
+  "schema": 1,
+  "scope": "Public synthetic fixtures on standard Ubuntu x64 only; no general solver/production readiness or full transitive license audit. Blocked candidates cannot be dispatched from main.",
+  "candidates": [
+    {
+      "id": "idaes",
+      "group": "chemical",
+      "status": "verified",
+      "license": "BSD",
+      "source": "https://github.com/IDAES/idaes-pse/tree/2.8.0",
+      "scope": "Property-model material flow only; full process optimization not yet proven",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: idaes-pse==2.8.0 pyomo==6.9.2 pandas==2.2.3 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050789,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "watertap",
+      "group": "chemical",
+      "status": "verified",
+      "license": "BSD",
+      "source": "https://github.com/watertap-org/watertap/tree/1.3.0",
+      "scope": "NaCl property model; no RO plant optimization claim",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: watertap==1.3.0 idaes-pse==2.8.0 pyomo==6.9.2 numpy==1.26.4 pandas==2.2.3"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667051149,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "phreeqc",
+      "group": "chemical",
+      "status": "verified",
+      "license": "BSD-3-Clause / USGS public domain",
+      "source": "https://www.usgs.gov/software/phreeqc-version-3",
+      "scope": "Aqueous speciation with checked public USGS database",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: phreeqpy==0.6.0"
+      ],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322361,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "thermo",
+      "group": "chemical",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "thermo==0.4.2",
+      "source": "https://pypi.org/project/thermo/0.4.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124161,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "chemicals",
+      "group": "chemical",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "chemicals==1.3.3",
+      "source": "https://pypi.org/project/chemicals/1.3.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124467,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "fluids",
+      "group": "chemical",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "fluids==1.1.0",
+      "source": "https://pypi.org/project/fluids/1.1.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124204,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "ht",
+      "group": "chemical",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "ht==1.1.0",
+      "source": "https://pypi.org/project/ht/1.1.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124415,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pybamm",
+      "group": "chemical",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "pybamm==25.10.2",
+      "source": "https://pypi.org/project/pybamm/25.10.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124258,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "rmg_py",
+      "group": "chemical",
+      "status": "blocked",
+      "license": "MIT",
+      "source": "https://github.com/ReactionMechanismGenerator/RMG-Py",
+      "scope": "Pinned public Docker; Arrhenius kinetics fixture only, full mechanism generation not verified",
+      "distribution": [
+        "docker pull reactionmechanismgenerator/rmg@sha256:30ef9094a74b090cd6623747dfff85bf9d763429544f75f26515d4d61804fde8"
+      ],
+      "reason": "Native kinetics module rmgpy.kinetics.model missing in pinned public container; run 45457951955 job 138672379951 failed after entrypoint repair."
+    },
+    {
+      "id": "rdkit",
+      "group": "chemical",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "rdkit==2025.3.3",
+      "source": "https://pypi.org/project/rdkit/2025.3.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124374,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "cadquery",
+      "group": "engineering",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "cadquery==2.5.2",
+      "source": "https://pypi.org/project/cadquery/2.5.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050942,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "freecad",
+      "group": "engineering",
+      "status": "verified",
+      "license": "LGPL-2.0+",
+      "source": "https://github.com/FreeCAD/FreeCAD",
+      "scope": "Headless CAD fixture",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh freecad"
+      ],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322356,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "openseespy",
+      "group": "engineering",
+      "status": "verified",
+      "license": "Free for research, education and internal use; no commercial redistribution",
+      "source": "https://openseespydoc.readthedocs.io/en/latest/",
+      "scope": "Internal research only; public source fixture does not redistribute library or create service; research, education and internal use only; no commercial redistribution.",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh openseespy",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: openseespy==3.7.1.2 openseespylinux==3.7.1.2"
+      ],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322151,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "fenicsx",
+      "group": "engineering",
+      "status": "verified",
+      "license": "LGPL-3.0+",
+      "source": "https://github.com/FEniCS/dolfinx",
+      "scope": "Finite element integration on public unit mesh",
+      "distribution": [
+        "docker pull dolfinx/dolfinx@sha256:61f17eb5de64721e8bbfc06b0e715bd8d0c3b6f8ec37d30f6985016c6ac68472"
+      ],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322112,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "su2",
+      "group": "engineering",
+      "status": "verified",
+      "license": "LGPL-2.1",
+      "source": "https://github.com/su2code/SU2",
+      "scope": "Pinned public serial CFD executable; uniform Euler flow on synthetic mesh",
+      "distribution": [],
+      "evidence": {
+        "run_id": 45457780727,
+        "job_id": 138671781228,
+        "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "wntr",
+      "group": "engineering",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: wntr==1.3.2 numpy==1.26.4 six==1.17.0 pandas==2.2.3 setuptools==80.9.0"
+      ],
+      "source": "https://pypi.org/project/wntr/1.3.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670321597,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pandapower",
+      "group": "engineering",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": "pandapower==3.1.2",
+      "source": "https://pypi.org/project/pandapower/3.1.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124103,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "opendss",
+      "group": "engineering",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "dss-python==0.15.7",
+      "source": "https://pypi.org/project/dss-python/0.15.7/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124311,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pyvista",
+      "group": "engineering",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "pyvista==0.45.2",
+      "source": "https://pypi.org/project/pyvista/0.45.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124163,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "openmdao",
+      "group": "engineering",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "openmdao==3.39.0",
+      "source": "https://pypi.org/project/openmdao/3.39.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124314,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "ortools",
+      "group": "optimization",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "ortools==9.12.4544",
+      "source": "https://pypi.org/project/ortools/9.12.4544/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124347,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pyomo",
+      "group": "optimization",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": "pyomo==6.9.2",
+      "source": "https://pypi.org/project/pyomo/6.9.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124533,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "highs",
+      "group": "optimization",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "highspy==1.10.0",
+      "source": "https://pypi.org/project/highspy/1.10.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124542,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "cvxpy",
+      "group": "optimization",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "cvxpy==1.6.5",
+      "source": "https://pypi.org/project/cvxpy/1.6.5/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124194,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "casadi",
+      "group": "optimization",
+      "status": "verified",
+      "license": "LGPL-3.0+",
+      "distribution": "casadi==3.7.0",
+      "source": "https://pypi.org/project/casadi/3.7.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124480,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "salib",
+      "group": "optimization",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "SALib==1.5.1",
+      "source": "https://pypi.org/project/SALib/1.5.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667051077,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "simpy",
+      "group": "optimization",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "simpy==4.1.1",
+      "source": "https://pypi.org/project/simpy/4.1.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124431,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pint",
+      "group": "optimization",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": "pint==0.24.4",
+      "source": "https://pypi.org/project/pint/0.24.4/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124462,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pymc",
+      "group": "optimization",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "pymc==5.22.0",
+      "source": "https://pypi.org/project/pymc/5.22.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124432,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "deap",
+      "group": "optimization",
+      "status": "verified",
+      "license": "LGPL",
+      "distribution": "deap==1.4.3",
+      "source": "https://pypi.org/project/deap/1.4.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124369,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "talib",
+      "group": "finance",
+      "status": "verified",
+      "license": "BSD-2-Clause",
+      "distribution": "TA-Lib==0.6.5",
+      "source": "https://pypi.org/project/TA-Lib/0.6.5/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124686,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "backtrader",
+      "group": "finance",
+      "status": "verified",
+      "license": "GPL-3.0+",
+      "distribution": "backtrader==1.9.78.123",
+      "source": "https://pypi.org/project/backtrader/1.9.78.123/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124511,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "statsmodels",
+      "group": "finance",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": "statsmodels==0.14.4",
+      "source": "https://pypi.org/project/statsmodels/0.14.4/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124586,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "qlib",
+      "group": "finance",
+      "status": "verified",
+      "license": "MIT",
+      "source": "https://github.com/microsoft/qlib/tree/v0.9.6",
+      "scope": "Qlib quantitative risk analysis; not local historical data pipeline",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 gym-notices==0.0.8 cloudpickle==3.1.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/ab/b1/eb05a423eb801ab7d0715d6a3b28d92589e30b437052553df19ca2087240/gym-0.26.2.tar.gz#sha256=e0d882f4b54f0c65f203104c24ab8a38b039f1289986803c7d02cdbe214fbcc4",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: pyqlib==0.9.6 pandas==2.2.3 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322205,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "optuna",
+      "group": "finance",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "optuna==4.3.0",
+      "source": "https://pypi.org/project/optuna/4.3.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124775,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "riskfolio",
+      "group": "finance",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "riskfolio-lib==7.0.0",
+      "source": "https://pypi.org/project/riskfolio-lib/7.0.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664124539,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "arch",
+      "group": "finance",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": "arch==7.2.0",
+      "source": "https://pypi.org/project/arch/7.2.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050858,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pyportfolioopt",
+      "group": "finance",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "pyportfolioopt==1.5.6",
+      "source": "https://pypi.org/project/pyportfolioopt/1.5.6/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664128382,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "statsforecast",
+      "group": "finance",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "statsforecast==2.0.1",
+      "source": "https://pypi.org/project/statsforecast/2.0.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050884,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "shap",
+      "group": "finance",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "shap==0.47.2",
+      "source": "https://pypi.org/project/shap/0.47.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664128622,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "scikit_learn",
+      "group": "ai",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "scikit-learn==1.6.1",
+      "source": "https://pypi.org/project/scikit-learn/1.6.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664128628,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "xgboost",
+      "group": "ai",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "xgboost==3.0.2",
+      "source": "https://pypi.org/project/xgboost/3.0.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050831,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "lightgbm",
+      "group": "ai",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "lightgbm==4.6.0",
+      "source": "https://pypi.org/project/lightgbm/4.6.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050871,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "catboost",
+      "group": "ai",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "catboost==1.2.8",
+      "source": "https://pypi.org/project/catboost/1.2.8/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664128469,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "tensorflow",
+      "group": "ai",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "tensorflow-cpu==2.19.0",
+      "source": "https://pypi.org/project/tensorflow-cpu/2.19.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664128875,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "jax",
+      "group": "ai",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "jax==0.5.3",
+      "source": "https://pypi.org/project/jax/0.5.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664128837,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "llama_cpp",
+      "group": "ai",
+      "status": "verified",
+      "license": "MIT / Apache-2.0 model",
+      "source": "https://github.com/ggml-org/llama.cpp/releases/tag/b11865",
+      "scope": "CPU public GGUF inference; no hosted model",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: huggingface-hub==0.31.4"
+      ],
+      "evidence": {
+        "run_id": 45457780727,
+        "job_id": 138671780729,
+        "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "transformers",
+      "group": "ai",
+      "status": "verified",
+      "license": "Apache-2.0 / Apache-2.0 model",
+      "source": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/tree/1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "scope": "Local pretrained encoder",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: transformers==4.52.4 huggingface-hub==0.31.4 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050258,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "sentence_transformers",
+      "group": "ai",
+      "status": "verified",
+      "license": "Apache-2.0 / Apache-2.0 model",
+      "source": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/tree/1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "scope": "Local pretrained embedding",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: sentence-transformers==4.1.0 transformers==4.52.4 huggingface-hub==0.31.4 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667051153,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "faiss",
+      "group": "ai",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "faiss-cpu==1.11.0",
+      "source": "https://pypi.org/project/faiss-cpu/1.11.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664128951,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "docling",
+      "group": "documents",
+      "status": "verified",
+      "license": "MIT",
+      "source": "https://github.com/docling-project/docling/tree/v2.34.0",
+      "scope": "Document structure on Markdown; no PDF neural layout claim",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: docling==2.34.0 pandas==2.2.3 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667051006,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "paddleocr",
+      "group": "documents",
+      "status": "verified",
+      "license": "Apache-2.0 code and weights",
+      "source": "https://huggingface.co/PaddlePaddle/PP-OCRv5_mobile_rec",
+      "scope": "CPU local pretrained OCR",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh paddleocr",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/ed/0e/5c61eedde9f6c87713e89d794f01e378cfd9565847d4576fa627d758c554/GPUtil-1.4.0.tar.gz#sha256=099e52c65e512cdfa8c8763fca67f5a5c2afb63469602d5dcb4d296b3661efb9",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: paddlepaddle==3.2.2 paddleocr==3.3.2 huggingface-hub==0.31.4 numpy==1.26.4 pillow==11.2.1 paddlex==3.3.13 pandas==2.2.3 protobuf==5.29.4"
+      ],
+      "evidence": {
+        "run_id": 45457780727,
+        "job_id": 138671780934,
+        "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "ocrmypdf",
+      "group": "documents",
+      "status": "verified",
+      "license": "MPL-2.0",
+      "distribution": "ocrmypdf==16.10.0",
+      "source": "https://pypi.org/project/ocrmypdf/16.10.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050908,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pdfplumber",
+      "group": "documents",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "pdfplumber==0.11.6",
+      "source": "https://pypi.org/project/pdfplumber/0.11.6/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664132695,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "marker",
+      "group": "documents",
+      "status": "blocked",
+      "reason": "Code and model weights have separate licensing restrictions; unconditional recurring free eligibility not established."
+    },
+    {
+      "id": "libreoffice",
+      "group": "documents",
+      "status": "verified",
+      "license": "MPL-2.0/LGPL",
+      "distribution": [
+        "libreoffice-writer"
+      ],
+      "source": "https://www.libreoffice.org/about-us/licenses/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664132527,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "pandoc",
+      "group": "documents",
+      "status": "verified",
+      "license": "GPL-2.0+",
+      "distribution": [
+        "pandoc"
+      ],
+      "source": "https://pandoc.org/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664132626,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "tika",
+      "group": "documents",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "source": "https://archive.apache.org/dist/tika/3.1.0/",
+      "scope": "Local synthetic PDF parsing only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: reportlab==4.4.1"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050954,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "tabula",
+      "group": "documents",
+      "status": "verified",
+      "license": "MIT",
+      "source": "https://github.com/tabulapdf/tabula-java",
+      "scope": "Synthetic ruled PDF table extraction",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: reportlab==4.4.1"
+      ],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322049,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "tesseract_multilingual",
+      "group": "documents",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": [
+        "tesseract-ocr",
+        "tesseract-ocr-ind",
+        "fonts-dejavu-core",
+        "imagemagick"
+      ],
+      "source": "https://github.com/tesseract-ocr/tessdata",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664132495,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "scenedetect",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "scenedetect==0.6.6",
+      "source": "https://pypi.org/project/scenedetect/0.6.6/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664132974,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "librosa",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "ISC",
+      "distribution": "librosa==0.11.0",
+      "source": "https://pypi.org/project/librosa/0.11.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664133023,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "demucs",
+      "group": "multimedia",
+      "status": "blocked",
+      "reason": "Pretrained weight license and reproducible CPU source separation not established."
+    },
+    {
+      "id": "silero_vad",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "MIT",
+      "source": "https://github.com/snakers4/silero-vad",
+      "scope": "Bundled MIT VAD model on CPU",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh silero_vad",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: silero-vad==5.1.2 onnxruntime==1.22.1 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050881,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "whisperx",
+      "group": "multimedia",
+      "status": "blocked",
+      "license": "BSD-2-Clause / Apache-2.0 model",
+      "source": "https://github.com/m-bain/whisperX",
+      "scope": "Pinned local Wav2Vec2 alignment on synthetic audio; no hosted inference or diarization",
+      "distribution": [
+        "bash ci/jobs/install_expansion_packages.sh whisperx",
+        "python -m pip install --disable-pip-version-check --no-input --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: whisperx==3.3.4 transformers==4.52.4 huggingface-hub==0.31.4 numpy==2.2.6"
+      ],
+      "reason": "Local CPU alignment failed Wav2Vec2ForCTC import after model download and retry; run 45457780727 job 138671780669."
+    },
+    {
+      "id": "mediapipe",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "source": "https://github.com/google-ai-edge/mediapipe",
+      "scope": "Local bundled hand model inference on synthetic blank frame; negative case only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: mediapipe==0.10.21 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322101,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "sam2",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "source": "https://huggingface.co/facebook/sam2.1-hiera-tiny",
+      "scope": "Pinned SAM2.1 local CPU prompted image segmentation; video tracking not verified",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: transformers==4.57.1 huggingface-hub==0.36.0 pillow==11.2.1 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45457780727,
+        "job_id": 138671780670,
+        "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "imagemagick",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "ImageMagick License",
+      "distribution": [
+        "imagemagick"
+      ],
+      "source": "https://imagemagick.org/script/license.php",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664133123,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "blender",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "GPL-3.0+",
+      "distribution": [
+        "blender"
+      ],
+      "source": "https://www.blender.org/about/license/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664132961,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "open3d",
+      "group": "multimedia",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "open3d==0.19.0",
+      "source": "https://pypi.org/project/open3d/0.19.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664133334,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "arrow",
+      "group": "data",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "pyarrow==20.0.0",
+      "source": "https://pypi.org/project/pyarrow/20.0.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664135949,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "dask",
+      "group": "data",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "dask==2025.5.1",
+      "source": "https://pypi.org/project/dask/2025.5.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664136107,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "ray",
+      "group": "data",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "source": "https://github.com/ray-project/ray",
+      "scope": "Local ephemeral single-node workers only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ray==2.46.0 numpy==1.26.4"
+      ],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667051266,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "networkx",
+      "group": "data",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": "networkx==3.4.2",
+      "source": "https://pypi.org/project/networkx/3.4.2/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664136531,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "gdal",
+      "group": "data",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": [
+        "gdal-bin"
+      ],
+      "source": "https://gdal.org/en/stable/license.html",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664136506,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "geopandas",
+      "group": "data",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "geopandas==1.0.1",
+      "source": "https://pypi.org/project/geopandas/1.0.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664136728,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "xarray",
+      "group": "data",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "xarray==2025.4.0",
+      "source": "https://pypi.org/project/xarray/2025.4.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664136611,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "rasterio",
+      "group": "data",
+      "status": "verified",
+      "license": "BSD",
+      "distribution": "rasterio==1.4.3",
+      "source": "https://pypi.org/project/rasterio/1.4.3/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664136546,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "orjson",
+      "group": "data",
+      "status": "verified",
+      "license": "Apache-2.0 OR MIT",
+      "distribution": "orjson==3.10.18",
+      "source": "https://pypi.org/project/orjson/3.10.18/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664136623,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "great_expectations",
+      "group": "data",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "great-expectations==1.5.0",
+      "source": "https://pypi.org/project/great-expectations/1.5.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667050327,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "hypothesis",
+      "group": "software",
+      "status": "verified",
+      "license": "MPL-2.0",
+      "distribution": "hypothesis==6.131.9",
+      "source": "https://pypi.org/project/hypothesis/6.131.9/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664137806,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "locust",
+      "group": "software",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "locust==2.37.10",
+      "source": "https://pypi.org/project/locust/2.37.10/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664139549,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "k6",
+      "group": "software",
+      "status": "verified",
+      "license": "AGPL-3.0",
+      "source": "https://github.com/grafana/k6/releases/tag/v1.0.0",
+      "scope": "Bounded loopback-only load test",
+      "distribution": [],
+      "evidence": {
+        "run_id": 45456441945,
+        "job_id": 138667051460,
+        "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "appium",
+      "group": "software",
+      "status": "blocked",
+      "reason": "Run 45457780727 job 138671780514: no KVM access, no preinstalled Android system image or emulator."
+    },
+    {
+      "id": "maestro",
+      "group": "software",
+      "status": "blocked",
+      "reason": "Run 45457780727 job 138671780514: no KVM access, no preinstalled Android system image or emulator."
+    },
+    {
+      "id": "trivy",
+      "group": "software",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "source": "https://github.com/aquasecurity/trivy/releases/tag/v0.76.2",
+      "scope": "Offline configuration scan only",
+      "distribution": [],
+      "evidence": {
+        "run_id": 45457363379,
+        "job_id": 138670322232,
+        "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "semgrep",
+      "group": "software",
+      "status": "verified",
+      "license": "LGPL-2.1",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: semgrep==1.121.0 setuptools==80.9.0"
+      ],
+      "source": "https://pypi.org/project/semgrep/1.121.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45457780727,
+        "job_id": 138671780968,
+        "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "z3",
+      "group": "software",
+      "status": "verified",
+      "license": "MIT",
+      "distribution": "z3-solver==4.14.1.0",
+      "source": "https://pypi.org/project/z3-solver/4.14.1.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664139824,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "scrapy",
+      "group": "software",
+      "status": "verified",
+      "license": "BSD-3-Clause",
+      "distribution": "scrapy==2.13.1",
+      "source": "https://pypi.org/project/scrapy/2.13.1/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664139870,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    },
+    {
+      "id": "trafilatura",
+      "group": "software",
+      "status": "verified",
+      "license": "Apache-2.0",
+      "distribution": "trafilatura==2.0.0",
+      "source": "https://pypi.org/project/trafilatura/2.0.0/",
+      "scope": "public synthetic local smoke; runtime and dependency verification required",
+      "evidence": {
+        "run_id": 45455618202,
+        "job_id": 138664139752,
+        "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
+    }
+  ],
+  "verified_count": 84,
+  "blocked_count": 6
+}

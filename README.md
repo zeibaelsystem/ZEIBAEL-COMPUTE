@@ -295,3 +295,7 @@ The existing admin-only Hatchable dispatcher may invoke `workflow=ci`, `task=scr
 ## Extended compute engines — 15 smoke-verified public routes (2026-11-25 WIB)
 
 [Engine routing and reference cases](docs/EXTENDED_COMPUTE_ENGINES.md) · [Runtime evidence](ci/evidence/extended_compute_2026-11-25.json) · [Run #45453112160](https://github.com/zeibaelsystem/ZEIBAEL-COMPUTE/actions/runs/45453112160). OpenFOAM, CoolProp, DWSIM headless GPL-3, SymPy, OpenCV, Tesseract, DuckDB, Polars, QuantLib, VectorBT, CPU PyTorch, CPU ONNX Runtime, OpenModelica, Gmsh and LAMMPS each have a reviewed `ci/jobs/engine_<id>.json`. Dispatch only the matching engine; `extended_compute_smoke` is the explicit full 15-engine audit. All use existing `ci.yml`, public standard Ubuntu x64 runners, public synthetic inputs and existing artifact limits. Do not use these fixtures as production engineering or trading evidence. No PaddleOCR, GPU, billing or new service is claimed. For custom cases prepare a reviewed job with appropriate validation and public-safe data.
+
+## 90-candidate expansion — 84 verified public fixture routes
+
+[Catalog and scoped blockers](docs/COMPUTE_EXPANSION_90.md) · [CI evidence](ci/evidence/expansion_2026-11-25.json). Existing 15 extended engines unchanged. Use verified individual manifest `engine_<id>` and existing dispatcher. Five audit batches contain only verified engines. No private input, no GPU, no paid API, no claim of production validation. Blocked candidates have no runnable manifest.

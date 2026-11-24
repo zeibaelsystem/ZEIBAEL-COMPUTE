@@ -1,0 +1,779 @@
+{
+  "schema": 1,
+  "scope": "PR synthetic public CPU smoke; actual completed GitHub Actions jobs and reviewed manifest/artifact steps. Earlier runs failed due to other engines. No production readiness or all transitive license claims.",
+  "runs": [
+    {
+      "run_id": 45455618202,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "regression_job_id": 138664122708,
+      "regression": "success"
+    },
+    {
+      "run_id": 45456441945,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "regression_job_id": 138667049720,
+      "regression": "success"
+    },
+    {
+      "run_id": 45457363379,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "regression_job_id": 138670321098,
+      "regression": "success"
+    },
+    {
+      "run_id": 45457780727,
+      "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+      "regression_job_id": 138671780779,
+      "regression": "success"
+    },
+    {
+      "run_id": 45457951955,
+      "commit": "d7cef75b04626c880cebcd30dbcf24a732e929a6",
+      "regression_job_id": 138672379521,
+      "regression": "success"
+    }
+  ],
+  "group": {
+    "chemical": {
+      "verified": 9,
+      "blocked": 1
+    },
+    "engineering": {
+      "verified": 10,
+      "blocked": 0
+    },
+    "optimization": {
+      "verified": 10,
+      "blocked": 0
+    },
+    "finance": {
+      "verified": 10,
+      "blocked": 0
+    },
+    "ai": {
+      "verified": 10,
+      "blocked": 0
+    },
+    "documents": {
+      "verified": 9,
+      "blocked": 1
+    },
+    "multimedia": {
+      "verified": 8,
+      "blocked": 2
+    },
+    "data": {
+      "verified": 10,
+      "blocked": 0
+    },
+    "software": {
+      "verified": 8,
+      "blocked": 2
+    }
+  },
+  "verified": [
+    {
+      "id": "idaes",
+      "run_id": 45456441945,
+      "job_id": 138667050789,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "watertap",
+      "run_id": 45456441945,
+      "job_id": 138667051149,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "phreeqc",
+      "run_id": 45457363379,
+      "job_id": 138670322361,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "thermo",
+      "run_id": 45455618202,
+      "job_id": 138664124161,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "chemicals",
+      "run_id": 45455618202,
+      "job_id": 138664124467,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "fluids",
+      "run_id": 45455618202,
+      "job_id": 138664124204,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "ht",
+      "run_id": 45455618202,
+      "job_id": 138664124415,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pybamm",
+      "run_id": 45455618202,
+      "job_id": 138664124258,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "rdkit",
+      "run_id": 45455618202,
+      "job_id": 138664124374,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "cadquery",
+      "run_id": 45456441945,
+      "job_id": 138667050942,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "freecad",
+      "run_id": 45457363379,
+      "job_id": 138670322356,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "openseespy",
+      "run_id": 45457363379,
+      "job_id": 138670322151,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "fenicsx",
+      "run_id": 45457363379,
+      "job_id": 138670322112,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "su2",
+      "run_id": 45457780727,
+      "job_id": 138671781228,
+      "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "wntr",
+      "run_id": 45457363379,
+      "job_id": 138670321597,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pandapower",
+      "run_id": 45455618202,
+      "job_id": 138664124103,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "opendss",
+      "run_id": 45455618202,
+      "job_id": 138664124311,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pyvista",
+      "run_id": 45455618202,
+      "job_id": 138664124163,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "openmdao",
+      "run_id": 45455618202,
+      "job_id": 138664124314,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "ortools",
+      "run_id": 45455618202,
+      "job_id": 138664124347,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pyomo",
+      "run_id": 45455618202,
+      "job_id": 138664124533,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "highs",
+      "run_id": 45455618202,
+      "job_id": 138664124542,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "cvxpy",
+      "run_id": 45455618202,
+      "job_id": 138664124194,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "casadi",
+      "run_id": 45455618202,
+      "job_id": 138664124480,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "salib",
+      "run_id": 45456441945,
+      "job_id": 138667051077,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "simpy",
+      "run_id": 45455618202,
+      "job_id": 138664124431,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pint",
+      "run_id": 45455618202,
+      "job_id": 138664124462,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pymc",
+      "run_id": 45455618202,
+      "job_id": 138664124432,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "deap",
+      "run_id": 45455618202,
+      "job_id": 138664124369,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "talib",
+      "run_id": 45455618202,
+      "job_id": 138664124686,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "backtrader",
+      "run_id": 45455618202,
+      "job_id": 138664124511,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "statsmodels",
+      "run_id": 45455618202,
+      "job_id": 138664124586,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "qlib",
+      "run_id": 45457363379,
+      "job_id": 138670322205,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "optuna",
+      "run_id": 45455618202,
+      "job_id": 138664124775,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "riskfolio",
+      "run_id": 45455618202,
+      "job_id": 138664124539,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "arch",
+      "run_id": 45456441945,
+      "job_id": 138667050858,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pyportfolioopt",
+      "run_id": 45455618202,
+      "job_id": 138664128382,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "statsforecast",
+      "run_id": 45456441945,
+      "job_id": 138667050884,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "shap",
+      "run_id": 45455618202,
+      "job_id": 138664128622,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "scikit_learn",
+      "run_id": 45455618202,
+      "job_id": 138664128628,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "xgboost",
+      "run_id": 45456441945,
+      "job_id": 138667050831,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "lightgbm",
+      "run_id": 45456441945,
+      "job_id": 138667050871,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "catboost",
+      "run_id": 45455618202,
+      "job_id": 138664128469,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "tensorflow",
+      "run_id": 45455618202,
+      "job_id": 138664128875,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "jax",
+      "run_id": 45455618202,
+      "job_id": 138664128837,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "llama_cpp",
+      "run_id": 45457780727,
+      "job_id": 138671780729,
+      "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "transformers",
+      "run_id": 45456441945,
+      "job_id": 138667050258,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "sentence_transformers",
+      "run_id": 45456441945,
+      "job_id": 138667051153,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "faiss",
+      "run_id": 45455618202,
+      "job_id": 138664128951,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "docling",
+      "run_id": 45456441945,
+      "job_id": 138667051006,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "paddleocr",
+      "run_id": 45457780727,
+      "job_id": 138671780934,
+      "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "ocrmypdf",
+      "run_id": 45456441945,
+      "job_id": 138667050908,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pdfplumber",
+      "run_id": 45455618202,
+      "job_id": 138664132695,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "libreoffice",
+      "run_id": 45455618202,
+      "job_id": 138664132527,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "pandoc",
+      "run_id": 45455618202,
+      "job_id": 138664132626,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "tika",
+      "run_id": 45456441945,
+      "job_id": 138667050954,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "tabula",
+      "run_id": 45457363379,
+      "job_id": 138670322049,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "tesseract_multilingual",
+      "run_id": 45455618202,
+      "job_id": 138664132495,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "scenedetect",
+      "run_id": 45455618202,
+      "job_id": 138664132974,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "librosa",
+      "run_id": 45455618202,
+      "job_id": 138664133023,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "silero_vad",
+      "run_id": 45456441945,
+      "job_id": 138667050881,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "mediapipe",
+      "run_id": 45457363379,
+      "job_id": 138670322101,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "sam2",
+      "run_id": 45457780727,
+      "job_id": 138671780670,
+      "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "imagemagick",
+      "run_id": 45455618202,
+      "job_id": 138664133123,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "blender",
+      "run_id": 45455618202,
+      "job_id": 138664132961,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "open3d",
+      "run_id": 45455618202,
+      "job_id": 138664133334,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "arrow",
+      "run_id": 45455618202,
+      "job_id": 138664135949,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "dask",
+      "run_id": 45455618202,
+      "job_id": 138664136107,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "ray",
+      "run_id": 45456441945,
+      "job_id": 138667051266,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "networkx",
+      "run_id": 45455618202,
+      "job_id": 138664136531,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "gdal",
+      "run_id": 45455618202,
+      "job_id": 138664136506,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "geopandas",
+      "run_id": 45455618202,
+      "job_id": 138664136728,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "xarray",
+      "run_id": 45455618202,
+      "job_id": 138664136611,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "rasterio",
+      "run_id": 45455618202,
+      "job_id": 138664136546,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "orjson",
+      "run_id": 45455618202,
+      "job_id": 138664136623,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "great_expectations",
+      "run_id": 45456441945,
+      "job_id": 138667050327,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "hypothesis",
+      "run_id": 45455618202,
+      "job_id": 138664137806,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "locust",
+      "run_id": 45455618202,
+      "job_id": 138664139549,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "k6",
+      "run_id": 45456441945,
+      "job_id": 138667051460,
+      "commit": "d12d00856472ec3d7c9296d92897b10440bca089",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "trivy",
+      "run_id": 45457363379,
+      "job_id": 138670322232,
+      "commit": "e659a7137b55fc00a6792d26b13fdd6eeb4932ae",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "semgrep",
+      "run_id": 45457780727,
+      "job_id": 138671780968,
+      "commit": "14aa2c3f83dae5734da4b647f1d8cc23c4d3ae99",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "z3",
+      "run_id": 45455618202,
+      "job_id": 138664139824,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "scrapy",
+      "run_id": 45455618202,
+      "job_id": 138664139870,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    },
+    {
+      "id": "trafilatura",
+      "run_id": 45455618202,
+      "job_id": 138664139752,
+      "commit": "e6aedf38cf2fc60e267b72180427d1a19e7540e7",
+      "manifest_step": "success",
+      "artifact_step": "success"
+    }
+  ],
+  "blocked": [
+    {
+      "id": "rmg_py",
+      "reason": "Native kinetics module rmgpy.kinetics.model missing in pinned public container; run 45457951955 job 138672379951 failed after entrypoint repair."
+    },
+    {
+      "id": "marker",
+      "reason": "Code and model weights have separate licensing restrictions; unconditional recurring free eligibility not established."
+    },
+    {
+      "id": "demucs",
+      "reason": "Pretrained weight license and reproducible CPU source separation not established."
+    },
+    {
+      "id": "whisperx",
+      "reason": "Local CPU alignment failed Wav2Vec2ForCTC import after model download and retry; run 45457780727 job 138671780669."
+    },
+    {
+      "id": "appium",
+      "reason": "Run 45457780727 job 138671780514: no KVM access, no preinstalled Android system image or emulator."
+    },
+    {
+      "id": "maestro",
+      "reason": "Run 45457780727 job 138671780514: no KVM access, no preinstalled Android system image or emulator."
+    }
+  ],
+  "mobile_preflight": {
+    "run_id": 45457780727,
+    "job_id": 138671780514,
+    "result": "KVM_ACCESS=no; NO_PREINSTALLED_ANDROID_IMAGES; NO_PREINSTALLED_EMULATOR"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "fenicsx",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "docker",
+          "pull",
+          "dolfinx/dolfinx@sha256:61f17eb5de64721e8bbfc06b0e715bd8d0c3b6f8ec37d30f6985016c6ac68472"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "fenicsx"
+        ]
+      ]
+    }
+  ]
+}

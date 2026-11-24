@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "lightgbm",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "lightgbm==4.6.0",
+          "scikit-learn==1.6.1",
+          "numpy==2.2.6",
+          "scipy==1.15.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "lightgbm"
+        ]
+      ]
+    }
+  ]
+}

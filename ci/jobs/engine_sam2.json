@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "sam2",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu",
+          "torchvision==0.22.1+cpu",
+          "torchaudio==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "transformers==4.57.1",
+          "huggingface-hub==0.36.0",
+          "pillow==11.2.1",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "sam2"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "watertap",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "watertap==1.3.0",
+          "idaes-pse==2.8.0",
+          "pyomo==6.9.2",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "watertap"
+        ]
+      ]
+    }
+  ]
+}

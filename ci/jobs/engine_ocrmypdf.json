@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "ocrmypdf",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_expansion_packages.sh",
+          "ocrmypdf"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ocrmypdf==16.10.0",
+          "pypdf==5.5.0",
+          "pillow==11.2.1",
+          "pikepdf==9.8.1"
+        ],
+        [
+          "python",
+          "scripts/expansion_compute.py",
+          "ocrmypdf"
+        ]
+      ]
+    }
+  ]
+}
