@@ -23,10 +23,12 @@ def run(engine, work):
         close(w.rho, 997, 3)
         return {"water_density_kg_m3": w.rho}
     if engine == "chemicals":
-        from chemicals.identifiers import CAS_from_any
-                cas=CAS_from_any("water")
+        from chemicals.identifiers import CAS_from_any, MW
+        cas=CAS_from_any("water")
         check(cas=="7732-18-5","CAS mismatch")
-        return {"cas":cas,"molecular_weight":18.01528}
+        mw=MW(cas)
+        close(mw,18.01528,0.01)
+        return {"cas":cas,"molecular_weight":mw}
     if engine == "fluids":
         from fluids import Reynolds, friction_factor
         r=Reynolds(V=1,D=0.1,rho=1000,mu=0.001)
