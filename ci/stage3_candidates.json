@@ -1,23 +1,31 @@
 {
   "schema": 1,
-  "scope": "Development candidates, not active until verified",
+  "scope": "Reviewed public synthetic capability routes only; blocked candidates have no active manifest. Free public software distribution; individual license scope applies.",
   "candidates": [
     {
       "id": "biosteam",
       "group": "chemical",
-      "status": "candidate",
+      "status": "blocked",
       "license": "MIT",
       "source": "https://github.com/BioSTEAMDevelopmentGroup/biosteam",
       "scope": "Local process mixer",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --only-binary=:all: https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815 https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca numpy==1.26.4 pandas==2.2.3 scipy==1.15.3"
-      ]
+      ],
+      "reason": "Pinned ThermoSTEAM source requires colorpalette>=0.3.3 without compatible wheel.",
+      "failed_evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156489,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "failure",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "qsdsan",
       "group": "chemical",
-      "status": "candidate",
+      "status": "blocked",
       "license": "NCSA / MIT dependency",
       "source": "https://github.com/QSD-Group/QSDsan",
       "scope": "Component property; not WWTP flowsheet",
@@ -25,7 +33,15 @@
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --only-binary=:all: https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815 https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca numpy==1.26.4 pandas==2.2.3 scipy==1.15.3",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: qsdsan==1.4.3 numpy==1.26.4 pandas==2.2.3"
-      ]
+      ],
+      "reason": "Blocked by the same ThermoSTEAM/colorpalette dependency.",
+      "failed_evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156494,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "failure",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "foqus",
@@ -36,25 +52,39 @@
     {
       "id": "reaktoro",
       "group": "chemical",
-      "status": "candidate",
+      "status": "verified",
       "license": "LGPL-2.1",
       "source": "https://anaconda.org/conda-forge/reaktoro",
       "scope": "Equilibrium solver on neutral salt solution",
-      "distribution": "conda-forge only: python=3.12 reaktoro=2.13.0"
+      "distribution": "conda-forge only: python=3.12 reaktoro=2.13.0",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156863,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pyomo_dae",
       "group": "chemical",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pyomo==6.9.2",
       "license": "BSD",
       "source": "https://pypi.org/project/pyomo/6.9.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "DAE discretization fixture; extension, not independent engine",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680152,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "openpnm",
       "group": "chemical",
-      "status": "candidate",
+      "status": "verified",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 six==1.17.0",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/44/8e/250fab1cafeea43f4eb11f1d64cd6313f639965ff62cb0d9da3883655781/docrep-0.3.2.tar.gz#sha256=ed8a17e201abd829ef8da78a0b6f4d51fb99a4cbd0554adbed3309297f964314",
@@ -62,54 +92,96 @@
       ],
       "license": "MIT",
       "source": "https://pypi.org/project/openpnm/3.6.5/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692844,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "porespy",
       "group": "chemical",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "porespy==3.3.0",
       "license": "MIT",
       "source": "https://pypi.org/project/porespy/3.3.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680511,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "fipy",
       "group": "chemical",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "fipy==4.0.3",
       "license": "NIST public domain",
       "source": "https://pypi.org/project/fipy/4.0.3/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360679979,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pyromat",
       "group": "chemical",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pyromat==3.0.1",
       "license": "GPL-3.0",
       "source": "https://pypi.org/project/pyromat/3.0.1/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Air heat capacity fixture",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680031,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "phasepy",
       "group": "chemical",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "phasepy==0.0.56",
       "license": "MIT",
       "source": "https://pypi.org/project/phasepy/0.0.56/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Mixture property fixture",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360679819,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "precice",
       "group": "mechanical",
-      "status": "candidate",
+      "status": "verified",
       "license": "LGPL-3.0",
       "source": "https://github.com/precice/precice/releases/tag/v3.3.0",
-      "scope": "Pinned local preCICE two-participant exchange",
+      "scope": "Two-process local coupling fixture; not production OpenFOAM/CalculiX coupling",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh precice"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659663992,
+        "job_id": 139365776839,
+        "commit": "cd341984be64eb8298687c8bd95a712ee39375c1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "code_aster",
@@ -138,22 +210,36 @@
     {
       "id": "mfem",
       "group": "mechanical",
-      "status": "candidate",
+      "status": "verified",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/mfem/4.10.0.1/",
       "scope": "Local finite element mesh integration",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: mfem==4.10.0.1"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365157129,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "project_chrono",
       "group": "mechanical",
-      "status": "candidate",
+      "status": "verified",
       "license": "BSD-3-Clause",
       "source": "https://anaconda.org/conda-forge/pychrono",
       "scope": "Local rigid body free fall",
-      "distribution": "conda-forge only: python=3.12 pychrono=10.0.0"
+      "distribution": "conda-forge only: python=3.12 pychrono=10.0.0",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156458,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "mbdyn",
@@ -164,20 +250,35 @@
     {
       "id": "pyelastica",
       "group": "mechanical",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pyelastica==1.0.0",
       "license": "MIT",
       "source": "https://pypi.org/project/pyelastica/1.0.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Rod geometry/rest length fixture",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680303,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "sfepy",
       "group": "mechanical",
-      "status": "candidate",
+      "status": "blocked",
       "license": "BSD-3-Clause",
       "source": "https://anaconda.org/conda-forge/sfepy",
       "scope": "Finite element domain construction",
-      "distribution": "conda-forge only: python=3.12 sfepy=2026.3"
+      "distribution": "conda-forge only: python=3.12 sfepy=2026.3",
+      "reason": "Conda install passed; functional subprocess returned nonzero; cause not captured.",
+      "failed_evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156876,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "failure",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "omsimulator",
@@ -188,58 +289,100 @@
     {
       "id": "fmpy",
       "group": "control",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "fmpy==0.3.32",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/fmpy/0.3.32/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "FMU metadata parsing only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680196,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "python_control",
       "group": "control",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "control==0.10.2",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/control/0.10.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360679955,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "gekko",
       "group": "control",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "gekko==1.3.3",
       "license": "MIT",
       "source": "https://pypi.org/project/gekko/1.3.3/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680089,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pysindy",
       "group": "control",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pysindy==2.1.0",
       "license": "MIT",
       "source": "https://pypi.org/project/pysindy/2.1.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680137,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "do_mpc",
       "group": "control",
-      "status": "candidate",
+      "status": "verified",
       "license": "LGPL-3.0",
       "source": "https://pypi.org/project/do-mpc/5.1.2/",
       "scope": "Local dynamic model simulation",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: do-mpc==5.1.2 casadi==3.7.0"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692699,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pypsa",
       "group": "control",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pypsa==1.4.0",
       "license": "MIT",
       "source": "https://pypi.org/project/pypsa/1.4.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680096,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "gridcal",
@@ -256,33 +399,54 @@
     {
       "id": "pyspice",
       "group": "control",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pyspice==1.5",
       "license": "GPL-3.0",
       "source": "https://pypi.org/project/pyspice/1.5/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Netlist construction only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680188,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "sundials",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "license": "BSD-3-Clause",
       "source": "https://github.com/LLNL/sundials",
       "scope": "Native CVODE ODE solve",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh sundials"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692527,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "petsc",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "license": "BSD-2-Clause",
       "source": "https://petsc.org/release/",
       "scope": "Native PETSc KSP linear solve",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh petsc"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692816,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "trilinos",
@@ -293,16 +457,23 @@
     {
       "id": "openturns",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "openturns==1.28",
       "license": "LGPL",
       "source": "https://pypi.org/project/openturns/1.28/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360679975,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "gemseo",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/5b/91/0378b47975d93f76a1ce3813be573d857c35fe542cd6c0b2da4b401fd2f5/minisom-2.3.5.tar.gz#sha256=c4e65e0a6a50170c163e9c0408f77464871e7b3007ad0cd87e178cdaf3db2ce3",
@@ -312,52 +483,94 @@
       ],
       "license": "LGPL-3.0",
       "source": "https://pypi.org/project/gemseo/6.3.3/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Design-space fixture",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156921,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "nevergrad",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "nevergrad==1.0.12",
       "license": "MIT",
       "source": "https://pypi.org/project/nevergrad/1.0.12/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680094,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pymoo",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pymoo==0.6.2",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/pymoo/0.6.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680024,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "numba",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "numba==0.68.1",
       "license": "BSD",
       "source": "https://pypi.org/project/numba/0.68.1/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "JIT capability; existing transitive dependency may overlap",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680373,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "mpmath",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "mpmath==1.4.1",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/mpmath/1.4.1/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Arbitrary-precision capability; existing transitive dependency may overlap",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680069,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "mpi4py",
       "group": "math",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "mpi4py==4.1.2",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/mpi4py/4.1.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360679940,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "lean",
@@ -368,124 +581,208 @@
     {
       "id": "nautilus_trader",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "license": "LGPL-3.0+",
       "source": "https://pypi.org/project/nautilus_trader/1.231.0/",
-      "scope": "Order-book microstructure; not full backtest",
+      "scope": "Synthetic order-book fixture; not strategy backtest",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: nautilus_trader==1.231.0 numpy==2.2.6 pandas==2.3.3"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692644,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "zipline_reloaded",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/zipline-reloaded/3.2.1/",
-      "scope": "Synthetic pipeline factor",
+      "scope": "SMA factor fixture; not full backtest",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: zipline-reloaded==3.2.1 numpy==2.2.6 pandas==2.2.3"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156516,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "backtesting_py",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "backtesting==0.6.6",
       "license": "AGPL-3.0",
       "source": "https://pypi.org/project/backtesting/0.6.6/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Synthetic strategy fixture; AGPL conditions apply",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360679965,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "sktime",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "sktime==1.3.0",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/sktime/1.3.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680066,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "mlforecast",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "mlforecast==1.1.0",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/mlforecast/1.1.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680389,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "neuralforecast",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/neuralforecast/1.7.7/",
       "scope": "Local CPU training/prediction",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: neuralforecast==1.7.7 torch==2.7.1+cpu pytorch-lightning==2.5.1.post0 numpy==1.26.4 pandas==2.2.3 pyarrow==20.0.0"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156499,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pytorch_forecasting",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "license": "MIT",
       "source": "https://pypi.org/project/pytorch-forecasting/1.3.0/",
-      "scope": "Time-series dataset windows, no model training",
+      "scope": "Synthetic dataset windows",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: pytorch-forecasting==1.3.0 torch==2.7.1+cpu lightning==2.5.1.post0 numpy==1.26.4 pandas==2.2.3"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692591,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "hmmlearn",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "hmmlearn==0.3.3",
       "license": "BSD",
       "source": "https://pypi.org/project/hmmlearn/0.3.3/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680438,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "ruptures",
       "group": "trading",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "ruptures==1.1.10",
       "license": "BSD-2-Clause",
       "source": "https://pypi.org/project/ruptures/1.1.10/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680226,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "openvino",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "openvino==2026.4.1",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/openvino/2026.4.1/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680460,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "ncnn",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/ncnn/1.0.20261020/",
       "scope": "Locally constructed CPU ReLU inference",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ncnn==1.0.20250503 numpy==1.26.4"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156423,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "mnn",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0 / BSD-3-Clause wheel metadata",
       "source": "https://github.com/alibaba/MNN",
       "scope": "Local tensor operations only",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: MNN==3.6.2 numpy==2.2.6"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692657,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "ctranslate2",
@@ -496,18 +793,25 @@
     {
       "id": "mlflow",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/mlflow-skinny/3.18.0/",
       "scope": "Local experiment metadata and metric persistence",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: mlflow-skinny==3.18.0"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692445,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "dvc",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/dvc/3.67.1/",
       "scope": "Local versioned data restore, no remote",
@@ -515,86 +819,149 @@
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/3e/38/7859ff46355f76f8d19459005ca000b6e7012f2f1ca597746cbcd1fbfe5e/antlr4-python3-runtime-4.9.3.tar.gz#sha256=f224469b4168294902bb1efa80a8bf7855f24c99aef99cbefc1bcd3cce77881b",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: dvc==3.67.1"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156145,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pyod",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pyod==3.6.9",
       "license": "BSD-2-Clause",
       "source": "https://pypi.org/project/pyod/3.6.9/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680019,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "river",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "river==0.27.0",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/river/0.27.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360680107,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pyg",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "license": "MIT",
       "source": "https://pypi.org/project/torch-geometric/2.8.1/",
       "scope": "CPU graph convolution",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: torch-geometric==2.8.1 torch==2.7.1+cpu numpy==2.2.6"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692500,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "tsfresh",
       "group": "ai",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "tsfresh==0.21.2",
       "license": "MIT",
       "source": "https://pypi.org/project/tsfresh/0.21.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360683505,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pymupdf",
       "group": "media",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pymupdf==2.1",
       "license": "AGPL-3.0 local scope",
       "source": "https://pypi.org/project/pymupdf/2.1/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "Local PDF fixture; AGPL conditions apply",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360684188,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pyav",
       "group": "media",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "av==19.0.2",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/av/19.0.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360683963,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "gstreamer",
       "group": "media",
-      "status": "candidate",
+      "status": "verified",
       "license": "LGPL-2.1+",
       "source": "https://gstreamer.freedesktop.org/",
       "scope": "Generated local audio pipeline",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh gstreamer"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156684,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "mediainfo",
       "group": "media",
-      "status": "candidate",
+      "status": "verified",
       "license": "BSD-2-Clause",
       "source": "https://mediaarea.net/en/MediaInfo",
       "scope": "Local metadata extraction",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh mediainfo"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362693069,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "essentia",
@@ -623,7 +990,7 @@
     {
       "id": "layoutparser",
       "group": "media",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/layoutparser/0.3.4/",
       "scope": "Local document geometry",
@@ -631,30 +998,51 @@
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/72/73/b3d451dfc523756cf177d3ebb0af76dc7751b341c60e2a21871be400ae29/iopath-0.1.10.tar.gz#sha256=3311c16a4d9137223e20f141655759933e1eda24f8bff166af834af3c645ef01",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: layoutparser==0.3.4 numpy==1.26.4"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156811,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "opentimelineio",
       "group": "media",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "OpenTimelineIO==0.18.1",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/OpenTimelineIO/0.18.1/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360683827,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "spark",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://anaconda.org/conda-forge/pyspark",
       "scope": "Local Spark aggregation",
-      "distribution": "conda-forge only: python=3.12 pyspark=4.3.0"
+      "distribution": "conda-forge only: python=3.12 pyspark=4.3.0",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156442,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "flink",
       "group": "data",
-      "status": "candidate",
+      "status": "blocked",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/apache-flink/2.3.0/",
       "scope": "Local batch SQL only",
@@ -662,71 +1050,121 @@
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b/crcmod-1.7.tar.gz#sha256=dc7051a0db5f2bd48665a990d3ec1cc305a466a77358ca4492826f41f283601e",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: apache-flink==2.3.0 pandas==2.2.3"
-      ]
+      ],
+      "reason": "Dependency resolution blocked by Apache Beam dill<0.3.2 requirement.",
+      "failed_evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156827,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "failure",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "datafusion",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "datafusion==55.0.0",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/datafusion/55.0.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360683904,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "ibis",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ibis-framework[duckdb]==12.0.0 duckdb==1.4.3 pyarrow==20.0.0 pyarrow-hotfix==0.7 packaging==25.0"
       ],
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/ibis-framework/12.0.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156717,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "zarr",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "zarr==3.4.2",
       "license": "MIT",
       "source": "https://pypi.org/project/zarr/3.4.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360684867,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "hdf5",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "h5py==3.16.0",
       "license": "BSD-3-Clause",
       "source": "https://pypi.org/project/h5py/3.16.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360684708,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "vaex",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "license": "MIT",
       "source": "https://anaconda.org/conda-forge/vaex-core",
       "scope": "Local dataframe aggregation",
-      "distribution": "conda-forge only: python=3.12 vaex-core=4.20.0"
+      "distribution": "conda-forge only: python=3.12 vaex-core=4.20.0",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156470,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "nats",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://github.com/nats-io/nats-server",
       "scope": "Local loopback messaging",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh nats",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: nats-py==2.17.0"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156653,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "snakemake",
       "group": "data",
-      "status": "candidate",
+      "status": "verified",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 six==1.17.0",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/bd/df/c9b4e25dce00f6349fd28aadba7b6c3f7431cc8bd4308a158fbe57b6a22e/connection_pool-0.0.3.tar.gz#sha256=bf429e7aef65921c69b4ed48f3d48d3eac1383b05d2df91884705842d974d0dc",
@@ -734,7 +1172,14 @@
       ],
       "license": "MIT",
       "source": "https://pypi.org/project/snakemake/9.27.2/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692586,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "nextflow",
@@ -751,87 +1196,154 @@
     {
       "id": "cp2k",
       "group": "science",
-      "status": "candidate",
+      "status": "blocked",
       "license": "GPL-2.0+",
       "source": "https://www.cp2k.org/",
       "scope": "Native local H2 energy calculation",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh cp2k"
-      ]
+      ],
+      "reason": "Ubuntu package unavailable on reviewed runner.",
+      "failed_evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692776,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "failure",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "gromacs",
       "group": "science",
-      "status": "candidate",
+      "status": "verified",
       "license": "LGPL-2.1+",
       "source": "https://www.gromacs.org/",
-      "scope": "Native molecular trajectory distance",
+      "scope": "Trajectory-distance fixture",
       "distribution": [
         "bash ci/jobs/install_stage3_packages.sh gromacs"
-      ]
+      ],
+      "evidence": {
+        "run_id": 45658803666,
+        "job_id": 139362692860,
+        "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "openmm",
       "group": "science",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "openmm==8.6.1",
       "license": "BSD-like",
       "source": "https://pypi.org/project/openmm/8.6.1/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360685367,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "ase",
       "group": "science",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "ase==3.29.0",
       "license": "LGPL-2.1+",
       "source": "https://pypi.org/project/ase/3.29.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360687603,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pyscf",
       "group": "science",
-      "status": "candidate",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://anaconda.org/conda-forge/pyscf",
       "scope": "Local H2 RHF energy",
-      "distribution": "conda-forge only: python=3.11 pyscf=2.15.1"
+      "distribution": "conda-forge only: python=3.11 pyscf=2.15.1",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156891,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "psi4",
       "group": "science",
-      "status": "candidate",
+      "status": "blocked",
       "license": "LGPL-3.0 / BSD / MIT",
       "source": "https://anaconda.org/conda-forge/psi4",
       "scope": "Independent local H2 Hartree-Fock energy",
-      "distribution": "conda-forge only: python=3.12 psi4=1.11"
+      "distribution": "conda-forge only: python=3.12 psi4=1.11",
+      "reason": "Conda install passed; functional subprocess returned nonzero; cause not captured.",
+      "failed_evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156660,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "failure",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "pymatgen",
       "group": "science",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "pymatgen==2026.10.24",
       "license": "MIT",
       "source": "https://pypi.org/project/pymatgen/2026.10.24/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360687345,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "mdanalysis",
       "group": "science",
-      "status": "candidate",
+      "status": "verified",
       "distribution": "MDAnalysis==2.11.0",
       "license": "GPL-3.0+",
       "source": "https://pypi.org/project/MDAnalysis/2.11.0/",
-      "scope": "reviewed public synthetic fixture only"
+      "scope": "reviewed public synthetic fixture only",
+      "evidence": {
+        "run_id": 45658245235,
+        "job_id": 139360687543,
+        "commit": "e5fb95fb89f6d9be373679fba23dc072f7a2d5cf",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     },
     {
       "id": "gpaw",
       "group": "science",
-      "status": "candidate",
+      "status": "verified",
       "license": "GPL-3.0+",
       "source": "https://anaconda.org/conda-forge/gpaw",
       "scope": "Local DFT with public GPL dataset",
-      "distribution": "conda-forge only: python=3.12 gpaw=26.7.0=py312_nompi_omp_8 gpaw-data=1.0.1"
+      "distribution": "conda-forge only: python=3.12 gpaw=26.7.0=py312_nompi_omp_8 gpaw-data=1.0.1",
+      "evidence": {
+        "run_id": 45659492491,
+        "job_id": 139365156713,
+        "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
+        "manifest_step": "success",
+        "artifact_step": "success"
+      }
     }
-  ]
+  ],
+  "verified_count": 66,
+  "blocked_count": 24
 }

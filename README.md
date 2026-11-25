@@ -299,3 +299,7 @@ The existing admin-only Hatchable dispatcher may invoke `workflow=ci`, `task=scr
 ## 90-candidate expansion — 84 verified public fixture routes
 
 [Catalog and scoped blockers](docs/COMPUTE_EXPANSION_90.md) · [CI evidence](ci/evidence/expansion_2026-11-25.json). Existing 15 extended engines unchanged. Use verified individual manifest `engine_<id>` and existing dispatcher. Five audit batches contain only verified engines. No private input, no GPU, no paid API, no claim of production validation. Blocked candidates have no runnable manifest.
+
+### Stage 3
+
+See [Stage 3 capability expansion](docs/STAGE3_COMPUTE.md) for 66 reviewed public fixture routes and the bounded DAG workflow. Blocked candidates are excluded from dispatch.

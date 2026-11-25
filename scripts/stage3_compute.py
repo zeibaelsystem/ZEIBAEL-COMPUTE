@@ -350,11 +350,6 @@ def run(engine,work):
         b.add(BookOrder(OrderSide.SELL,Price.from_str("101.00"),Quantity.from_str("7"),2),2,0,2)
         bid=float(b.best_bid_price()); ask=float(b.best_ask_price()); close(ask-bid,2)
         return {"bid":bid,"ask":ask,"spread":ask-bid,"scope":"synthetic limit order book only"}
-    if engine=="flink":
-        from pyflink.table import EnvironmentSettings,TableEnvironment
-        env=TableEnvironment.create(EnvironmentSettings.in_batch_mode())
-        with env.execute_sql("SELECT SUM(x) FROM (VALUES (1),(2),(3)) AS t(x)").collect() as it: v=int(next(it)[0])
-        close(v,6); return {"sum":v,"scope":"local JVM batch"} 
     if engine=="nats":
         import asyncio,socket,time
         with socket.socket() as s: s.bind(("127.0.0.1",0)); port=s.getsockname()[1]
@@ -405,14 +400,6 @@ def run(engine,work):
         rows=[l for l in (work/"distance.xvg").read_text().splitlines() if l.strip() and not l.startswith(("#","@"))]
         v=float(rows[-1].split()[-1]); close(v,.2,1e-5)
         return {"distance_nm":v,"scope":"trajectory analysis, not molecular dynamics integration"}
-    if engine=="cp2k":
-        import shutil,re
-        b=shutil.which("cp2k") or shutil.which("cp2k.psmp") or shutil.which("cp2k.ssmp"); check(b is not None,"CP2K binary")
-        inp=work/"h2.inp"; inp.write_text("&GLOBAL\n PROJECT h2\n RUN_TYPE ENERGY\n PRINT_LEVEL LOW\n&END GLOBAL\n&FORCE_EVAL\n METHOD Quickstep\n &DFT\n BASIS_SET_FILE_NAME /usr/share/cp2k/data/BASIS_MOLOPT\n POTENTIAL_FILE_NAME /usr/share/cp2k/data/GTH_POTENTIALS\n &SCF\n MAX_SCF 60\n EPS_SCF 1.0E-6\n &END SCF\n &XC\n &XC_FUNCTIONAL PBE\n &END XC_FUNCTIONAL\n &END XC\n &MGRID\n CUTOFF 100\n REL_CUTOFF 30\n &END MGRID\n &END DFT\n &SUBSYS\n &CELL\n ABC 8 8 8\n &END CELL\n &COORD\n H 4 4 3.63\n H 4 4 4.37\n &END COORD\n &KIND H\n BASIS_SET DZVP-MOLOPT-SR-GTH\n POTENTIAL GTH-PBE-q1\n &END KIND\n &END SUBSYS\n&END FORCE_EVAL\n")
-        out=cmd([b,"-i",str(inp)],work)
-        matches=re.findall(r"ENERGY\| Total FORCE_EVAL.*?([-+]\d+\.\d+)",out); check(matches,"energy missing")
-        v=float(matches[-1]); check(-2<v<-.5,"unphysical energy")
-        return {"energy_hartree":v,"scope":"tiny H2 DFT reference, not converged production"} 
     if engine=="precice":
         cfg=work/"precice-config.xml"; cfg.write_text("""<precice-configuration>
         <data:scalar name="A"/><data:scalar name="B"/>
@@ -449,17 +436,6 @@ def run(engine,work):
         a=l.Rectangle(0,0,10,10); b=l.Rectangle(5,5,15,15)
         v=a.intersect(b).area; close(v,25)
         return {"intersection_area":v,"scope":"layout geometry only; no pretrained detector"}
-    if engine=="biosteam":
-        import biosteam as b
-        b.settings.set_thermo(["Water"])
-        a=b.Stream("a",Water=2); c=b.Stream("c",Water=3)
-        m=b.Mixer("m",ins=(a,c)); m.simulate(); v=float(m.outs[0].imol["Water"]); close(v,5)
-        return {"water_kmol_h":v}
-    if engine=="qsdsan":
-        import qsdsan as q
-        c=q.Component("H2O",search_ID="Water",particle_size="Soluble",degradability="Undegradable",organic=False)
-        v=float(c.MW); close(v,18.015,.01)
-        return {"water_molecular_weight":v,"scope":"sanitation component property only"}
     raise ValueError("Unapproved engine")
 
 def main():
