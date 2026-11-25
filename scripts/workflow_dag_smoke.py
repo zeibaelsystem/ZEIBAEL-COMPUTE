@@ -30,7 +30,10 @@ def run():
         if any(v!="success" for v in first["status"].values()): raise RuntimeError("DAG fixture failed")
         second=execute(graph,funcs,root/"checkpoints",version,max_workers=2)
         if len(second["cached"])!=4: raise RuntimeError("Resume failed")
-        result={"scope":"single-runner, isolated venvs, synthetic root comparison","first":first,"resume":second,"result_digest":hashlib.sha256(json.dumps(first["results"],sort_keys=True).encode()).hexdigest()}
+        fresh=execute(graph,funcs,root/"fresh-checkpoints",version,max_workers=2)
+        if fresh["results"]!=first["results"] or any(v!="success" for v in fresh["status"].values()): raise RuntimeError("Fresh repeat mismatch")
+        locks={name:subprocess.check_output([str(p),"-m","pip","freeze"],text=True,timeout=30).splitlines() for name,p in envs.items()}
+        result={"scope":"single-runner, isolated venvs, synthetic root comparison","first":first,"resume":second,"fresh_repeat":fresh,"dependency_versions":locks,"python":sys.version,"result_digest":hashlib.sha256(json.dumps(first["results"],sort_keys=True).encode()).hexdigest()}
         p=Path(os.environ["ZEIBAEL_OUTPUT_DIR"])/"files"; p.mkdir(parents=True,exist_ok=True)
         (p/"workflow_result.json").write_text(json.dumps(result,indent=2,allow_nan=False)+"\n")
         print("ZEIBAEL_DAG_RESULT="+json.dumps(result,allow_nan=False))

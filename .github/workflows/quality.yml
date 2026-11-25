@@ -84,7 +84,7 @@ jobs:
       fail-fast: false
       max-parallel: 18
       matrix:
-        engine: [openpnm, gemseo, snakemake, ibis, do_mpc, ncnn, mnn, mlflow, dvc, pyg, neuralforecast, pytorch_forecasting, zipline_reloaded, nautilus_trader, flink, nats, gstreamer, mediainfo, sundials, petsc, gromacs, cp2k, precice]
+        engine: [gemseo, dvc, flink, ncnn, ibis, nats, zipline_reloaded, neuralforecast, gstreamer, reaktoro, sfepy, pyscf, psi4, gpaw, project_chrono, vaex, spark, mfem, layoutparser, biosteam, qsdsan, workflow_dag_smoke]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

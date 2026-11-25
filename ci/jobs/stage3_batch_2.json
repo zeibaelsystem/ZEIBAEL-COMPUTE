@@ -384,7 +384,7 @@
           "--no-input",
           "--only-binary=:all:",
           "ibis-framework[duckdb]==12.0.0",
-          "duckdb==1.3.2",
+          "duckdb==1.4.3",
           "pyarrow==20.0.0",
           "pyarrow-hotfix==0.7",
           "packaging==25.0"

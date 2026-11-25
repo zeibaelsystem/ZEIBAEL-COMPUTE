@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "project_chrono",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "project_chrono"
+        ]
+      ]
+    }
+  ]
+}

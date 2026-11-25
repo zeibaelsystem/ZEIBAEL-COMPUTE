@@ -125,7 +125,6 @@ def run(engine,work):
         m.mp.dps=60; v=m.sqrt(2); check(abs(v*v-2)<m.mpf("1e-55"),"precision")
         return {"digits":60,"sqrt2":str(v),"scope":"direct precision route; previously transitive"}
     if engine=="mpi4py":
-        import subprocess
         v=subprocess.check_output(["mpiexec","-n","2",sys.executable,"-c","from mpi4py import MPI; c=MPI.COMM_WORLD; x=c.allreduce(c.rank+1); assert x==3; print(x)"],cwd=work,text=True,timeout=30)
         check(v.split().count("3")==2,"MPI reduction")
         return {"ranks":2,"sum":3}
@@ -225,7 +224,7 @@ def run(engine,work):
         return {"sum":v}
     if engine=="ibis":
         import ibis
-        c=ibis.duckdb.connect(); t=c.create_table("t",obj={"x":[1,2,3]}); v=int(t.x.sum().execute()); close(v,6)
+        c=ibis.duckdb.connect(); t=ibis.memtable({"x":[1,2,3]}); v=int(c.execute(t.x.sum())); close(v,6)
         return {"sum":v}
     if engine=="zarr":
         import zarr, numpy as np
@@ -277,8 +276,9 @@ def run(engine,work):
         p=work/"relu.param"; p.write_text("7767517\n2 2\nInput input 0 1 data\nReLU relu 1 1 data out\n")
         b=work/"relu.bin"; b.write_bytes(b"")
         net=ncnn.Net(); net.opt.use_vulkan_compute=False; net.opt.num_threads=1
-        check(net.load_param(str(p))==0,"param load"); check(net.load_model(str(b))==0,"model load")
-        ex=net.create_extractor(); check(ex.input("data",ncnn.Mat(np.array([-2.,1.,3.],dtype=np.float32)))==0,"input")
+        check(net.load_param(str(p))==0,"param load")
+        arr=np.array([-2.,1.,3.],dtype=np.float32); mat=ncnn.Mat(arr).clone()
+        ex=net.create_extractor(); check(ex.input("data",mat)==0,"input")
         rc,out=ex.extract("out"); check(rc==0,"inference"); v=np.array(out).tolist(); check(v==[0.,1.,3.],"ReLU output")
         return {"output":v,"device":"cpu"}
     if engine=="mnn":
@@ -334,7 +334,8 @@ def run(engine,work):
     if engine=="zipline_reloaded":
         import numpy as np
         from zipline.pipeline.factors import SimpleMovingAverage
-        f=SimpleMovingAverage(window_length=3); out=np.empty(2)
+        from zipline.pipeline.data import USEquityPricing
+        f=SimpleMovingAverage(inputs=[USEquityPricing.close],window_length=3); out=np.empty(2)
         f.compute(None,np.array([1,2]),out,np.array([[1.,2.],[3.,4.],[5.,6.]]))
         check(np.allclose(out,[3,4]),"factor result")
         return {"sma":out.tolist(),"scope":"pipeline factor, not full backtest"}
@@ -374,7 +375,7 @@ def run(engine,work):
         finally:
             server.terminate(); server.wait(timeout=5)
     if engine=="gstreamer":
-        cmd(["gst-launch-1.0","-q","audiotestsrc","num-buffers=10","!","audioconvert","!","wavenc","!","filesink","location="+str(work/"tone.wav")],work)
+        cmd(["gst-launch-1.0","-q","audiotestsrc","num-buffers=10","!","audioconvert","!","audio/x-raw,format=S16LE","!","wavenc","!","filesink","location="+str(work/"tone.wav")],work)
         import wave
         with wave.open(str(work/"tone.wav")) as w: n=w.getnframes(); rate=w.getframerate()
         check(n>0 and rate>0,"audio output")
@@ -438,6 +439,27 @@ def run(engine,work):
             for proc in (a,b):
                 if proc.poll() is None: proc.kill(); proc.communicate()
         return {"participants":2,"transferred_value":3,"scope":"synthetic local explicit coupling, not OpenFOAM/CalculiX integration"}
+    if engine=="mfem":
+        import mfem.ser as m
+        mesh=m.Mesh.MakeCartesian2D(2,2,m.Element.QUADRILATERAL,True,1.,1.)
+        v=sum(mesh.GetElementVolume(i) for i in range(mesh.GetNE())); close(v,1)
+        return {"elements":mesh.GetNE(),"area":v}
+    if engine=="layoutparser":
+        import layoutparser as l
+        a=l.Rectangle(0,0,10,10); b=l.Rectangle(5,5,15,15)
+        v=a.intersect(b).area; close(v,25)
+        return {"intersection_area":v,"scope":"layout geometry only; no pretrained detector"}
+    if engine=="biosteam":
+        import biosteam as b
+        b.settings.set_thermo(["Water"])
+        a=b.Stream("a",Water=2); c=b.Stream("c",Water=3)
+        m=b.Mixer("m",ins=(a,c)); m.simulate(); v=float(m.outs[0].imol["Water"]); close(v,5)
+        return {"water_kmol_h":v}
+    if engine=="qsdsan":
+        import qsdsan as q
+        c=q.Component("H2O",search_ID="Water",particle_size="Soluble",degradability="Undegradable",organic=False)
+        v=float(c.MW); close(v,18.015,.01)
+        return {"water_molecular_weight":v,"scope":"sanitation component property only"}
     raise ValueError("Unapproved engine")
 
 def main():

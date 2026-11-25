@@ -5,14 +5,27 @@
     {
       "id": "biosteam",
       "group": "chemical",
-      "status": "blocked",
-      "reason": "Source distribution requires reviewed build/dependency pins."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://github.com/BioSTEAMDevelopmentGroup/biosteam",
+      "scope": "Local process mixer",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --only-binary=:all: https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815 https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca numpy==1.26.4 pandas==2.2.3 scipy==1.15.3"
+      ]
     },
     {
       "id": "qsdsan",
       "group": "chemical",
-      "status": "blocked",
-      "reason": "BioSTEAM dependency distribution/build compatibility not qualified."
+      "status": "candidate",
+      "license": "NCSA / MIT dependency",
+      "source": "https://github.com/QSD-Group/QSDsan",
+      "scope": "Component property; not WWTP flowsheet",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --only-binary=:all: https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815 https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca numpy==1.26.4 pandas==2.2.3 scipy==1.15.3",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: qsdsan==1.4.3 numpy==1.26.4 pandas==2.2.3"
+      ]
     },
     {
       "id": "foqus",
@@ -23,8 +36,11 @@
     {
       "id": "reaktoro",
       "group": "chemical",
-      "status": "blocked",
-      "reason": "No PyPI distribution; separate native/conda route required."
+      "status": "candidate",
+      "license": "LGPL-2.1",
+      "source": "https://anaconda.org/conda-forge/reaktoro",
+      "scope": "Equilibrium solver on neutral salt solution",
+      "distribution": "conda-forge only: python=3.12 reaktoro=2.13.0"
     },
     {
       "id": "pyomo_dae",
@@ -122,14 +138,22 @@
     {
       "id": "mfem",
       "group": "mechanical",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/mfem/4.10.0.1/",
+      "scope": "Local finite element mesh integration",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: mfem==4.10.0.1"
+      ]
     },
     {
       "id": "project_chrono",
       "group": "mechanical",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "source": "https://anaconda.org/conda-forge/pychrono",
+      "scope": "Local rigid body free fall",
+      "distribution": "conda-forge only: python=3.12 pychrono=10.0.0"
     },
     {
       "id": "mbdyn",
@@ -149,8 +173,11 @@
     {
       "id": "sfepy",
       "group": "mechanical",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "source": "https://anaconda.org/conda-forge/sfepy",
+      "scope": "Finite element domain construction",
+      "distribution": "conda-forge only: python=3.12 sfepy=2026.3"
     },
     {
       "id": "omsimulator",
@@ -277,6 +304,8 @@
       "group": "math",
       "status": "candidate",
       "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/5b/91/0378b47975d93f76a1ce3813be573d857c35fe542cd6c0b2da4b401fd2f5/minisom-2.3.5.tar.gz#sha256=c4e65e0a6a50170c163e9c0408f77464871e7b3007ad0cd87e178cdaf3db2ce3",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 six==1.17.0",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/a9/d4/d233fbbf228dbe2644d236240cee3e5a9d693aa0a1488632a1d55dd67680/xdsmjs-2.0.0.tar.gz#sha256=314183dbcf66ab13af1262158a0e45467146ee56856013a8225bf1c0b447562a",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: gemseo==6.3.3"
@@ -394,7 +423,7 @@
       "scope": "Local CPU training/prediction",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
-        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: neuralforecast==1.7.7 torch==2.7.1+cpu pytorch-lightning==2.5.1.post0 numpy==1.26.4 pandas==2.2.3"
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: neuralforecast==1.7.7 torch==2.7.1+cpu pytorch-lightning==2.5.1.post0 numpy==1.26.4 pandas==2.2.3 pyarrow==20.0.0"
       ]
     },
     {
@@ -444,7 +473,7 @@
       "source": "https://pypi.org/project/ncnn/1.0.20261020/",
       "scope": "Locally constructed CPU ReLU inference",
       "distribution": [
-        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ncnn==1.0.20261020 numpy==2.2.6"
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ncnn==1.0.20250503 numpy==1.26.4"
       ]
     },
     {
@@ -483,6 +512,8 @@
       "source": "https://pypi.org/project/dvc/3.67.1/",
       "scope": "Local versioned data restore, no remote",
       "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/3e/38/7859ff46355f76f8d19459005ca000b6e7012f2f1ca597746cbcd1fbfe5e/antlr4-python3-runtime-4.9.3.tar.gz#sha256=f224469b4168294902bb1efa80a8bf7855f24c99aef99cbefc1bcd3cce77881b",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: dvc==3.67.1"
       ]
     },
@@ -592,8 +623,15 @@
     {
       "id": "layoutparser",
       "group": "media",
-      "status": "blocked",
-      "reason": "Model weight and optional detector dependencies not qualified."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/layoutparser/0.3.4/",
+      "scope": "Local document geometry",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/72/73/b3d451dfc523756cf177d3ebb0af76dc7751b341c60e2a21871be400ae29/iopath-0.1.10.tar.gz#sha256=3311c16a4d9137223e20f141655759933e1eda24f8bff166af834af3c645ef01",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: layoutparser==0.3.4 numpy==1.26.4"
+      ]
     },
     {
       "id": "opentimelineio",
@@ -607,8 +645,11 @@
     {
       "id": "spark",
       "group": "data",
-      "status": "blocked",
-      "reason": "Source distribution and JVM memory compatibility not qualified."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://anaconda.org/conda-forge/pyspark",
+      "scope": "Local Spark aggregation",
+      "distribution": "conda-forge only: python=3.12 pyspark=4.3.0"
     },
     {
       "id": "flink",
@@ -618,6 +659,8 @@
       "source": "https://pypi.org/project/apache-flink/2.3.0/",
       "scope": "Local batch SQL only",
       "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b/crcmod-1.7.tar.gz#sha256=dc7051a0db5f2bd48665a990d3ec1cc305a466a77358ca4492826f41f283601e",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: apache-flink==2.3.0 pandas==2.2.3"
       ]
     },
@@ -635,7 +678,7 @@
       "group": "data",
       "status": "candidate",
       "distribution": [
-        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ibis-framework[duckdb]==12.0.0 duckdb==1.3.2 pyarrow==20.0.0 pyarrow-hotfix==0.7 packaging==25.0"
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ibis-framework[duckdb]==12.0.0 duckdb==1.4.3 pyarrow==20.0.0 pyarrow-hotfix==0.7 packaging==25.0"
       ],
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/ibis-framework/12.0.0/",
@@ -662,8 +705,11 @@
     {
       "id": "vaex",
       "group": "data",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://anaconda.org/conda-forge/vaex-core",
+      "scope": "Local dataframe aggregation",
+      "distribution": "conda-forge only: python=3.12 vaex-core=4.20.0"
     },
     {
       "id": "nats",
@@ -745,14 +791,20 @@
     {
       "id": "pyscf",
       "group": "science",
-      "status": "blocked",
-      "reason": "No compatible wheel verified in metadata audit."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://anaconda.org/conda-forge/pyscf",
+      "scope": "Local H2 RHF energy",
+      "distribution": "conda-forge only: python=3.11 pyscf=2.15.1"
     },
     {
       "id": "psi4",
       "group": "science",
-      "status": "blocked",
-      "reason": "No PyPI release; native distribution required."
+      "status": "candidate",
+      "license": "LGPL-3.0 / BSD / MIT",
+      "source": "https://anaconda.org/conda-forge/psi4",
+      "scope": "Independent local H2 Hartree-Fock energy",
+      "distribution": "conda-forge only: python=3.12 psi4=1.11"
     },
     {
       "id": "pymatgen",
@@ -775,8 +827,11 @@
     {
       "id": "gpaw",
       "group": "science",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "GPL-3.0+",
+      "source": "https://anaconda.org/conda-forge/gpaw",
+      "scope": "Local DFT with public GPL dataset",
+      "distribution": "conda-forge only: python=3.12 gpaw=26.7.0=py312_nompi_omp_8 gpaw-data=1.0.1"
     }
   ]
 }
