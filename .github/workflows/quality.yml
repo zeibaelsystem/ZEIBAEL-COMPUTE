@@ -84,7 +84,7 @@ jobs:
       fail-fast: false
       max-parallel: 18
       matrix:
-        engine: [pyomo_dae, openpnm, porespy, fipy, pyromat, phasepy, pyelastica, fmpy, python_control, gekko, pysindy, pypsa, pyspice, openturns, gemseo, nevergrad, pymoo, numba, mpmath, mpi4py, backtesting_py, sktime, mlforecast, hmmlearn, ruptures, openvino, pyod, river, tsfresh, pymupdf, pyav, opentimelineio, datafusion, ibis, zarr, hdf5, snakemake, openmm, ase, pymatgen, mdanalysis, workflow_dag_smoke]
+        engine: [openpnm, gemseo, snakemake, ibis, do_mpc, ncnn, mnn, mlflow, dvc, pyg, neuralforecast, pytorch_forecasting, zipline_reloaded, nautilus_trader, flink, nats, gstreamer, mediainfo, sundials, petsc, gromacs, cp2k, precice]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

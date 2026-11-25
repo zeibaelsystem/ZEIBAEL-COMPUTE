@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "flink",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "apache-flink==2.3.0",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "flink"
+        ]
+      ]
+    }
+  ]
+}

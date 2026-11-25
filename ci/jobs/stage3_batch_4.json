@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "mediainfo",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "mediainfo"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mediainfo"
+        ]
+      ]
+    },
+    {
+      "id": "sundials",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "sundials"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "sundials"
+        ]
+      ]
+    },
+    {
+      "id": "petsc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "petsc"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "petsc"
+        ]
+      ]
+    },
+    {
+      "id": "gromacs",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "gromacs"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "gromacs"
+        ]
+      ]
+    },
+    {
+      "id": "cp2k",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "cp2k"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "cp2k"
+        ]
+      ]
+    },
+    {
+      "id": "precice",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "precice"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "precice"
+        ]
+      ]
+    }
+  ]
+}

@@ -16,6 +16,29 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1",
+          "six==1.17.0"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/44/8e/250fab1cafeea43f4eb11f1d64cd6313f639965ff62cb0d9da3883655781/docrep-0.3.2.tar.gz#sha256=ed8a17e201abd829ef8da78a0b6f4d51fb99a4cbd0554adbed3309297f964314"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
           "openpnm==3.6.5"
         ],
         [

@@ -16,6 +16,29 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1",
+          "six==1.17.0"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/a9/d4/d233fbbf228dbe2644d236240cee3e5a9d693aa0a1488632a1d55dd67680/xdsmjs-2.0.0.tar.gz#sha256=314183dbcf66ab13af1262158a0e45467146ee56856013a8225bf1c0b447562a"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
           "gemseo==6.3.3"
         ],
         [

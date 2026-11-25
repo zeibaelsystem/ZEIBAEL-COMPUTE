@@ -39,7 +39,11 @@
       "id": "openpnm",
       "group": "chemical",
       "status": "candidate",
-      "distribution": "openpnm==3.6.5",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 six==1.17.0",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/44/8e/250fab1cafeea43f4eb11f1d64cd6313f639965ff62cb0d9da3883655781/docrep-0.3.2.tar.gz#sha256=ed8a17e201abd829ef8da78a0b6f4d51fb99a4cbd0554adbed3309297f964314",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: openpnm==3.6.5"
+      ],
       "license": "MIT",
       "source": "https://pypi.org/project/openpnm/3.6.5/",
       "scope": "reviewed public synthetic fixture only"
@@ -83,8 +87,13 @@
     {
       "id": "precice",
       "group": "mechanical",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "LGPL-3.0",
+      "source": "https://github.com/precice/precice/releases/tag/v3.3.0",
+      "scope": "Pinned local preCICE two-participant exchange",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh precice"
+      ]
     },
     {
       "id": "code_aster",
@@ -188,8 +197,13 @@
     {
       "id": "do_mpc",
       "group": "control",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "LGPL-3.0",
+      "source": "https://pypi.org/project/do-mpc/5.1.2/",
+      "scope": "Local dynamic model simulation",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: do-mpc==5.1.2 casadi==3.7.0"
+      ]
     },
     {
       "id": "pypsa",
@@ -224,14 +238,24 @@
     {
       "id": "sundials",
       "group": "math",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "source": "https://github.com/LLNL/sundials",
+      "scope": "Native CVODE ODE solve",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh sundials"
+      ]
     },
     {
       "id": "petsc",
       "group": "math",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "BSD-2-Clause",
+      "source": "https://petsc.org/release/",
+      "scope": "Native PETSc KSP linear solve",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh petsc"
+      ]
     },
     {
       "id": "trilinos",
@@ -252,7 +276,11 @@
       "id": "gemseo",
       "group": "math",
       "status": "candidate",
-      "distribution": "gemseo==6.3.3",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 six==1.17.0",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/a9/d4/d233fbbf228dbe2644d236240cee3e5a9d693aa0a1488632a1d55dd67680/xdsmjs-2.0.0.tar.gz#sha256=314183dbcf66ab13af1262158a0e45467146ee56856013a8225bf1c0b447562a",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: gemseo==6.3.3"
+      ],
       "license": "LGPL-3.0",
       "source": "https://pypi.org/project/gemseo/6.3.3/",
       "scope": "reviewed public synthetic fixture only"
@@ -311,14 +339,24 @@
     {
       "id": "nautilus_trader",
       "group": "trading",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "LGPL-3.0+",
+      "source": "https://pypi.org/project/nautilus_trader/1.231.0/",
+      "scope": "Order-book microstructure; not full backtest",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: nautilus_trader==1.231.0 numpy==2.2.6 pandas==2.3.3"
+      ]
     },
     {
       "id": "zipline_reloaded",
       "group": "trading",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/zipline-reloaded/3.2.1/",
+      "scope": "Synthetic pipeline factor",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: zipline-reloaded==3.2.1 numpy==2.2.6 pandas==2.2.3"
+      ]
     },
     {
       "id": "backtesting_py",
@@ -350,14 +388,26 @@
     {
       "id": "neuralforecast",
       "group": "trading",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/neuralforecast/1.7.7/",
+      "scope": "Local CPU training/prediction",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: neuralforecast==1.7.7 torch==2.7.1+cpu pytorch-lightning==2.5.1.post0 numpy==1.26.4 pandas==2.2.3"
+      ]
     },
     {
       "id": "pytorch_forecasting",
       "group": "trading",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://pypi.org/project/pytorch-forecasting/1.3.0/",
+      "scope": "Time-series dataset windows, no model training",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: pytorch-forecasting==1.3.0 torch==2.7.1+cpu lightning==2.5.1.post0 numpy==1.26.4 pandas==2.2.3"
+      ]
     },
     {
       "id": "hmmlearn",
@@ -389,14 +439,24 @@
     {
       "id": "ncnn",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/ncnn/1.0.20261020/",
+      "scope": "Locally constructed CPU ReLU inference",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ncnn==1.0.20261020 numpy==2.2.6"
+      ]
     },
     {
       "id": "mnn",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "Apache-2.0 / BSD-3-Clause wheel metadata",
+      "source": "https://github.com/alibaba/MNN",
+      "scope": "Local tensor operations only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: MNN==3.6.2 numpy==2.2.6"
+      ]
     },
     {
       "id": "ctranslate2",
@@ -407,14 +467,24 @@
     {
       "id": "mlflow",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/mlflow-skinny/3.18.0/",
+      "scope": "Local experiment metadata and metric persistence",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: mlflow-skinny==3.18.0"
+      ]
     },
     {
       "id": "dvc",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/dvc/3.67.1/",
+      "scope": "Local versioned data restore, no remote",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: dvc==3.67.1"
+      ]
     },
     {
       "id": "pyod",
@@ -437,8 +507,14 @@
     {
       "id": "pyg",
       "group": "ai",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "MIT",
+      "source": "https://pypi.org/project/torch-geometric/2.8.1/",
+      "scope": "CPU graph convolution",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: --index-url https://download.pytorch.org/whl/cpu torch==2.7.1+cpu torchvision==0.22.1+cpu torchaudio==2.7.1+cpu",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: torch-geometric==2.8.1 torch==2.7.1+cpu numpy==2.2.6"
+      ]
     },
     {
       "id": "tsfresh",
@@ -470,14 +546,24 @@
     {
       "id": "gstreamer",
       "group": "media",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "LGPL-2.1+",
+      "source": "https://gstreamer.freedesktop.org/",
+      "scope": "Generated local audio pipeline",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh gstreamer"
+      ]
     },
     {
       "id": "mediainfo",
       "group": "media",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "BSD-2-Clause",
+      "source": "https://mediaarea.net/en/MediaInfo",
+      "scope": "Local metadata extraction",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh mediainfo"
+      ]
     },
     {
       "id": "essentia",
@@ -527,8 +613,13 @@
     {
       "id": "flink",
       "group": "data",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/apache-flink/2.3.0/",
+      "scope": "Local batch SQL only",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: apache-flink==2.3.0 pandas==2.2.3"
+      ]
     },
     {
       "id": "datafusion",
@@ -543,7 +634,9 @@
       "id": "ibis",
       "group": "data",
       "status": "candidate",
-      "distribution": "ibis-framework==12.0.0",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: ibis-framework[duckdb]==12.0.0 duckdb==1.3.2 pyarrow==20.0.0 pyarrow-hotfix==0.7 packaging==25.0"
+      ],
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/ibis-framework/12.0.0/",
       "scope": "reviewed public synthetic fixture only"
@@ -575,14 +668,24 @@
     {
       "id": "nats",
       "group": "data",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "Apache-2.0",
+      "source": "https://github.com/nats-io/nats-server",
+      "scope": "Local loopback messaging",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh nats",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: nats-py==2.17.0"
+      ]
     },
     {
       "id": "snakemake",
       "group": "data",
       "status": "candidate",
-      "distribution": "snakemake==9.27.2",
+      "distribution": [
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1 six==1.17.0",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/bd/df/c9b4e25dce00f6349fd28aadba7b6c3f7431cc8bd4308a158fbe57b6a22e/connection_pool-0.0.3.tar.gz#sha256=bf429e7aef65921c69b4ed48f3d48d3eac1383b05d2df91884705842d974d0dc",
+        "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: snakemake==9.27.2"
+      ],
       "license": "MIT",
       "source": "https://pypi.org/project/snakemake/9.27.2/",
       "scope": "reviewed public synthetic fixture only"
@@ -602,14 +705,24 @@
     {
       "id": "cp2k",
       "group": "science",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "GPL-2.0+",
+      "source": "https://www.cp2k.org/",
+      "scope": "Native local H2 energy calculation",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh cp2k"
+      ]
     },
     {
       "id": "gromacs",
       "group": "science",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "candidate",
+      "license": "LGPL-2.1+",
+      "source": "https://www.gromacs.org/",
+      "scope": "Native molecular trajectory distance",
+      "distribution": [
+        "bash ci/jobs/install_stage3_packages.sh gromacs"
+      ]
     },
     {
       "id": "openmm",

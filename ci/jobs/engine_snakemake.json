@@ -16,6 +16,29 @@
           "--disable-pip-version-check",
           "--no-input",
           "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1",
+          "six==1.17.0"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/bd/df/c9b4e25dce00f6349fd28aadba7b6c3f7431cc8bd4308a158fbe57b6a22e/connection_pool-0.0.3.tar.gz#sha256=bf429e7aef65921c69b4ed48f3d48d3eac1383b05d2df91884705842d974d0dc"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
           "snakemake==9.27.2"
         ],
         [

@@ -265,6 +265,179 @@ def run(engine,work):
         u=m.Universe.empty(2,trajectory=True); u.atoms.positions=np.array([[0,0,0],[1,0,0]])
         v=float(np.linalg.norm(u.atoms.positions[1]-u.atoms.positions[0])); close(v,1)
         return {"distance_A":v}
+    if engine=="do_mpc":
+        import do_mpc, numpy as np
+        m=do_mpc.model.Model("continuous")
+        x=m.set_variable("_x","x"); u=m.set_variable("_u","u"); m.set_rhs("x",-x+u); m.setup()
+        s=do_mpc.simulator.Simulator(m); s.set_param(t_step=.1); s.setup(); s.x0=np.array([[2.]])
+        v=float(s.make_step(np.array([[1.]])).item()); close(v,1+np.exp(-.1),1e-4)
+        return {"x_after_0_1s":v,"scope":"dynamic simulation, not MPC closed loop"}
+    if engine=="ncnn":
+        import ncnn, numpy as np
+        p=work/"relu.param"; p.write_text("7767517\n2 2\nInput input 0 1 data\nReLU relu 1 1 data out\n")
+        b=work/"relu.bin"; b.write_bytes(b"")
+        net=ncnn.Net(); net.opt.use_vulkan_compute=False; net.opt.num_threads=1
+        check(net.load_param(str(p))==0,"param load"); check(net.load_model(str(b))==0,"model load")
+        ex=net.create_extractor(); check(ex.input("data",ncnn.Mat(np.array([-2.,1.,3.],dtype=np.float32)))==0,"input")
+        rc,out=ex.extract("out"); check(rc==0,"inference"); v=np.array(out).tolist(); check(v==[0.,1.,3.],"ReLU output")
+        return {"output":v,"device":"cpu"}
+    if engine=="mnn":
+        import MNN.expr as F
+        a=F.const([-2.,1.,3.],[3],F.NCHW,F.float)
+        v=F.relu(a).read().tolist(); check(v==[0.,1.,3.],"ReLU output")
+        return {"output":v,"scope":"local tensor expression"}
+    if engine=="mlflow":
+        import mlflow
+        os.environ["MLFLOW_ALLOW_FILE_STORE"]="true"; os.environ["MLFLOW_ENABLE_TELEMETRY"]="false"
+        mlflow.set_tracking_uri((work/"mlruns").as_uri()); mlflow.set_experiment("public_fixture")
+        with mlflow.start_run() as r:
+            mlflow.log_param("fixture","public"); mlflow.log_metric("m",3)
+            rid=r.info.run_id
+        v=mlflow.get_run(rid).data.metrics["m"]; close(v,3)
+        return {"metric":v,"scope":"local filesystem only"}
+    if engine=="dvc":
+        os.environ["DVC_NO_ANALYTICS"]="1"
+        cmd(["dvc","init","--no-scm"],work)
+        (work/"data.txt").write_text("public fixture\n")
+        cmd(["dvc","add","data.txt"],work)
+        check((work/"data.txt.dvc").is_file(),"DVC metadata")
+        (work/"data.txt").unlink()
+        cmd(["dvc","checkout","data.txt.dvc"],work)
+        check((work/"data.txt").read_text()=="public fixture\n","local restore")
+        return {"restored":True,"remote":False}
+    if engine=="pyg":
+        import torch
+        from torch_geometric.nn import GCNConv
+        m=GCNConv(1,1,bias=False)
+        with torch.no_grad(): m.lin.weight.fill_(1.)
+        x=torch.tensor([[1.],[3.]])
+        edge=torch.tensor([[0,1],[1,0]],dtype=torch.long)
+        v=m(x,edge).detach().flatten().tolist(); close(v[0],2,1e-5); close(v[1],2,1e-5)
+        return {"node_outputs":v}
+    if engine=="neuralforecast":
+        import pandas as pd,numpy as np
+        from neuralforecast import NeuralForecast
+        from neuralforecast.models import NBEATS
+        d=pd.DataFrame({"unique_id":["a"]*20,"ds":pd.date_range("2025-01-01",periods=20),"y":np.arange(20,dtype=float)})
+        model=NBEATS(h=2,input_size=4,max_steps=2,random_seed=7,accelerator="cpu",devices=1,enable_progress_bar=False,logger=False)
+        nf=NeuralForecast(models=[model],freq="D"); nf.fit(df=d); v=nf.predict()["NBEATS"].tolist()
+        check(len(v)==2 and np.isfinite(v).all(),"forecast shape")
+        return {"forecast":v,"scope":"two-step synthetic training, no predictive quality claim"}
+    if engine=="pytorch_forecasting":
+        from pytorch_forecasting import TimeSeriesDataSet
+        import pandas as pd, numpy as np
+        d=pd.DataFrame({"time":np.arange(20),"group":["a"]*20,"target":np.arange(20,dtype=float)})
+        ds=TimeSeriesDataSet(d,time_idx="time",target="target",group_ids=["group"],max_encoder_length=4,max_prediction_length=2,time_varying_unknown_reals=["target"])
+        x,y=next(iter(ds.to_dataloader(train=False,batch_size=2,num_workers=0)))
+        check(y[0].shape[-1]==2 and len(ds)>0,"window shape")
+        return {"windows":len(ds),"target_shape":list(y[0].shape),"scope":"training dataset window construction"}
+    if engine=="zipline_reloaded":
+        import numpy as np
+        from zipline.pipeline.factors import SimpleMovingAverage
+        f=SimpleMovingAverage(window_length=3); out=np.empty(2)
+        f.compute(None,np.array([1,2]),out,np.array([[1.,2.],[3.,4.],[5.,6.]]))
+        check(np.allclose(out,[3,4]),"factor result")
+        return {"sma":out.tolist(),"scope":"pipeline factor, not full backtest"}
+    if engine=="nautilus_trader":
+        from nautilus_trader.model.book import OrderBook
+        from nautilus_trader.model.data import BookOrder
+        from nautilus_trader.model.enums import BookType,OrderSide
+        from nautilus_trader.model.identifiers import InstrumentId
+        from nautilus_trader.model.objects import Price,Quantity
+        b=OrderBook(InstrumentId.from_str("PUBLIC.SIM"),BookType.L2_MBP)
+        b.add(BookOrder(OrderSide.BUY,Price.from_str("99.00"),Quantity.from_str("5"),1),1,0,1)
+        b.add(BookOrder(OrderSide.SELL,Price.from_str("101.00"),Quantity.from_str("7"),2),2,0,2)
+        bid=float(b.best_bid_price()); ask=float(b.best_ask_price()); close(ask-bid,2)
+        return {"bid":bid,"ask":ask,"spread":ask-bid,"scope":"synthetic limit order book only"}
+    if engine=="flink":
+        from pyflink.table import EnvironmentSettings,TableEnvironment
+        env=TableEnvironment.create(EnvironmentSettings.in_batch_mode())
+        with env.execute_sql("SELECT SUM(x) FROM (VALUES (1),(2),(3)) AS t(x)").collect() as it: v=int(next(it)[0])
+        close(v,6); return {"sum":v,"scope":"local JVM batch"} 
+    if engine=="nats":
+        import asyncio,socket,time
+        with socket.socket() as s: s.bind(("127.0.0.1",0)); port=s.getsockname()[1]
+        server=subprocess.Popen(["nats-server","-a","127.0.0.1","-p",str(port)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+        try:
+            for _ in range(50):
+                try:
+                    with socket.create_connection(("127.0.0.1",port),.1): break
+                except OSError: time.sleep(.1)
+            else: raise RuntimeError("local NATS not ready")
+            async def flow():
+                import nats
+                c=await nats.connect(f"nats://127.0.0.1:{port}",allow_reconnect=False,connect_timeout=2)
+                sub=await c.subscribe("public.fixture"); await c.flush(); await c.publish("public.fixture",b"123")
+                msg=await sub.next_msg(timeout=2); await c.close(); return msg.data.decode()
+            v=asyncio.run(flow()); check(v=="123","message")
+            return {"message":v,"scope":"loopback ephemeral server"}
+        finally:
+            server.terminate(); server.wait(timeout=5)
+    if engine=="gstreamer":
+        cmd(["gst-launch-1.0","-q","audiotestsrc","num-buffers=10","!","audioconvert","!","wavenc","!","filesink","location="+str(work/"tone.wav")],work)
+        import wave
+        with wave.open(str(work/"tone.wav")) as w: n=w.getnframes(); rate=w.getframerate()
+        check(n>0 and rate>0,"audio output")
+        return {"frames":n,"sample_rate":rate}
+    if engine=="mediainfo":
+        import wave,struct
+        with wave.open(str(work/"tone.wav"),"wb") as w:
+            w.setnchannels(1); w.setsampwidth(2); w.setframerate(8000); w.writeframes(struct.pack("<8000h",*([0]*8000)))
+        v=json.loads(cmd(["mediainfo","--Output=JSON",str(work/"tone.wav")],work))
+        a=next(x for x in v["media"]["track"] if x["@type"]=="Audio"); close(float(a["SamplingRate"]),8000); close(float(a["Duration"]),1,.01)
+        return {"sample_rate":8000,"duration_s":float(a["Duration"])}
+    if engine=="sundials":
+        c=work/"test.c"; c.write_text('#include <cvode/cvode.h>\n#include <cvode/cvode_ls.h>\n#include <nvector/nvector_serial.h>\n#include <sunmatrix/sunmatrix_dense.h>\n#include <sunlinsol/sunlinsol_dense.h>\n#include <sundials/sundials_context.h>\n#include <stdio.h>\nint rhs(realtype t,N_Vector y,N_Vector yd,void *d){NV_Ith_S(yd,0)=-NV_Ith_S(y,0);return 0;}\nint main(){SUNContext c; SUNContext_Create(0,&c); N_Vector y=N_VNew_Serial(1,c); NV_Ith_S(y,0)=1; void *mem=CVodeCreate(CV_BDF,c); if(CVodeInit(mem,rhs,0,y)<0||CVodeSStolerances(mem,1e-8,1e-10)<0)return 1; SUNMatrix A=SUNDenseMatrix(1,1,c); SUNLinearSolver ls=SUNLinSol_Dense(y,A,c); if(CVodeSetLinearSolver(mem,ls,A)<0)return 2; realtype t; if(CVode(mem,1,y,&t,CV_NORMAL)<0)return 3; printf("%.12f\\n",(double)NV_Ith_S(y,0)); CVodeFree(&mem); SUNLinSolFree(ls); SUNMatDestroy(A); N_VDestroy(y); SUNContext_Free(&c);return 0;}')
+        cmd(["gcc",str(c),"-o",str(work/"test"),"-lsundials_cvode","-lsundials_nvecserial","-lsundials_sunmatrixdense","-lsundials_sunlinsoldense","-lm"],work)
+        v=float(cmd([str(work/"test")],work).strip()); close(v,math.exp(-1),1e-6)
+        return {"solution_t1":v}
+    if engine=="petsc":
+        c=work/"test.c"; c.write_text('#include <petscksp.h>\n#include <stdio.h>\nint main(int argc,char**argv){PetscInitialize(&argc,&argv,0,0);Mat A;Vec b,x;KSP k;MatCreateSeqAIJ(PETSC_COMM_SELF,1,1,1,0,&A);MatSetValue(A,0,0,2,INSERT_VALUES);MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY);MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY);VecCreateSeq(PETSC_COMM_SELF,1,&b);VecDuplicate(b,&x);VecSet(b,6);KSPCreate(PETSC_COMM_SELF,&k);KSPSetOperators(k,A,A);KSPSetType(k,KSPPREONLY);PC pc;KSPGetPC(k,&pc);PCSetType(pc,PCLU);KSPSolve(k,b,x);PetscScalar v;PetscInt i=0;VecGetValues(x,1,&i,&v);printf("%.10f\\n",(double)PetscRealPart(v));KSPDestroy(&k);VecDestroy(&x);VecDestroy(&b);MatDestroy(&A);PetscFinalize();return 0;}')
+        import shlex
+        flags=shlex.split(cmd(["pkg-config","--cflags","--libs","PETSc"],work))
+        cmd(["mpicc",str(c),"-o",str(work/"test"),*flags],work)
+        v=float(cmd([str(work/"test")],work).strip().splitlines()[-1]); close(v,3)
+        return {"solution":v}
+    if engine=="gromacs":
+        (work/"fixture.gro").write_text("Public pair\n    2\n    1DUM      A    1   0.000   0.000   0.000\n    1DUM      B    2   0.200   0.000   0.000\n   2.00000   2.00000   2.00000\n")
+        cmd(["gmx","distance","-s","fixture.gro","-f","fixture.gro","-select","atomnr 1 plus atomnr 2","-oall","distance.xvg","-xvg","none"],work)
+        rows=[l for l in (work/"distance.xvg").read_text().splitlines() if l.strip() and not l.startswith(("#","@"))]
+        v=float(rows[-1].split()[-1]); close(v,.2,1e-5)
+        return {"distance_nm":v,"scope":"trajectory analysis, not molecular dynamics integration"}
+    if engine=="cp2k":
+        import shutil,re
+        b=shutil.which("cp2k") or shutil.which("cp2k.psmp") or shutil.which("cp2k.ssmp"); check(b is not None,"CP2K binary")
+        inp=work/"h2.inp"; inp.write_text("&GLOBAL\n PROJECT h2\n RUN_TYPE ENERGY\n PRINT_LEVEL LOW\n&END GLOBAL\n&FORCE_EVAL\n METHOD Quickstep\n &DFT\n BASIS_SET_FILE_NAME /usr/share/cp2k/data/BASIS_MOLOPT\n POTENTIAL_FILE_NAME /usr/share/cp2k/data/GTH_POTENTIALS\n &SCF\n MAX_SCF 60\n EPS_SCF 1.0E-6\n &END SCF\n &XC\n &XC_FUNCTIONAL PBE\n &END XC_FUNCTIONAL\n &END XC\n &MGRID\n CUTOFF 100\n REL_CUTOFF 30\n &END MGRID\n &END DFT\n &SUBSYS\n &CELL\n ABC 8 8 8\n &END CELL\n &COORD\n H 4 4 3.63\n H 4 4 4.37\n &END COORD\n &KIND H\n BASIS_SET DZVP-MOLOPT-SR-GTH\n POTENTIAL GTH-PBE-q1\n &END KIND\n &END SUBSYS\n&END FORCE_EVAL\n")
+        out=cmd([b,"-i",str(inp)],work)
+        matches=re.findall(r"ENERGY\| Total FORCE_EVAL.*?([-+]\d+\.\d+)",out); check(matches,"energy missing")
+        v=float(matches[-1]); check(-2<v<-.5,"unphysical energy")
+        return {"energy_hartree":v,"scope":"tiny H2 DFT reference, not converged production"} 
+    if engine=="precice":
+        cfg=work/"precice-config.xml"; cfg.write_text("""<precice-configuration>
+        <data:scalar name="A"/><data:scalar name="B"/>
+        <mesh name="FirstMesh" dimensions="2"><use-data name="A"/><use-data name="B"/></mesh>
+        <mesh name="SecondMesh" dimensions="2"><use-data name="A"/><use-data name="B"/></mesh>
+        <participant name="First"><provide-mesh name="FirstMesh"/><receive-mesh name="SecondMesh" from="Second"/><write-data name="A" mesh="FirstMesh"/><read-data name="B" mesh="FirstMesh"/><mapping:nearest-neighbor direction="read" from="SecondMesh" to="FirstMesh" constraint="consistent"/></participant>
+        <participant name="Second"><provide-mesh name="SecondMesh"/><receive-mesh name="FirstMesh" from="First"/><write-data name="B" mesh="SecondMesh"/><read-data name="A" mesh="SecondMesh"/><mapping:nearest-neighbor direction="read" from="FirstMesh" to="SecondMesh" constraint="consistent"/></participant>
+        <m2n:sockets acceptor="First" connector="Second" exchange-directory="." network="lo"/>
+        <coupling-scheme:serial-explicit><participants first="First" second="Second"/><time-window-size value="1"/><max-time-windows value="1"/><exchange data="A" mesh="FirstMesh" from="First" to="Second"/><exchange data="B" mesh="SecondMesh" from="Second" to="First"/></coupling-scheme:serial-explicit>
+        </precice-configuration>""")
+        c=work/"p.cpp"; c.write_text("""#include <precice/precice.hpp>
+        #include <vector>
+        #include <iostream>
+        #include <cmath>
+        int main(int argc,char**argv){bool first=std::string(argv[1])=="First";std::string mesh=first?"FirstMesh":"SecondMesh";precice::Participant p(argv[1],"precice-config.xml",0,1);std::vector<double> pos{0,0};std::vector<precice::VertexID> ids{p.setMeshVertex(mesh,pos)};p.initialize();while(p.isCouplingOngoing()){double dt=p.getMaxTimeStepSize();std::vector<double> value{3.0};if(!first){p.readData(mesh,"A",ids,dt,value);std::cout<<"RECEIVED="<<value[0]<<std::endl;if(std::abs(value[0]-3)>1e-8)return 2;value[0]*=2;}p.writeData(mesh,first?"A":"B",ids,value);p.advance(dt);}p.finalize();return 0;}
+        """)
+        cmd(["g++","-std=c++17","-I/usr/include/eigen3",str(c),"-o",str(work/"p"),"-lprecice"],work)
+        a=subprocess.Popen([str(work/"p"),"First"],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+        b=subprocess.Popen([str(work/"p"),"Second"],cwd=work,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+        try:
+            vb,_=b.communicate(timeout=45); va,_=a.communicate(timeout=45)
+            check(a.returncode==0 and b.returncode==0 and "RECEIVED=3" in vb,va[-1500:]+vb[-1500:])
+        finally:
+            for proc in (a,b):
+                if proc.poll() is None: proc.kill(); proc.communicate()
+        return {"participants":2,"transferred_value":3,"scope":"synthetic local explicit coupling, not OpenFOAM/CalculiX integration"}
     raise ValueError("Unapproved engine")
 
 def main():
