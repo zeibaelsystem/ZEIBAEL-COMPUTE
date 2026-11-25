@@ -1,0 +1,447 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "mpmath",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "mpmath==1.4.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mpmath"
+        ]
+      ]
+    },
+    {
+      "id": "mpi4py",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "mpi4py"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "mpi4py==4.1.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mpi4py"
+        ]
+      ]
+    },
+    {
+      "id": "backtesting_py",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "backtesting==0.6.6"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "backtesting_py"
+        ]
+      ]
+    },
+    {
+      "id": "sktime",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "sktime==1.3.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "sktime"
+        ]
+      ]
+    },
+    {
+      "id": "mlforecast",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "mlforecast==1.1.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mlforecast"
+        ]
+      ]
+    },
+    {
+      "id": "hmmlearn",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "hmmlearn==0.3.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "hmmlearn"
+        ]
+      ]
+    },
+    {
+      "id": "ruptures",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ruptures==1.1.10"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "ruptures"
+        ]
+      ]
+    },
+    {
+      "id": "openvino",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openvino==2026.4.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "openvino"
+        ]
+      ]
+    },
+    {
+      "id": "pyod",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyod==3.6.9"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pyod"
+        ]
+      ]
+    },
+    {
+      "id": "river",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "river==0.27.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "river"
+        ]
+      ]
+    },
+    {
+      "id": "tsfresh",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "tsfresh==0.21.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "tsfresh"
+        ]
+      ]
+    },
+    {
+      "id": "pymupdf",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pymupdf==2.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pymupdf"
+        ]
+      ]
+    },
+    {
+      "id": "pyav",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "av==19.0.2",
+          "numpy==2.2.6"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pyav"
+        ]
+      ]
+    },
+    {
+      "id": "opentimelineio",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "OpenTimelineIO==0.18.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "opentimelineio"
+        ]
+      ]
+    },
+    {
+      "id": "datafusion",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "datafusion==55.0.0",
+          "pyarrow==20.0.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "datafusion"
+        ]
+      ]
+    },
+    {
+      "id": "ibis",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ibis-framework==12.0.0",
+          "duckdb==1.3.2",
+          "pyarrow==20.0.0",
+          "pyarrow-hotfix==0.7"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "ibis"
+        ]
+      ]
+    },
+    {
+      "id": "zarr",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "zarr==3.4.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "zarr"
+        ]
+      ]
+    },
+    {
+      "id": "hdf5",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "h5py==3.16.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "hdf5"
+        ]
+      ]
+    }
+  ]
+}

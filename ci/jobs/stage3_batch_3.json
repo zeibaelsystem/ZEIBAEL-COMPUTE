@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "snakemake",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "snakemake==9.27.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "snakemake"
+        ]
+      ]
+    },
+    {
+      "id": "openmm",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openmm==8.6.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "openmm"
+        ]
+      ]
+    },
+    {
+      "id": "ase",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ase==3.29.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "ase"
+        ]
+      ]
+    },
+    {
+      "id": "pymatgen",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pymatgen==2026.10.24"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pymatgen"
+        ]
+      ]
+    },
+    {
+      "id": "mdanalysis",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "MDAnalysis==2.11.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mdanalysis"
+        ]
+      ]
+    }
+  ]
+}

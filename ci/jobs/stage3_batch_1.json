@@ -1,0 +1,438 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "pyomo_dae",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyomo==6.9.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pyomo_dae"
+        ]
+      ]
+    },
+    {
+      "id": "openpnm",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openpnm==3.6.5"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "openpnm"
+        ]
+      ]
+    },
+    {
+      "id": "porespy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "porespy==3.3.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "porespy"
+        ]
+      ]
+    },
+    {
+      "id": "fipy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "fipy==4.0.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "fipy"
+        ]
+      ]
+    },
+    {
+      "id": "pyromat",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyromat==3.0.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pyromat"
+        ]
+      ]
+    },
+    {
+      "id": "phasepy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "phasepy==0.0.56"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "phasepy"
+        ]
+      ]
+    },
+    {
+      "id": "pyelastica",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyelastica==1.0.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pyelastica"
+        ]
+      ]
+    },
+    {
+      "id": "fmpy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "fmpy==0.3.32"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "fmpy"
+        ]
+      ]
+    },
+    {
+      "id": "python_control",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "control==0.10.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "python_control"
+        ]
+      ]
+    },
+    {
+      "id": "gekko",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "gekko==1.3.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "gekko"
+        ]
+      ]
+    },
+    {
+      "id": "pysindy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pysindy==2.1.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pysindy"
+        ]
+      ]
+    },
+    {
+      "id": "pypsa",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pypsa==1.4.0",
+          "highspy==1.10.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pypsa"
+        ]
+      ]
+    },
+    {
+      "id": "pyspice",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pyspice==1.5"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pyspice"
+        ]
+      ]
+    },
+    {
+      "id": "openturns",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openturns==1.28"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "openturns"
+        ]
+      ]
+    },
+    {
+      "id": "gemseo",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "gemseo==6.3.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "gemseo"
+        ]
+      ]
+    },
+    {
+      "id": "nevergrad",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "nevergrad==1.0.12"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "nevergrad"
+        ]
+      ]
+    },
+    {
+      "id": "pymoo",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pymoo==0.6.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pymoo"
+        ]
+      ]
+    },
+    {
+      "id": "numba",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "numba==0.68.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "numba"
+        ]
+      ]
+    }
+  ]
+}

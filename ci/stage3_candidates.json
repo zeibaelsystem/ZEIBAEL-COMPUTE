@@ -1,0 +1,669 @@
+{
+  "schema": 1,
+  "scope": "Development candidates, not active until verified",
+  "candidates": [
+    {
+      "id": "biosteam",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "Source distribution requires reviewed build/dependency pins."
+    },
+    {
+      "id": "qsdsan",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "BioSTEAM dependency distribution/build compatibility not qualified."
+    },
+    {
+      "id": "foqus",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "reaktoro",
+      "group": "chemical",
+      "status": "blocked",
+      "reason": "No PyPI distribution; separate native/conda route required."
+    },
+    {
+      "id": "pyomo_dae",
+      "group": "chemical",
+      "status": "candidate",
+      "distribution": "pyomo==6.9.2",
+      "license": "BSD",
+      "source": "https://pypi.org/project/pyomo/6.9.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "openpnm",
+      "group": "chemical",
+      "status": "candidate",
+      "distribution": "openpnm==3.6.5",
+      "license": "MIT",
+      "source": "https://pypi.org/project/openpnm/3.6.5/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "porespy",
+      "group": "chemical",
+      "status": "candidate",
+      "distribution": "porespy==3.3.0",
+      "license": "MIT",
+      "source": "https://pypi.org/project/porespy/3.3.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "fipy",
+      "group": "chemical",
+      "status": "candidate",
+      "distribution": "fipy==4.0.3",
+      "license": "NIST public domain",
+      "source": "https://pypi.org/project/fipy/4.0.3/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "pyromat",
+      "group": "chemical",
+      "status": "candidate",
+      "distribution": "pyromat==3.0.1",
+      "license": "GPL-3.0",
+      "source": "https://pypi.org/project/pyromat/3.0.1/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "phasepy",
+      "group": "chemical",
+      "status": "candidate",
+      "distribution": "phasepy==0.0.56",
+      "license": "MIT",
+      "source": "https://pypi.org/project/phasepy/0.0.56/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "precice",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "code_aster",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "elmer_fem",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "moose",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "deal_ii",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "mfem",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "project_chrono",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "mbdyn",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "pyelastica",
+      "group": "mechanical",
+      "status": "candidate",
+      "distribution": "pyelastica==1.0.0",
+      "license": "MIT",
+      "source": "https://pypi.org/project/pyelastica/1.0.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "sfepy",
+      "group": "mechanical",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "omsimulator",
+      "group": "control",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "fmpy",
+      "group": "control",
+      "status": "candidate",
+      "distribution": "fmpy==0.3.32",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/fmpy/0.3.32/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "python_control",
+      "group": "control",
+      "status": "candidate",
+      "distribution": "control==0.10.2",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/control/0.10.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "gekko",
+      "group": "control",
+      "status": "candidate",
+      "distribution": "gekko==1.3.3",
+      "license": "MIT",
+      "source": "https://pypi.org/project/gekko/1.3.3/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "pysindy",
+      "group": "control",
+      "status": "candidate",
+      "distribution": "pysindy==2.1.0",
+      "license": "MIT",
+      "source": "https://pypi.org/project/pysindy/2.1.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "do_mpc",
+      "group": "control",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "pypsa",
+      "group": "control",
+      "status": "candidate",
+      "distribution": "pypsa==1.4.0",
+      "license": "MIT",
+      "source": "https://pypi.org/project/pypsa/1.4.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "gridcal",
+      "group": "control",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "openems",
+      "group": "control",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "pyspice",
+      "group": "control",
+      "status": "candidate",
+      "distribution": "pyspice==1.5",
+      "license": "GPL-3.0",
+      "source": "https://pypi.org/project/pyspice/1.5/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "sundials",
+      "group": "math",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "petsc",
+      "group": "math",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "trilinos",
+      "group": "math",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "openturns",
+      "group": "math",
+      "status": "candidate",
+      "distribution": "openturns==1.28",
+      "license": "LGPL",
+      "source": "https://pypi.org/project/openturns/1.28/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "gemseo",
+      "group": "math",
+      "status": "candidate",
+      "distribution": "gemseo==6.3.3",
+      "license": "LGPL-3.0",
+      "source": "https://pypi.org/project/gemseo/6.3.3/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "nevergrad",
+      "group": "math",
+      "status": "candidate",
+      "distribution": "nevergrad==1.0.12",
+      "license": "MIT",
+      "source": "https://pypi.org/project/nevergrad/1.0.12/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "pymoo",
+      "group": "math",
+      "status": "candidate",
+      "distribution": "pymoo==0.6.2",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/pymoo/0.6.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "numba",
+      "group": "math",
+      "status": "candidate",
+      "distribution": "numba==0.68.1",
+      "license": "BSD",
+      "source": "https://pypi.org/project/numba/0.68.1/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "mpmath",
+      "group": "math",
+      "status": "candidate",
+      "distribution": "mpmath==1.4.1",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/mpmath/1.4.1/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "mpi4py",
+      "group": "math",
+      "status": "candidate",
+      "distribution": "mpi4py==4.1.2",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/mpi4py/4.1.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "lean",
+      "group": "trading",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "nautilus_trader",
+      "group": "trading",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "zipline_reloaded",
+      "group": "trading",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "backtesting_py",
+      "group": "trading",
+      "status": "candidate",
+      "distribution": "backtesting==0.6.6",
+      "license": "AGPL-3.0",
+      "source": "https://pypi.org/project/backtesting/0.6.6/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "sktime",
+      "group": "trading",
+      "status": "candidate",
+      "distribution": "sktime==1.3.0",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/sktime/1.3.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "mlforecast",
+      "group": "trading",
+      "status": "candidate",
+      "distribution": "mlforecast==1.1.0",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/mlforecast/1.1.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "neuralforecast",
+      "group": "trading",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "pytorch_forecasting",
+      "group": "trading",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "hmmlearn",
+      "group": "trading",
+      "status": "candidate",
+      "distribution": "hmmlearn==0.3.3",
+      "license": "BSD",
+      "source": "https://pypi.org/project/hmmlearn/0.3.3/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "ruptures",
+      "group": "trading",
+      "status": "candidate",
+      "distribution": "ruptures==1.1.10",
+      "license": "BSD-2-Clause",
+      "source": "https://pypi.org/project/ruptures/1.1.10/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "openvino",
+      "group": "ai",
+      "status": "candidate",
+      "distribution": "openvino==2026.4.1",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/openvino/2026.4.1/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "ncnn",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "mnn",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "ctranslate2",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "Already a dependency of existing faster-whisper path; standalone fixture not yet qualified."
+    },
+    {
+      "id": "mlflow",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "dvc",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "pyod",
+      "group": "ai",
+      "status": "candidate",
+      "distribution": "pyod==3.6.9",
+      "license": "BSD-2-Clause",
+      "source": "https://pypi.org/project/pyod/3.6.9/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "river",
+      "group": "ai",
+      "status": "candidate",
+      "distribution": "river==0.27.0",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/river/0.27.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "pyg",
+      "group": "ai",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "tsfresh",
+      "group": "ai",
+      "status": "candidate",
+      "distribution": "tsfresh==0.21.2",
+      "license": "MIT",
+      "source": "https://pypi.org/project/tsfresh/0.21.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "pymupdf",
+      "group": "media",
+      "status": "candidate",
+      "distribution": "pymupdf==2.1",
+      "license": "AGPL-3.0 local scope",
+      "source": "https://pypi.org/project/pymupdf/2.1/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "pyav",
+      "group": "media",
+      "status": "candidate",
+      "distribution": "av==19.0.2",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/av/19.0.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "gstreamer",
+      "group": "media",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "mediainfo",
+      "group": "media",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "essentia",
+      "group": "media",
+      "status": "blocked",
+      "reason": "AGPL scope and CPU distribution wheel not yet qualified."
+    },
+    {
+      "id": "opensmile",
+      "group": "media",
+      "status": "blocked",
+      "reason": "Commercial use license restriction; not unconditional free."
+    },
+    {
+      "id": "easyocr",
+      "group": "media",
+      "status": "blocked",
+      "reason": "Model weights and CPU runtime not qualified."
+    },
+    {
+      "id": "rapidocr",
+      "group": "media",
+      "status": "blocked",
+      "reason": "Model weight/license and runtime need separate validation."
+    },
+    {
+      "id": "layoutparser",
+      "group": "media",
+      "status": "blocked",
+      "reason": "Model weight and optional detector dependencies not qualified."
+    },
+    {
+      "id": "opentimelineio",
+      "group": "media",
+      "status": "candidate",
+      "distribution": "OpenTimelineIO==0.18.1",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/OpenTimelineIO/0.18.1/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "spark",
+      "group": "data",
+      "status": "blocked",
+      "reason": "Source distribution and JVM memory compatibility not qualified."
+    },
+    {
+      "id": "flink",
+      "group": "data",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "datafusion",
+      "group": "data",
+      "status": "candidate",
+      "distribution": "datafusion==55.0.0",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/datafusion/55.0.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "ibis",
+      "group": "data",
+      "status": "candidate",
+      "distribution": "ibis-framework==12.0.0",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/ibis-framework/12.0.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "zarr",
+      "group": "data",
+      "status": "candidate",
+      "distribution": "zarr==3.4.2",
+      "license": "MIT",
+      "source": "https://pypi.org/project/zarr/3.4.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "hdf5",
+      "group": "data",
+      "status": "candidate",
+      "distribution": "h5py==3.16.0",
+      "license": "BSD-3-Clause",
+      "source": "https://pypi.org/project/h5py/3.16.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "vaex",
+      "group": "data",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "nats",
+      "group": "data",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "snakemake",
+      "group": "data",
+      "status": "candidate",
+      "distribution": "snakemake==9.27.2",
+      "license": "MIT",
+      "source": "https://pypi.org/project/snakemake/9.27.2/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "nextflow",
+      "group": "data",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "quantum_espresso",
+      "group": "science",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "cp2k",
+      "group": "science",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "gromacs",
+      "group": "science",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    },
+    {
+      "id": "openmm",
+      "group": "science",
+      "status": "candidate",
+      "distribution": "openmm==8.6.1",
+      "license": "BSD-like",
+      "source": "https://pypi.org/project/openmm/8.6.1/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "ase",
+      "group": "science",
+      "status": "candidate",
+      "distribution": "ase==3.29.0",
+      "license": "LGPL-2.1+",
+      "source": "https://pypi.org/project/ase/3.29.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "pyscf",
+      "group": "science",
+      "status": "blocked",
+      "reason": "No compatible wheel verified in metadata audit."
+    },
+    {
+      "id": "psi4",
+      "group": "science",
+      "status": "blocked",
+      "reason": "No PyPI release; native distribution required."
+    },
+    {
+      "id": "pymatgen",
+      "group": "science",
+      "status": "candidate",
+      "distribution": "pymatgen==2026.10.24",
+      "license": "MIT",
+      "source": "https://pypi.org/project/pymatgen/2026.10.24/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "mdanalysis",
+      "group": "science",
+      "status": "candidate",
+      "distribution": "MDAnalysis==2.11.0",
+      "license": "GPL-3.0+",
+      "source": "https://pypi.org/project/MDAnalysis/2.11.0/",
+      "scope": "reviewed public synthetic fixture only"
+    },
+    {
+      "id": "gpaw",
+      "group": "science",
+      "status": "blocked",
+      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+    }
+  ]
+}
