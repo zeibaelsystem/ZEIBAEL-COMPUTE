@@ -231,6 +231,231 @@
           "layoutparser"
         ]
       ]
+    },
+    {
+      "id": "biosteam",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/bf/c2/1b8de77cebbe8a825ff2e90a35238f707cb7d5e88f52b6e993686afecd9c/colorpalette-0.3.3.tar.gz#sha256=e4bb8f5b087b5719bd01e39a4df2a646db15cad9fe765234dd8ba85b47488ceb"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--only-binary=:all:",
+          "https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815",
+          "https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca",
+          "numpy==1.26.4",
+          "pandas==2.2.3",
+          "scipy==1.15.3"
+        ],
+        [
+          "python",
+          "scripts/recovery_compute.py",
+          "biosteam"
+        ]
+      ]
+    },
+    {
+      "id": "qsdsan",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/bf/c2/1b8de77cebbe8a825ff2e90a35238f707cb7d5e88f52b6e993686afecd9c/colorpalette-0.3.3.tar.gz#sha256=e4bb8f5b087b5719bd01e39a4df2a646db15cad9fe765234dd8ba85b47488ceb"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--only-binary=:all:",
+          "https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815",
+          "https://files.pythonhosted.org/packages/a1/01/259198e3e8834211d2797fdbc27c3c29b06ef36350519dd6bc29a4b5680e/biosteam-2.51.19.tar.gz#sha256=4e7d79a776a3704a3c08bb4982c2d0a0b0acf9dcbf9b3c40e952301256fa5040",
+          "numpy==1.26.4",
+          "pandas==2.2.3",
+          "scipy==1.15.3"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "qsdsan==1.4.3",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/recovery_compute.py",
+          "qsdsan"
+        ]
+      ]
+    },
+    {
+      "id": "sfepy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/recovery_conda.py",
+          "sfepy"
+        ]
+      ]
+    },
+    {
+      "id": "psi4",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/recovery_conda.py",
+          "psi4"
+        ]
+      ]
+    },
+    {
+      "id": "flink",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b/crcmod-1.7.tar.gz#sha256=dc7051a0db5f2bd48665a990d3ec1cc305a466a77358ca4492826f41f283601e"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/c7/11/345f3173809cea7f1a193bfbf02403fff250a3360e0e118a1630985e547d/dill-0.3.1.1.tar.gz#sha256=42d8ef819367516592a825746a18073ced42ca169ab1f5f4044134703e7a049c"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/a2/55/8f8cab2afd404cf578136ef2cc5dfb50baa1761b68c9da1fb1e4eed343c9/docopt-0.6.2.tar.gz#sha256=49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "apache-flink==2.3.0",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/recovery_compute.py",
+          "flink"
+        ]
+      ]
+    },
+    {
+      "id": "cp2k",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/recovery_conda.py",
+          "cp2k"
+        ]
+      ]
     }
   ]
 }

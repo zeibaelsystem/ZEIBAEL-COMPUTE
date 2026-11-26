@@ -302,4 +302,4 @@ The existing admin-only Hatchable dispatcher may invoke `workflow=ci`, `task=scr
 
 ### Stage 3
 
-See [Stage 3 capability expansion](docs/STAGE3_COMPUTE.md) for 66 reviewed public fixture routes and the bounded DAG workflow. Blocked candidates are excluded from dispatch.
+See [Stage 3 capability expansion](docs/STAGE3_COMPUTE.md) for 73 reviewed public fixture routes and the bounded DAG workflow. Blocked candidates are excluded from dispatch.

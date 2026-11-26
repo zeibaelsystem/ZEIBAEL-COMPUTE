@@ -1,0 +1,115 @@
+{
+  "date": "2026-11-26",
+  "scope": "Seven recovered public synthetic CPU functional fixtures on development PR; production readiness not claimed",
+  "prior_verified": 66,
+  "recovered": 7,
+  "verified_count": 73,
+  "blocked_count": 17,
+  "runs": [
+    {
+      "run_id": 45755642961,
+      "commit": "59f0d1548686fd57ba5deb4533f369c9befc0dd0"
+    },
+    {
+      "run_id": 45755809157,
+      "commit": "68ca077b22982630cebd4242dccce484de726659"
+    },
+    {
+      "run_id": 45755931856,
+      "commit": "a532759fd4c335d9211f3a5f9092042267ea916e"
+    }
+  ],
+  "verified": [
+    {
+      "id": "biosteam",
+      "run_id": 45755642961,
+      "commit": "59f0d1548686fd57ba5deb4533f369c9befc0dd0",
+      "job_id": 139693507471,
+      "manifest_step": "success",
+      "artifact_step": "success",
+      "tested_manifest": "recovery_biosteam",
+      "values": {
+        "water_kmol_h": 5
+      }
+    },
+    {
+      "id": "qsdsan",
+      "run_id": 45755809157,
+      "commit": "68ca077b22982630cebd4242dccce484de726659",
+      "job_id": 139694031721,
+      "manifest_step": "success",
+      "artifact_step": "success",
+      "tested_manifest": "recovery_qsdsan",
+      "values": {
+        "water_molecular_weight": 18.01528,
+        "scope": "sanitation component property only"
+      }
+    },
+    {
+      "id": "sfepy",
+      "run_id": 45755809157,
+      "commit": "68ca077b22982630cebd4242dccce484de726659",
+      "job_id": 139694031601,
+      "manifest_step": "success",
+      "artifact_step": "success",
+      "tested_manifest": "recovery_sfepy",
+      "values": {
+        "nodes": 3,
+        "elements": 1,
+        "scope": "FEM domain and region construction"
+      }
+    },
+    {
+      "id": "psi4",
+      "run_id": 45755809157,
+      "commit": "68ca077b22982630cebd4242dccce484de726659",
+      "job_id": 139694031637,
+      "manifest_step": "success",
+      "artifact_step": "success",
+      "tested_manifest": "recovery_psi4",
+      "values": {
+        "energy_hartree": -1.116759307378158
+      }
+    },
+    {
+      "id": "flink",
+      "run_id": 45755809157,
+      "commit": "68ca077b22982630cebd4242dccce484de726659",
+      "job_id": 139694031736,
+      "manifest_step": "success",
+      "artifact_step": "success",
+      "tested_manifest": "recovery_flink",
+      "values": {
+        "sum": 6,
+        "scope": "local JVM batch"
+      }
+    },
+    {
+      "id": "cp2k",
+      "run_id": 45755931856,
+      "commit": "a532759fd4c335d9211f3a5f9092042267ea916e",
+      "job_id": 139694416308,
+      "manifest_step": "success",
+      "artifact_step": "success",
+      "tested_manifest": "recovery_cp2k",
+      "values": {
+        "energy_hartree": -1.155676308541696,
+        "scope": "coarse public H2 DFT calculation, not production convergence"
+      }
+    },
+    {
+      "id": "nextflow",
+      "run_id": 45755931856,
+      "commit": "a532759fd4c335d9211f3a5f9092042267ea916e",
+      "job_id": 139694416607,
+      "manifest_step": "success",
+      "artifact_step": "success",
+      "tested_manifest": "recovery_nextflow",
+      "values": {
+        "sum": 5,
+        "executor": "local",
+        "version": "25.10.4"
+      }
+    }
+  ]
+}
