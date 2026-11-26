@@ -29,6 +29,18 @@ def run(engine,work):
         c=q.Component("H2O",search_ID="Water",particle_size="Soluble",degradability="Undegradable",organic=False)
         v=float(c.MW); close(v,18.015,.01)
         return {"water_molecular_weight":v,"scope":"sanitation component property only"}
+    if engine=="nextflow":
+        import hashlib, urllib.request, subprocess
+        url="https://github.com/nextflow-io/nextflow/releases/download/v25.10.4/nextflow-25.10.4-dist"
+        with urllib.request.urlopen(url,timeout=90) as response: data=response.read(50_000_001)
+        check(len(data)<=50_000_000 and hashlib.sha256(data).hexdigest()=="60db869a7618783e3ee60183a2b0c6c50ffc67221eabec60800b904991786aaa","Nextflow digest mismatch")
+        exe=work/"nextflow"; exe.write_bytes(data); exe.chmod(0o700)
+        (work/"fixture.nf").write_text("nextflow.enable.dsl=2\nprocess PUBLIC_SUM {\n    publishDir 'results', mode: 'copy'\n    output:\n    path 'result.txt'\n    script:\n    '''\n    echo $((2+3)) > result.txt\n    '''\n}\nworkflow { PUBLIC_SUM() }\n")
+        env={**os.environ,"NXF_OFFLINE":"true","NXF_DISABLE_CHECK_LATEST":"true","NXF_DISABLE_TELEMETRY":"true","NXF_ANSI_LOG":"false","NXF_HOME":str(work/"nxf-home")}
+        r=subprocess.run([str(exe),"run",str(work/"fixture.nf"),"-ansi-log","false"],cwd=work,env=env,capture_output=True,text=True,timeout=120)
+        check(r.returncode==0,r.stdout[-3000:]+r.stderr[-3000:])
+        v=int((work/"results/result.txt").read_text().strip()); check(v==5,"result mismatch")
+        return {"sum":v,"executor":"local","version":"25.10.4"}
     raise ValueError("Unapproved engine")
 
 def main():
