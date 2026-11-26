@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "recovery_biosteam",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/bf/c2/1b8de77cebbe8a825ff2e90a35238f707cb7d5e88f52b6e993686afecd9c/colorpalette-0.3.3.tar.gz#sha256=e4bb8f5b087b5719bd01e39a4df2a646db15cad9fe765234dd8ba85b47488ceb"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--only-binary=:all:",
+          "https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815",
+          "https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca",
+          "numpy==1.26.4",
+          "pandas==2.2.3",
+          "scipy==1.15.3"
+        ],
+        [
+          "python",
+          "scripts/recovery_compute.py",
+          "biosteam"
+        ]
+      ]
+    }
+  ]
+}
