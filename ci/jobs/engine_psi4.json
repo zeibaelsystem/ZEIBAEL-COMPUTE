@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "psi4",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/recovery_conda.py",
+          "psi4"
+        ]
+      ]
+    }
+  ]
+}

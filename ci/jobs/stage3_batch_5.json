@@ -2,7 +2,7 @@
   "schema": 1,
   "jobs": [
     {
-      "id": "recovery_cp2k",
+      "id": "nextflow",
       "runtime": "python",
       "runner": "ubuntu-24.04",
       "timeout_profile": "standard",
@@ -10,8 +10,8 @@
       "commands": [
         [
           "python",
-          "scripts/recovery_conda.py",
-          "cp2k"
+          "scripts/recovery_compute.py",
+          "nextflow"
         ]
       ]
     }

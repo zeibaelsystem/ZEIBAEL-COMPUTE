@@ -2,7 +2,7 @@
   "schema": 1,
   "jobs": [
     {
-      "id": "recovery_sfepy",
+      "id": "cp2k",
       "runtime": "python",
       "runner": "ubuntu-24.04",
       "timeout_profile": "standard",
@@ -11,7 +11,7 @@
         [
           "python",
           "scripts/recovery_conda.py",
-          "sfepy"
+          "cp2k"
         ]
       ]
     }

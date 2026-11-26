@@ -5,16 +5,27 @@
     {
       "id": "biosteam",
       "group": "chemical",
-      "status": "blocked",
+      "status": "verified",
       "license": "MIT",
-      "source": "https://github.com/BioSTEAMDevelopmentGroup/biosteam",
-      "scope": "Local process mixer",
+      "source": "https://pypi.org/project/biosteam/2.51.18/",
+      "scope": "Public water mixer; 2+3=5 kmol/h",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/bf/c2/1b8de77cebbe8a825ff2e90a35238f707cb7d5e88f52b6e993686afecd9c/colorpalette-0.3.3.tar.gz#sha256=e4bb8f5b087b5719bd01e39a4df2a646db15cad9fe765234dd8ba85b47488ceb",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --only-binary=:all: https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815 https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca numpy==1.26.4 pandas==2.2.3 scipy==1.15.3"
       ],
-      "reason": "Pinned ThermoSTEAM source requires colorpalette>=0.3.3 without compatible wheel.",
-      "failed_evidence": {
+      "evidence": {
+        "run_id": 45755642961,
+        "commit": "59f0d1548686fd57ba5deb4533f369c9befc0dd0",
+        "job_id": 139693507471,
+        "manifest_step": "success",
+        "artifact_step": "success",
+        "tested_manifest": "recovery_biosteam",
+        "values": {
+          "water_kmol_h": 5
+        }
+      },
+      "previous_failed_evidence": {
         "run_id": 45659492491,
         "job_id": 139365156489,
         "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
@@ -25,17 +36,29 @@
     {
       "id": "qsdsan",
       "group": "chemical",
-      "status": "blocked",
+      "status": "verified",
       "license": "NCSA / MIT dependency",
-      "source": "https://github.com/QSD-Group/QSDsan",
-      "scope": "Component property; not WWTP flowsheet",
+      "source": "https://pypi.org/project/qsdsan/1.4.3/",
+      "scope": "Water component property only; no WWTP flowsheet",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
-        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --only-binary=:all: https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815 https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca numpy==1.26.4 pandas==2.2.3 scipy==1.15.3",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/bf/c2/1b8de77cebbe8a825ff2e90a35238f707cb7d5e88f52b6e993686afecd9c/colorpalette-0.3.3.tar.gz#sha256=e4bb8f5b087b5719bd01e39a4df2a646db15cad9fe765234dd8ba85b47488ceb",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --only-binary=:all: https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815 https://files.pythonhosted.org/packages/a1/01/259198e3e8834211d2797fdbc27c3c29b06ef36350519dd6bc29a4b5680e/biosteam-2.51.19.tar.gz#sha256=4e7d79a776a3704a3c08bb4982c2d0a0b0acf9dcbf9b3c40e952301256fa5040 numpy==1.26.4 pandas==2.2.3 scipy==1.15.3",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: qsdsan==1.4.3 numpy==1.26.4 pandas==2.2.3"
       ],
-      "reason": "Blocked by the same ThermoSTEAM/colorpalette dependency.",
-      "failed_evidence": {
+      "evidence": {
+        "run_id": 45755809157,
+        "commit": "68ca077b22982630cebd4242dccce484de726659",
+        "job_id": 139694031721,
+        "manifest_step": "success",
+        "artifact_step": "success",
+        "tested_manifest": "recovery_qsdsan",
+        "values": {
+          "water_molecular_weight": 18.01528,
+          "scope": "sanitation component property only"
+        }
+      },
+      "previous_failed_evidence": {
         "run_id": 45659492491,
         "job_id": 139365156494,
         "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
@@ -266,13 +289,25 @@
     {
       "id": "sfepy",
       "group": "mechanical",
-      "status": "blocked",
+      "status": "verified",
       "license": "BSD-3-Clause",
       "source": "https://anaconda.org/conda-forge/sfepy",
-      "scope": "Finite element domain construction",
-      "distribution": "conda-forge only: python=3.12 sfepy=2026.3",
-      "reason": "Conda install passed; functional subprocess returned nonzero; cause not captured.",
-      "failed_evidence": {
+      "scope": "FEM domain construction, 3 nodes and 1 element",
+      "distribution": [],
+      "evidence": {
+        "run_id": 45755809157,
+        "commit": "68ca077b22982630cebd4242dccce484de726659",
+        "job_id": 139694031601,
+        "manifest_step": "success",
+        "artifact_step": "success",
+        "tested_manifest": "recovery_sfepy",
+        "values": {
+          "nodes": 3,
+          "elements": 1,
+          "scope": "FEM domain and region construction"
+        }
+      },
+      "previous_failed_evidence": {
         "run_id": 45659492491,
         "job_id": 139365156876,
         "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
@@ -1042,17 +1077,30 @@
     {
       "id": "flink",
       "group": "data",
-      "status": "blocked",
+      "status": "verified",
       "license": "Apache-2.0",
       "source": "https://pypi.org/project/apache-flink/2.3.0/",
-      "scope": "Local batch SQL only",
+      "scope": "Local JVM batch SQL aggregation",
       "distribution": [
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: setuptools==80.9.0 wheel==0.45.1",
         "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/6b/b0/e595ce2a2527e169c3bcd6c33d2473c1918e0b7f6826a043ca1245dd4e5b/crcmod-1.7.tar.gz#sha256=dc7051a0db5f2bd48665a990d3ec1cc305a466a77358ca4492826f41f283601e",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/c7/11/345f3173809cea7f1a193bfbf02403fff250a3360e0e118a1630985e547d/dill-0.3.1.1.tar.gz#sha256=42d8ef819367516592a825746a18073ced42ca169ab1f5f4044134703e7a049c",
+        "python -m pip install --disable-pip-version-check --no-input --no-build-isolation --no-deps https://files.pythonhosted.org/packages/a2/55/8f8cab2afd404cf578136ef2cc5dfb50baa1761b68c9da1fb1e4eed343c9/docopt-0.6.2.tar.gz#sha256=49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491",
         "python -m pip install --disable-pip-version-check --no-input --only-binary=:all: apache-flink==2.3.0 pandas==2.2.3"
       ],
-      "reason": "Dependency resolution blocked by Apache Beam dill<0.3.2 requirement.",
-      "failed_evidence": {
+      "evidence": {
+        "run_id": 45755809157,
+        "commit": "68ca077b22982630cebd4242dccce484de726659",
+        "job_id": 139694031736,
+        "manifest_step": "success",
+        "artifact_step": "success",
+        "tested_manifest": "recovery_flink",
+        "values": {
+          "sum": 6,
+          "scope": "local JVM batch"
+        }
+      },
+      "previous_failed_evidence": {
         "run_id": 45659492491,
         "job_id": 139365156827,
         "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
@@ -1184,8 +1232,24 @@
     {
       "id": "nextflow",
       "group": "data",
-      "status": "blocked",
-      "reason": "No reviewed executable distribution and functional fixture admitted yet."
+      "status": "verified",
+      "license": "Apache-2.0",
+      "source": "https://github.com/nextflow-io/nextflow/releases/tag/v25.10.4",
+      "scope": "Pinned offline local workflow fixture",
+      "distribution": [],
+      "evidence": {
+        "run_id": 45755931856,
+        "commit": "a532759fd4c335d9211f3a5f9092042267ea916e",
+        "job_id": 139694416607,
+        "manifest_step": "success",
+        "artifact_step": "success",
+        "tested_manifest": "recovery_nextflow",
+        "values": {
+          "sum": 5,
+          "executor": "local",
+          "version": "25.10.4"
+        }
+      }
     },
     {
       "id": "quantum_espresso",
@@ -1196,15 +1260,24 @@
     {
       "id": "cp2k",
       "group": "science",
-      "status": "blocked",
-      "license": "GPL-2.0+",
-      "source": "https://www.cp2k.org/",
-      "scope": "Native local H2 energy calculation",
-      "distribution": [
-        "bash ci/jobs/install_stage3_packages.sh cp2k"
-      ],
-      "reason": "Ubuntu package unavailable on reviewed runner.",
-      "failed_evidence": {
+      "status": "verified",
+      "license": "GPL-2.0-or-later",
+      "source": "https://anaconda.org/conda-forge/cp2k",
+      "scope": "Coarse local H2 DFT energy; not production convergence",
+      "distribution": [],
+      "evidence": {
+        "run_id": 45755931856,
+        "commit": "a532759fd4c335d9211f3a5f9092042267ea916e",
+        "job_id": 139694416308,
+        "manifest_step": "success",
+        "artifact_step": "success",
+        "tested_manifest": "recovery_cp2k",
+        "values": {
+          "energy_hartree": -1.155676308541696,
+          "scope": "coarse public H2 DFT calculation, not production convergence"
+        }
+      },
+      "previous_failed_evidence": {
         "run_id": 45658803666,
         "job_id": 139362692776,
         "commit": "3973db2232a6b38b5a19412c24d3b149d9ffaac0",
@@ -1281,13 +1354,23 @@
     {
       "id": "psi4",
       "group": "science",
-      "status": "blocked",
+      "status": "verified",
       "license": "LGPL-3.0 / BSD / MIT",
       "source": "https://anaconda.org/conda-forge/psi4",
-      "scope": "Independent local H2 Hartree-Fock energy",
-      "distribution": "conda-forge only: python=3.12 psi4=1.11",
-      "reason": "Conda install passed; functional subprocess returned nonzero; cause not captured.",
-      "failed_evidence": {
+      "scope": "Local exact RHF/STO-3G H2 energy",
+      "distribution": [],
+      "evidence": {
+        "run_id": 45755809157,
+        "commit": "68ca077b22982630cebd4242dccce484de726659",
+        "job_id": 139694031637,
+        "manifest_step": "success",
+        "artifact_step": "success",
+        "tested_manifest": "recovery_psi4",
+        "values": {
+          "energy_hartree": -1.116759307378158
+        }
+      },
+      "previous_failed_evidence": {
         "run_id": 45659492491,
         "job_id": 139365156660,
         "commit": "cf41a21d0f895cbcd299e9039af6f53b448371f1",
@@ -1344,6 +1427,6 @@
       }
     }
   ],
-  "verified_count": 66,
-  "blocked_count": 24
+  "verified_count": 73,
+  "blocked_count": 17
 }

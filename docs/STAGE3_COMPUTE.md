@@ -1,8 +1,8 @@
 # Stage 3 capability expansion
 
-66 verified public synthetic capability routes; 24 blocked; separate verified DAG smoke manifest. Prior 99 capability routes unchanged. Routes include extensions and overlapping dependencies, not 165 distinct software packages.
+73 verified public synthetic capability routes; 17 blocked; separate verified DAG smoke manifest. Prior 99 capability routes unchanged. Routes include extensions and overlapping dependencies, not 172 distinct software packages.
 
-[Candidate ledger](../ci/stage3_candidates.json) · [Run and job evidence](../ci/evidence/stage3_2026-11-25.json).
+[Candidate ledger](../ci/stage3_candidates.json) · [Original 66 run and job receipts](../ci/evidence/stage3_2026-11-25.json) · [Seven recovery receipts](../ci/evidence/stage3_recovery_2026-11-26.json).
 
 DAG: single standard runner, max 20 nodes / four threads; local checkpoint/cache only; isolated Python environments; fresh repeat verified. No cross-run persistence, paid fallback, private inputs or production solver certification.
 
@@ -10,8 +10,8 @@ DAG: single standard runner, max 20 nodes / four threads; local checkpoint/cache
 
 | ID | Group | Status | Scope or blocker |
 |---|---|---|---|
-| biosteam | chemical | blocked | Pinned ThermoSTEAM source requires colorpalette>=0.3.3 without compatible wheel. |
-| qsdsan | chemical | blocked | Blocked by the same ThermoSTEAM/colorpalette dependency. |
+| biosteam | chemical | verified | Public water mixer; 2+3=5 kmol/h |
+| qsdsan | chemical | verified | Water component property only; no WWTP flowsheet |
 | foqus | chemical | blocked | No reviewed executable distribution and functional fixture admitted yet. |
 | reaktoro | chemical | verified | Equilibrium solver on neutral salt solution |
 | pyomo_dae | chemical | verified | DAE discretization fixture; extension, not independent engine |
@@ -29,7 +29,7 @@ DAG: single standard runner, max 20 nodes / four threads; local checkpoint/cache
 | project_chrono | mechanical | verified | Local rigid body free fall |
 | mbdyn | mechanical | blocked | No reviewed executable distribution and functional fixture admitted yet. |
 | pyelastica | mechanical | verified | Rod geometry/rest length fixture |
-| sfepy | mechanical | blocked | Conda install passed; functional subprocess returned nonzero; cause not captured. |
+| sfepy | mechanical | verified | FEM domain construction, 3 nodes and 1 element |
 | omsimulator | control | blocked | No reviewed executable distribution and functional fixture admitted yet. |
 | fmpy | control | verified | FMU metadata parsing only |
 | python_control | control | verified | reviewed public synthetic fixture only |
@@ -81,7 +81,7 @@ DAG: single standard runner, max 20 nodes / four threads; local checkpoint/cache
 | layoutparser | media | verified | Local document geometry |
 | opentimelineio | media | verified | reviewed public synthetic fixture only |
 | spark | data | verified | Local Spark aggregation |
-| flink | data | blocked | Dependency resolution blocked by Apache Beam dill<0.3.2 requirement. |
+| flink | data | verified | Local JVM batch SQL aggregation |
 | datafusion | data | verified | reviewed public synthetic fixture only |
 | ibis | data | verified | reviewed public synthetic fixture only |
 | zarr | data | verified | reviewed public synthetic fixture only |
@@ -89,14 +89,14 @@ DAG: single standard runner, max 20 nodes / four threads; local checkpoint/cache
 | vaex | data | verified | Local dataframe aggregation |
 | nats | data | verified | Local loopback messaging |
 | snakemake | data | verified | reviewed public synthetic fixture only |
-| nextflow | data | blocked | No reviewed executable distribution and functional fixture admitted yet. |
+| nextflow | data | verified | Pinned offline local workflow fixture |
 | quantum_espresso | science | blocked | No reviewed executable distribution and functional fixture admitted yet. |
-| cp2k | science | blocked | Ubuntu package unavailable on reviewed runner. |
+| cp2k | science | verified | Coarse local H2 DFT energy; not production convergence |
 | gromacs | science | verified | Trajectory-distance fixture |
 | openmm | science | verified | reviewed public synthetic fixture only |
 | ase | science | verified | reviewed public synthetic fixture only |
 | pyscf | science | verified | Local H2 RHF energy |
-| psi4 | science | blocked | Conda install passed; functional subprocess returned nonzero; cause not captured. |
+| psi4 | science | verified | Local exact RHF/STO-3G H2 energy |
 | pymatgen | science | verified | reviewed public synthetic fixture only |
 | mdanalysis | science | verified | reviewed public synthetic fixture only |
 | gpaw | science | verified | Local DFT with public GPL dataset |

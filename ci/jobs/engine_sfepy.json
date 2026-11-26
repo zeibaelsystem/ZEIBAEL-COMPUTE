@@ -2,7 +2,7 @@
   "schema": 1,
   "jobs": [
     {
-      "id": "recovery_psi4",
+      "id": "sfepy",
       "runtime": "python",
       "runner": "ubuntu-24.04",
       "timeout_profile": "standard",
@@ -11,7 +11,7 @@
         [
           "python",
           "scripts/recovery_conda.py",
-          "psi4"
+          "sfepy"
         ]
       ]
     }

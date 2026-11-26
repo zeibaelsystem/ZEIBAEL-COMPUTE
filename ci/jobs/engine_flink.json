@@ -2,7 +2,7 @@
   "schema": 1,
   "jobs": [
     {
-      "id": "recovery_flink",
+      "id": "flink",
       "runtime": "python",
       "runner": "ubuntu-24.04",
       "timeout_profile": "standard",
