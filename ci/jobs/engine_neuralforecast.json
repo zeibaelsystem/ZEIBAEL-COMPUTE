@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "neuralforecast",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu",
+          "torchvision==0.22.1+cpu",
+          "torchaudio==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "neuralforecast==1.7.7",
+          "torch==2.7.1+cpu",
+          "pytorch-lightning==2.5.1.post0",
+          "numpy==1.26.4",
+          "pandas==2.2.3",
+          "pyarrow==20.0.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "neuralforecast"
+        ]
+      ]
+    }
+  ]
+}

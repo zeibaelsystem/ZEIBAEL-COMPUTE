@@ -1,0 +1,236 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "sundials",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "sundials"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "sundials"
+        ]
+      ]
+    },
+    {
+      "id": "petsc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "petsc"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "petsc"
+        ]
+      ]
+    },
+    {
+      "id": "gromacs",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "gromacs"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "gromacs"
+        ]
+      ]
+    },
+    {
+      "id": "precice",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "precice"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "precice"
+        ]
+      ]
+    },
+    {
+      "id": "reaktoro",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "reaktoro"
+        ]
+      ]
+    },
+    {
+      "id": "pyscf",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "pyscf"
+        ]
+      ]
+    },
+    {
+      "id": "gpaw",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "gpaw"
+        ]
+      ]
+    },
+    {
+      "id": "project_chrono",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "project_chrono"
+        ]
+      ]
+    },
+    {
+      "id": "vaex",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "vaex"
+        ]
+      ]
+    },
+    {
+      "id": "spark",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "spark"
+        ]
+      ]
+    },
+    {
+      "id": "mfem",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "mfem==4.10.0.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mfem"
+        ]
+      ]
+    },
+    {
+      "id": "layoutparser",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/72/73/b3d451dfc523756cf177d3ebb0af76dc7751b341c60e2a21871be400ae29/iopath-0.1.10.tar.gz#sha256=3311c16a4d9137223e20f141655759933e1eda24f8bff166af834af3c645ef01"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "layoutparser==0.3.4",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "layoutparser"
+        ]
+      ]
+    }
+  ]
+}

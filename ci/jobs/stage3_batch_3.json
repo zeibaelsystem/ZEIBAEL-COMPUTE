@@ -1,0 +1,537 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "snakemake",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1",
+          "six==1.17.0"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/bd/df/c9b4e25dce00f6349fd28aadba7b6c3f7431cc8bd4308a158fbe57b6a22e/connection_pool-0.0.3.tar.gz#sha256=bf429e7aef65921c69b4ed48f3d48d3eac1383b05d2df91884705842d974d0dc"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "snakemake==9.27.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "snakemake"
+        ]
+      ]
+    },
+    {
+      "id": "openmm",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "openmm==8.6.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "openmm"
+        ]
+      ]
+    },
+    {
+      "id": "ase",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ase==3.29.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "ase"
+        ]
+      ]
+    },
+    {
+      "id": "pymatgen",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pymatgen==2026.10.24"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pymatgen"
+        ]
+      ]
+    },
+    {
+      "id": "mdanalysis",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "MDAnalysis==2.11.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mdanalysis"
+        ]
+      ]
+    },
+    {
+      "id": "do_mpc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "do-mpc==5.1.2",
+          "casadi==3.7.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "do_mpc"
+        ]
+      ]
+    },
+    {
+      "id": "ncnn",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ncnn==1.0.20250503",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "ncnn"
+        ]
+      ]
+    },
+    {
+      "id": "mnn",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "MNN==3.6.2",
+          "numpy==2.2.6"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mnn"
+        ]
+      ]
+    },
+    {
+      "id": "mlflow",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "mlflow-skinny==3.18.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mlflow"
+        ]
+      ]
+    },
+    {
+      "id": "dvc",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "setuptools==80.9.0",
+          "wheel==0.45.1"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--no-build-isolation",
+          "--no-deps",
+          "https://files.pythonhosted.org/packages/3e/38/7859ff46355f76f8d19459005ca000b6e7012f2f1ca597746cbcd1fbfe5e/antlr4-python3-runtime-4.9.3.tar.gz#sha256=f224469b4168294902bb1efa80a8bf7855f24c99aef99cbefc1bcd3cce77881b"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "dvc==3.67.1"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "dvc"
+        ]
+      ]
+    },
+    {
+      "id": "pyg",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu",
+          "torchvision==0.22.1+cpu",
+          "torchaudio==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "torch-geometric==2.8.1",
+          "torch==2.7.1+cpu",
+          "numpy==2.2.6"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pyg"
+        ]
+      ]
+    },
+    {
+      "id": "neuralforecast",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu",
+          "torchvision==0.22.1+cpu",
+          "torchaudio==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "neuralforecast==1.7.7",
+          "torch==2.7.1+cpu",
+          "pytorch-lightning==2.5.1.post0",
+          "numpy==1.26.4",
+          "pandas==2.2.3",
+          "pyarrow==20.0.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "neuralforecast"
+        ]
+      ]
+    },
+    {
+      "id": "pytorch_forecasting",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "--index-url",
+          "https://download.pytorch.org/whl/cpu",
+          "torch==2.7.1+cpu",
+          "torchvision==0.22.1+cpu",
+          "torchaudio==2.7.1+cpu"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pytorch-forecasting==1.3.0",
+          "torch==2.7.1+cpu",
+          "lightning==2.5.1.post0",
+          "numpy==1.26.4",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pytorch_forecasting"
+        ]
+      ]
+    },
+    {
+      "id": "zipline_reloaded",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "zipline-reloaded==3.2.1",
+          "numpy==2.2.6",
+          "pandas==2.2.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "zipline_reloaded"
+        ]
+      ]
+    },
+    {
+      "id": "nautilus_trader",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "nautilus_trader==1.231.0",
+          "numpy==2.2.6",
+          "pandas==2.3.3"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "nautilus_trader"
+        ]
+      ]
+    },
+    {
+      "id": "nats",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "nats"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "nats-py==2.17.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "nats"
+        ]
+      ]
+    },
+    {
+      "id": "gstreamer",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "gstreamer"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "gstreamer"
+        ]
+      ]
+    },
+    {
+      "id": "mediainfo",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "mediainfo"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mediainfo"
+        ]
+      ]
+    }
+  ]
+}

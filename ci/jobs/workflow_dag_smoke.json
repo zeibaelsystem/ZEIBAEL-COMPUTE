@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "workflow_dag_smoke",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/workflow_dag_smoke.py"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "pyscf",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "scripts/stage3_conda.py",
+          "pyscf"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "ncnn",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ncnn==1.0.20250503",
+          "numpy==1.26.4"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "ncnn"
+        ]
+      ]
+    }
+  ]
+}

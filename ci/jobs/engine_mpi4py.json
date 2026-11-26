@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "mpi4py",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "bash",
+          "ci/jobs/install_stage3_packages.sh",
+          "mpi4py"
+        ],
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "mpi4py==4.1.2"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "mpi4py"
+        ]
+      ]
+    }
+  ]
+}

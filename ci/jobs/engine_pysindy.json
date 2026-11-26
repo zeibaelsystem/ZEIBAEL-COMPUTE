@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "pysindy",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "pysindy==2.1.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "pysindy"
+        ]
+      ]
+    }
+  ]
+}

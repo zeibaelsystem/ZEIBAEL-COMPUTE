@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "ibis",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "--only-binary=:all:",
+          "ibis-framework[duckdb]==12.0.0",
+          "duckdb==1.4.3",
+          "pyarrow==20.0.0",
+          "pyarrow-hotfix==0.7",
+          "packaging==25.0"
+        ],
+        [
+          "python",
+          "scripts/stage3_compute.py",
+          "ibis"
+        ]
+      ]
+    }
+  ]
+}

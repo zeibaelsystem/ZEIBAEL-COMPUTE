@@ -1,0 +1,30 @@
+"""Reviewed public conda-forge installation + functional regression only."""
+import hashlib,json,os,sys,subprocess,tarfile,tempfile,urllib.request,shutil
+from pathlib import Path
+SPECS=json.loads("{\"reaktoro\":{\"packages\":[\"python=3.12\",\"reaktoro=2.13.0\"],\"body\":\"from reaktoro import PhreeqcDatabase,AqueousPhase,ChemicalSystem,ChemicalState,EquilibriumSolver,AqueousProps\\ndb=PhreeqcDatabase(\\\"phreeqc.dat\\\"); aq=AqueousPhase(\\\"H2O H+ OH- Na+ Cl-\\\"); system=ChemicalSystem(db,aq)\\ns=ChemicalState(system); s.temperature(25,\\\"celsius\\\"); s.pressure(1,\\\"bar\\\"); s.set(\\\"H2O\\\",1,\\\"kg\\\"); s.set(\\\"Na+\\\",.01,\\\"mol\\\"); s.set(\\\"Cl-\\\",.01,\\\"mol\\\")\\nresult=EquilibriumSolver(system).solve(s); assert result.succeeded()\\nv=float(AqueousProps(s).pH()); assert 6<v<8\\nreturn {\\\"pH\\\":v}\"},\"pyscf\":{\"packages\":[\"python=3.11\",\"pyscf=2.15.1\"],\"body\":\"from pyscf import gto,scf\\nm=gto.M(atom=\\\"H 0 0 0; H 0 0 0.74\\\",basis=\\\"sto-3g\\\",verbose=0)\\nf=scf.RHF(m); v=float(f.kernel()); assert f.converged and abs(v+1.1167593)<1e-5\\nreturn {\\\"energy_hartree\\\":v,\\\"converged\\\":True}\"},\"gpaw\":{\"packages\":[\"python=3.12\",\"gpaw=26.7.0=py312_nompi_omp_8\",\"gpaw-data=1.0.1\"],\"body\":\"from ase import Atoms\\nfrom gpaw import GPAW\\na=Atoms(\\\"H2\\\",positions=[[0,0,0],[0,0,.74]],cell=(6,6,6)); a.center()\\na.calc=GPAW(mode=\\\"fd\\\",h=.25,xc=\\\"PBE\\\",txt=None,maxiter=100)\\nv=float(a.get_potential_energy()); assert -20<v<0\\nreturn {\\\"energy_eV\\\":v,\\\"scope\\\":\\\"coarse synthetic H2 DFT, not converged basis study\\\"}\"},\"project_chrono\":{\"packages\":[\"python=3.12\",\"pychrono=10.0.0\"],\"body\":\"import pychrono as c\\ns=c.ChSystemNSC(); s.SetGravitationalAcceleration(c.ChVector3d(0,-9.81,0))\\nb=c.ChBody(); b.SetMass(1); b.SetPos(c.ChVector3d(0,0,0)); s.AddBody(b)\\nfor _ in range(100): s.DoStepDynamics(.001)\\nv=float(b.GetPos().y); assert abs(v+.04905)<.002\\nreturn {\\\"y_m\\\":v,\\\"time_s\\\":.1}\"},\"vaex\":{\"packages\":[\"python=3.12\",\"vaex-core=4.20.0\"],\"body\":\"import vaex,numpy as np\\na=vaex.from_arrays(x=np.arange(1,6)); v=int(a.sum(\\\"x\\\")); assert v==15\\nreturn {\\\"sum\\\":v}\"},\"spark\":{\"packages\":[\"python=3.12\",\"pyspark=4.3.0\"],\"body\":\"import os\\nos.environ[\\\"SPARK_LOCAL_IP\\\"]=\\\"127.0.0.1\\\"\\nfrom pyspark.sql import SparkSession\\ns=SparkSession.builder.master(\\\"local[2]\\\").appName(\\\"public-fixture\\\").config(\\\"spark.ui.enabled\\\",\\\"false\\\").config(\\\"spark.driver.host\\\",\\\"127.0.0.1\\\").config(\\\"spark.driver.bindAddress\\\",\\\"127.0.0.1\\\").getOrCreate()\\ntry:\\n    v=int(s.range(1,6).groupBy().sum(\\\"id\\\").collect()[0][0]); assert v==15\\nfinally: s.stop()\\nreturn {\\\"sum\\\":v,\\\"scope\\\":\\\"local JVM, no remote cluster\\\"}\"}}")
+
+def main():
+    if len(sys.argv)!=2 or sys.argv[1] not in SPECS: raise SystemExit("Unapproved conda fixture")
+    engine=sys.argv[1]; spec=SPECS[engine]
+    with tempfile.TemporaryDirectory(prefix="stage3-conda-") as td:
+        root=Path(td)
+        if shutil.disk_usage(root).free<6*1024**3: raise RuntimeError("Insufficient disk")
+        url="https://conda.anaconda.org/conda-forge/linux-64/micromamba-2.10.0-0.tar.bz2"
+        with urllib.request.urlopen(url,timeout=60) as response: data=response.read(10_000_001)
+        if len(data)>10_000_000 or hashlib.sha256(data).hexdigest()!="9a97976244929bbae28fb1fae504e74a3e7e6d1932870e3a03321f01b7fbd07b": raise RuntimeError("micromamba digest mismatch")
+        archive=root/"m.tar.bz2"; archive.write_bytes(data)
+        with tarfile.open(archive) as t: t.extractall(root,members=[t.getmember("bin/micromamba")],filter="data")
+        exe=root/"bin/micromamba"; prefix=root/"env"
+        env=os.environ.copy()
+        env.update(OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1",MKL_NUM_THREADS="1",CUDA_VISIBLE_DEVICES="",MAMBA_ROOT_PREFIX=str(root/"mamba"),DO_NOT_TRACK="1")
+        base=[str(exe),"--no-rc","--root-prefix",str(root/"mamba")]
+        subprocess.run([*base,"create","-y","-p",str(prefix),"--override-channels","-c","https://conda.anaconda.org/conda-forge","--strict-channel-priority",*spec["packages"]],cwd=root,env=env,timeout=900,check=True)
+        fixture=root/"fixture.py"
+        fixture.write_text("import json\ndef run():\n"+"\n".join("    "+l for l in spec["body"].splitlines())+"\nprint('RESULT='+json.dumps(run(),allow_nan=False))\n")
+        p=subprocess.run([*base,"run","-p",str(prefix),"python",str(fixture)],cwd=root,env=env,timeout=180,check=True,capture_output=True,text=True)
+        vals=json.loads(next(l[7:] for l in p.stdout.splitlines() if l.startswith("RESULT=")))
+        result={"engine":engine,"input":"public_synthetic","status":"success","values":vals,"distribution":"conda-forge only","package_specs":spec["packages"]}
+        out=Path(os.environ["ZEIBAEL_OUTPUT_DIR"])/"files"; out.mkdir(parents=True,exist_ok=True)
+        (out/"engine_result.json").write_text(json.dumps(result,indent=2,allow_nan=False)+"\n")
+        print("ZEIBAEL_ENGINE_RESULT="+json.dumps(result,allow_nan=False))
+if __name__=="__main__": main()
