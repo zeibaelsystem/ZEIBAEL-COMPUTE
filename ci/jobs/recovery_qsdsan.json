@@ -40,7 +40,7 @@
           "--no-build-isolation",
           "--only-binary=:all:",
           "https://files.pythonhosted.org/packages/f8/68/19b26cfa5646a4fbb8119cd14d5212ddb0f099ab3e3de5524d147dfd7c91/thermosteam-0.51.17.tar.gz#sha256=2f0434c52d72a060b1afa16d9239ef05de0e988f2a1ba2d2de49ca81a8cf4815",
-          "https://files.pythonhosted.org/packages/39/76/1e8922bcb02251ddeb69f4ba9e585b3645cd88ecaeb726c8b704ca714ae9/biosteam-2.51.18.tar.gz#sha256=712896edee27ca7d63169eb1ded24ca7334d2f3dddd7344f15dc26aea6b35dca",
+          "https://files.pythonhosted.org/packages/a1/01/259198e3e8834211d2797fdbc27c3c29b06ef36350519dd6bc29a4b5680e/biosteam-2.51.19.tar.gz#sha256=4e7d79a776a3704a3c08bb4982c2d0a0b0acf9dcbf9b3c40e952301256fa5040",
           "numpy==1.26.4",
           "pandas==2.2.3",
           "scipy==1.15.3"
