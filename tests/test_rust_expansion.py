@@ -33,5 +33,23 @@ class RustExpansionContract(unittest.TestCase):
         self.assertIn("both_barriers_stop_first", source)
         self.assertIn("transaction_cost", source)
 
+    def test_exact_license_file_exception_is_checksum_bound(self):
+        from scripts.rust_expansion import review_package_license
+        import tempfile
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "LICENSE").write_text("Apache License\nVersion 2.0, January 2004\nEND OF TERMS AND CONDITIONS\n")
+            pkg = {"name":"polars-arrow-format","version":"0.1.0","license":None,
+                   "license_file":"LICENSE","manifest_path":str(root/"Cargo.toml")}
+            checksum = "19b0ef2474af9396b19025b189d96e992311e6a47f90c53cd998b36c4c64b84c"
+            self.assertEqual(review_package_license(pkg, checksum), "Apache-2.0")
+            for changed, check in [(dict(pkg,version="0.1.1"),checksum),(pkg,"wrong"),
+                                   (dict(pkg,license_file="../LICENSE"),checksum)]:
+                with self.assertRaises(ValueError):
+                    review_package_license(changed,check)
+            (root / "LICENSE").write_text("Unknown license")
+            with self.assertRaises(ValueError):
+                review_package_license(pkg,checksum)
+
 if __name__ == "__main__":
     unittest.main()
