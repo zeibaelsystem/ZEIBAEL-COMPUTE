@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "rust-pyo3",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "pyo3"
+        ]
+      ]
+    }
+  ]
+}
