@@ -73,5 +73,16 @@ class RustExpansionContract(unittest.TestCase):
         with self.assertRaises(ValueError):
             choose_reviewed_runner("rust", {}, CORE_VERIFIED["rust"], "short", runner="ubuntu-slim")
 
+    def test_spdx_alternatives_do_not_require_rejected_license_branch(self):
+        from scripts.rust_expansion import permitted_license_expression
+        for expression in ["MIT OR Apache-2.0 OR LGPL-2.1-or-later",
+                           "MIT/Apache-2.0", "Apache-2.0 WITH LLVM-exception",
+                           "(MIT OR GPL-3.0-only) AND BSD-3-Clause"]:
+            self.assertTrue(permitted_license_expression(expression), expression)
+        for expression in ["MIT AND LGPL-2.1-or-later", "GPL-3.0-only",
+                           "MIT OR", "MIT nonsense", "MIT$OR Apache-2.0",
+                           "MIT WITH Unknown-exception", "(MIT OR Apache-2.0", ""]:
+            self.assertFalse(permitted_license_expression(expression), expression)
+
 if __name__ == "__main__":
     unittest.main()
