@@ -218,6 +218,7 @@ PERMITTED_LICENSES = {
 CRATES_SOURCE = "registry+https://github.com/rust-lang/crates.io-index"
 
 LOCK_HASHES = {
+    "polars": "5fc30e7ef881ef3ef6a75a00f9bbce0fa62fb91987fc800afc6da2583267f64c",
     "criterion": "1695ba30f7c30731689ca47ec12032a2d23edc3915370665be4a26f93c977352",
     "ndarray": "19a2ed5583fd0834021bf6a7099463ee229d5b48cddbc438737f8fa5b7a53889",
     "pyo3": "e810a468af353e462e08a68e3944268ffa84efff044603984dba46fd6fbf74c9",
@@ -378,9 +379,6 @@ def execute_case(name, output):
                 if hashlib.sha256(lock).hexdigest() != LOCK_HASHES[name]:
                     raise ValueError("reviewed lockfile hash mismatch: " + name)
                 (root / "Cargo.lock").write_bytes(lock)
-            elif name == "polars":
-                # Only this not-yet-promoted recovery probe may resolve a fresh lock.
-                run_command(["cargo","generate-lockfile"],root)
             else:
                 raise ValueError("missing reviewed lockfile: " + name)
             run_command(["cargo","fetch","--locked"],root)
