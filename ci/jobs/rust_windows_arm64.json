@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "rust-windows-arm64",
+      "runtime": "rust",
+      "runner": "windows-11-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "Windows",
+          "ARM64"
+        ],
+        [
+          "rustc",
+          "--version"
+        ],
+        [
+          "cargo",
+          "test",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml",
+          "--",
+          "1000000",
+          "4"
+        ]
+      ]
+    }
+  ]
+}
