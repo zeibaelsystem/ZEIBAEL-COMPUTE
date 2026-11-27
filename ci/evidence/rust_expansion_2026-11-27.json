@@ -1,0 +1,186 @@
+{
+  "schema": 1,
+  "date": "2026-11-27",
+  "runId": 45985551586,
+  "commit": "e0865382178fe13408485bc6188a3cfaf3fa12a5",
+  "aggregateJobId": 140460611817,
+  "aggregateStatus": "failure",
+  "jobCount": 15,
+  "successCount": 14,
+  "failureCount": 1,
+  "qualityRunId": 45985406119,
+  "redRunId": 45985127341,
+  "qualityTests": {
+    "passed": 178,
+    "skipped": 2,
+    "failed": 0
+  },
+  "scope": "PUBLIC_SYNTHETIC_FIXTURES_ONLY",
+  "jobs": [
+    {
+      "id": "rust_rayon",
+      "jobId": 140460188815,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 15.292,
+      "marker": "RAYON_REDUCTION=333358333950005",
+      "lockSha256": "a05e4d7f50b5e95c2bfd5e0f692cc8b20a5dc7ae1c0b313ec5bdda4d787666c0"
+    },
+    {
+      "id": "rust_tokio",
+      "jobId": 140460188869,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 15.066,
+      "marker": "TOKIO_ASYNC_SUM=1496",
+      "lockSha256": "daa7a3909407ed8cae6692651f60a7e1a91519cb9bc8e6e7a9e5b57eb70c58b3"
+    },
+    {
+      "id": "rust_ndarray",
+      "jobId": 140460188896,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 11.774,
+      "marker": "NDARRAY_MATRIX_OK",
+      "lockSha256": "19a2ed5583fd0834021bf6a7099463ee229d5b48cddbc438737f8fa5b7a53889"
+    },
+    {
+      "id": "rust_criterion",
+      "jobId": 140460188873,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 37.989,
+      "marker": "Criterion measured benchmark",
+      "lockSha256": "1695ba30f7c30731689ca47ec12032a2d23edc3915370665be4a26f93c977352"
+    },
+    {
+      "id": "rust_pyo3",
+      "jobId": 140460188907,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 16.066,
+      "marker": "PYO3_EXTENSION_OK",
+      "lockSha256": "e810a468af353e462e08a68e3944268ffa84efff044603984dba46fd6fbf74c9"
+    },
+    {
+      "id": "rust_tooling",
+      "jobId": 140460188874,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 7.814,
+      "marker": "rustfmt and Clippy passed; Rust test passed"
+    },
+    {
+      "id": "rust_simd",
+      "jobId": 140460188846,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 9.699,
+      "marker": "SSE2_VECTOR_OK"
+    },
+    {
+      "id": "rust_wasm",
+      "jobId": 140460188838,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 10.783,
+      "marker": "WASM_EXECUTION_OK"
+    },
+    {
+      "id": "rust_backtest",
+      "jobId": 140460188954,
+      "runner": "ubuntu-24.04",
+      "status": "success",
+      "durationSeconds": 2.029,
+      "marker": "4 tests passed"
+    },
+    {
+      "id": "rust_linux_arm64",
+      "jobId": 140460189026,
+      "runner": "ubuntu-24.04-arm",
+      "status": "success",
+      "rustUnitTests": 4,
+      "samples": 1000000,
+      "workers": 4,
+      "serialHits": 785811,
+      "parallelHits": 785811,
+      "pi": 3.143244,
+      "serial_ns": 1843204,
+      "parallel_ns": 805327
+    },
+    {
+      "id": "rust_windows_x64",
+      "jobId": 140460189040,
+      "runner": "windows-2022",
+      "status": "success",
+      "rustUnitTests": 4,
+      "samples": 1000000,
+      "workers": 4,
+      "serialHits": 785811,
+      "parallelHits": 785811,
+      "pi": 3.143244,
+      "serial_ns": 3318300,
+      "parallel_ns": 1744000
+    },
+    {
+      "id": "rust_windows_arm64",
+      "jobId": 140460189017,
+      "runner": "windows-11-arm",
+      "status": "success",
+      "rustUnitTests": 4,
+      "samples": 1000000,
+      "workers": 4,
+      "serialHits": 785811,
+      "parallelHits": 785811,
+      "pi": 3.143244,
+      "serial_ns": 1856300,
+      "parallel_ns": 856800
+    },
+    {
+      "id": "rust_macos_arm64",
+      "jobId": 140460189011,
+      "runner": "macos-15",
+      "status": "success",
+      "rustUnitTests": 4,
+      "samples": 1000000,
+      "workers": 4,
+      "serialHits": 785811,
+      "parallelHits": 785811,
+      "pi": 3.143244,
+      "serial_ns": 1211542,
+      "parallel_ns": 2093375
+    },
+    {
+      "id": "rust_macos_x64",
+      "jobId": 140460189050,
+      "runner": "macos-15-intel",
+      "status": "success",
+      "rustUnitTests": 4,
+      "samples": 1000000,
+      "workers": 4,
+      "serialHits": 785811,
+      "parallelHits": 785811,
+      "pi": 3.143244,
+      "serial_ns": 6891550,
+      "parallel_ns": 4549126
+    },
+    {
+      "id": "rust_polars",
+      "jobId": 140460188772,
+      "runner": "ubuntu-24.04",
+      "status": "failure",
+      "reason": "polars-arrow-format 0.1.0 lacks SPDX metadata; package license-file requires explicit review"
+    }
+  ],
+  "licenseReview": {
+    "package": "polars-arrow-format",
+    "version": "0.1.0",
+    "checksum": "19b0ef2474af9396b19025b189d96e992311e6a47f90c53cd998b36c4c64b84c",
+    "license": "Apache-2.0",
+    "sources": [
+      "https://docs.rs/crate/polars-arrow-format/0.1.0/source/LICENSE",
+      "https://docs.rs/crate/polars-arrow-format/0.1.0/source/Cargo.toml",
+      "https://crates.io/api/v1/crates/polars-arrow-format/0.1.0"
+    ]
+  }
+}
