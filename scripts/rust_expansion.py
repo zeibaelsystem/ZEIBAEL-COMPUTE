@@ -215,6 +215,15 @@ PERMITTED_LICENSES = {
 }
 CRATES_SOURCE = "registry+https://github.com/rust-lang/crates.io-index"
 
+LOCK_HASHES = {
+    "criterion": "1695ba30f7c30731689ca47ec12032a2d23edc3915370665be4a26f93c977352",
+    "ndarray": "19a2ed5583fd0834021bf6a7099463ee229d5b48cddbc438737f8fa5b7a53889",
+    "pyo3": "e810a468af353e462e08a68e3944268ffa84efff044603984dba46fd6fbf74c9",
+    "rayon": "a05e4d7f50b5e95c2bfd5e0f692cc8b20a5dc7ae1c0b313ec5bdda4d787666c0",
+    "tokio": "daa7a3909407ed8cae6692651f60a7e1a91519cb9bc8e6e7a9e5b57eb70c58b3"
+}
+LOCK_ROOT = Path(__file__).resolve().parents[1] / "ci/fixtures/rust_expansion/locks"
+
 def run_command(argv, root, *, capture=False):
     result = subprocess.run(argv, cwd=root, text=True, encoding="utf-8", errors="replace",
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=420)
@@ -303,7 +312,16 @@ def execute_case(name, output):
         if mode == "tooling":
             run_command(["rustup","component","add","rustfmt","clippy"],root)
         if case.get("dependencies"):
-            run_command(["cargo","generate-lockfile"],root)
+            if name in LOCK_HASHES:
+                lock = (LOCK_ROOT / (name + ".lock")).read_bytes()
+                if hashlib.sha256(lock).hexdigest() != LOCK_HASHES[name]:
+                    raise ValueError("reviewed lockfile hash mismatch: " + name)
+                (root / "Cargo.lock").write_bytes(lock)
+            elif name == "polars":
+                # Only this not-yet-promoted recovery probe may resolve a fresh lock.
+                run_command(["cargo","generate-lockfile"],root)
+            else:
+                raise ValueError("missing reviewed lockfile: " + name)
             run_command(["cargo","fetch","--locked"],root)
         else:
             run_command(["cargo","generate-lockfile","--offline"],root)
