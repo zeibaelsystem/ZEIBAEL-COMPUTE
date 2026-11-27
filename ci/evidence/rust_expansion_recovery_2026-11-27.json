@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-27",
+  "scope": "Public synthetic fixtures only; crate-backed routes Ubuntu x64; native platform probes standard library only.",
+  "batch": {
+    "run_id": 45986606377,
+    "passed": 14,
+    "failed": 1,
+    "aggregate_job_id": 140464239647
+  },
+  "recovery": {
+    "run_id": 45987073960,
+    "job_id": 140465388898,
+    "aggregate_job_id": 140465763566,
+    "status": "success",
+    "route": "rust_polars",
+    "registry_dependencies": 111,
+    "filter_sum": 50,
+    "lock_sha256": "5fc30e7ef881ef3ef6a75a00f9bbce0fa62fb91987fc800afc6da2583267f64c",
+    "lock_git_blob": "b2eeee514a194ff01c609ac625fbc60d927921d5",
+    "artifact_id": 15191274668
+  },
+  "successful_jobs": {
+    "rust_rayon": 140463829122,
+    "rust_tokio": 140463829024,
+    "rust_ndarray": 140463829220,
+    "rust_criterion": 140463829058,
+    "rust_pyo3": 140463829137,
+    "rust_tooling": 140463829139,
+    "rust_simd": 140463829051,
+    "rust_wasm": 140463829047,
+    "rust_backtest": 140463829150,
+    "rust_linux_arm64": 140463829100,
+    "rust_windows_x64": 140463829322,
+    "rust_windows_arm64": 140463829126,
+    "rust_macos_arm64": 140463829116,
+    "rust_macos_x64": 140463829241
+  },
+  "historical_failures": [
+    "45985551586: polars-arrow-format license-file metadata required exact verified evidence",
+    "45986606377: r-efi alternative SPDX license expression needed choice-aware parser"
+  ],
+  "final_locked_batch": "pending"
+}
