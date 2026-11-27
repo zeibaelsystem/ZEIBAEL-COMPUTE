@@ -19,10 +19,12 @@ billing. Public crates.io acquisition uses no credentials or account.
 Direct dependency versions are exact pins verified against crates.io metadata:
 Rayon 1.10.0, Tokio 1.44.2, ndarray 0.16.1, Polars 0.46.0, Criterion 0.5.1,
 PyO3 0.23.5. The selected releases were non-yanked and MIT/Apache licensed.
-Rayon, Tokio, ndarray, Criterion and PyO3 now reuse byte-identical lockfiles
-from successful run 45985551586, with pinned SHA-256 checks. Only the Polars
-recovery probe may resolve a fresh lock until its successful receipt is
-captured. Fetch public registry packages by lock, verify registry checksums,
+All six crate-backed routes reuse byte-identical reviewed lockfiles, with
+pinned SHA-256 checks. Polars was recovered in run 45987073960 (111 registry
+dependencies, filter/sum = 50); the other five were reverified with committed
+locks in run 45986606377. Missing locks fail closed. SPDX alternatives are
+parsed as license choices, while conjunctions require every obligation to
+be admitted. Fetch public registry packages by lock, verify registry checksums,
 source and reviewed license evidence, and execute with `--offline --locked`.
 Lockfile, receipt and dependency metadata are uploaded as one-day public
 output artifacts. No vulnerability or production
@@ -50,3 +52,7 @@ first-batch evidence: `ci/evidence/rust_expansion_2026-11-27.json` (14/15
 jobs succeeded; Polars correctly stopped on license metadata). The exact
 polars-arrow-format 0.1.0 archive was separately verified as Apache-2.0
 via its published license file and crates.io checksum; no general exception.
+
+The recovery receipt is `ci/evidence/rust_expansion_recovery_2026-11-27.json`.
+It records 15 successful route receipts across the batch and recovery runs;
+this is not a claim of a single all-green batch before final rerun.

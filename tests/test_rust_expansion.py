@@ -54,7 +54,7 @@ class RustExpansionContract(unittest.TestCase):
     def test_verified_lockfiles_are_byte_identical(self):
         import hashlib
         from scripts.rust_expansion import LOCK_HASHES, LOCK_ROOT
-        self.assertEqual(set(LOCK_HASHES), {"rayon","tokio","ndarray","criterion","pyo3"})
+        self.assertEqual(set(LOCK_HASHES), {"rayon","tokio","ndarray","criterion","pyo3","polars"})
         for name, expected in LOCK_HASHES.items():
             lock = (LOCK_ROOT / (name + ".lock")).read_bytes()
             self.assertEqual(hashlib.sha256(lock).hexdigest(), expected)
