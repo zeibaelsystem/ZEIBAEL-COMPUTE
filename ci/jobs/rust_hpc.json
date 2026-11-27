@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "rust-hpc",
+      "language": "Rust",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "cargo",
+          "test",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "build",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml",
+          "--",
+          "1000000",
+          "4"
+        ]
+      ]
+    }
+  ]
+}
