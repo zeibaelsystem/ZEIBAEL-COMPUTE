@@ -9,7 +9,7 @@ BUILTIN_RUNNERS = {
     "python": ("ubuntu-24.04",),
     "node": ("ubuntu-24.04",),
     "go": ("ubuntu-24.04",),
-    "rust": ("ubuntu-24.04",),
+    "rust": ("ubuntu-24.04", "ubuntu-24.04-arm", "windows-2022", "windows-11-arm", "macos-15", "macos-15-intel"),
     "java": ("ubuntu-24.04",),
     "docker": ("ubuntu-24.04",),
     "php": ("ubuntu-24.04",),
