@@ -1,0 +1,425 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "rust-rayon",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "rayon"
+        ]
+      ]
+    },
+    {
+      "id": "rust-tokio",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "tokio"
+        ]
+      ]
+    },
+    {
+      "id": "rust-ndarray",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "ndarray"
+        ]
+      ]
+    },
+    {
+      "id": "rust-polars",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "polars"
+        ]
+      ]
+    },
+    {
+      "id": "rust-criterion",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "criterion"
+        ]
+      ]
+    },
+    {
+      "id": "rust-pyo3",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "long",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "pyo3"
+        ]
+      ]
+    },
+    {
+      "id": "rust-tooling",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "tooling"
+        ]
+      ]
+    },
+    {
+      "id": "rust-simd",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "simd"
+        ]
+      ]
+    },
+    {
+      "id": "rust-wasm",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "wasm"
+        ]
+      ]
+    },
+    {
+      "id": "rust-backtest",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "standard",
+      "output_files": true,
+      "requirements": {
+        "os": "linux",
+        "arch": "x64",
+        "min_cpu": 4,
+        "toolchains": [
+          "rustc",
+          "cargo"
+        ]
+      },
+      "commands": [
+        [
+          "python",
+          "scripts/rust_expansion.py",
+          "backtest"
+        ]
+      ]
+    },
+    {
+      "id": "rust-linux-arm64",
+      "runtime": "rust",
+      "runner": "ubuntu-24.04-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "Linux",
+          "ARM64"
+        ],
+        [
+          "rustc",
+          "--version"
+        ],
+        [
+          "cargo",
+          "test",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml",
+          "--",
+          "1000000",
+          "4"
+        ]
+      ]
+    },
+    {
+      "id": "rust-windows-x64",
+      "runtime": "rust",
+      "runner": "windows-2022",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "Windows",
+          "X64"
+        ],
+        [
+          "rustc",
+          "--version"
+        ],
+        [
+          "cargo",
+          "test",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml",
+          "--",
+          "1000000",
+          "4"
+        ]
+      ]
+    },
+    {
+      "id": "rust-windows-arm64",
+      "runtime": "rust",
+      "runner": "windows-11-arm",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "Windows",
+          "ARM64"
+        ],
+        [
+          "rustc",
+          "--version"
+        ],
+        [
+          "cargo",
+          "test",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml",
+          "--",
+          "1000000",
+          "4"
+        ]
+      ]
+    },
+    {
+      "id": "rust-macos-arm64",
+      "runtime": "rust",
+      "runner": "macos-15",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "macOS",
+          "ARM64"
+        ],
+        [
+          "rustc",
+          "--version"
+        ],
+        [
+          "cargo",
+          "test",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml",
+          "--",
+          "1000000",
+          "4"
+        ]
+      ]
+    },
+    {
+      "id": "rust-macos-x64",
+      "runtime": "rust",
+      "runner": "macos-15-intel",
+      "timeout_profile": "standard",
+      "commands": [
+        [
+          "python",
+          "ci/fixtures/python/runner_check.py",
+          "macOS",
+          "X64"
+        ],
+        [
+          "rustc",
+          "--version"
+        ],
+        [
+          "cargo",
+          "test",
+          "--offline",
+          "--locked",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml"
+        ],
+        [
+          "cargo",
+          "run",
+          "--offline",
+          "--locked",
+          "--release",
+          "--manifest-path",
+          "ci/fixtures/rust_hpc/Cargo.toml",
+          "--",
+          "1000000",
+          "4"
+        ]
+      ]
+    }
+  ]
+}
