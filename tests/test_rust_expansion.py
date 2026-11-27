@@ -33,5 +33,45 @@ class RustExpansionContract(unittest.TestCase):
         self.assertIn("both_barriers_stop_first", source)
         self.assertIn("transaction_cost", source)
 
+    def test_exact_license_file_exception_is_checksum_bound(self):
+        from scripts.rust_expansion import review_package_license
+        import tempfile
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "LICENSE").write_text("Apache License\nVersion 2.0, January 2004\nEND OF TERMS AND CONDITIONS\n")
+            pkg = {"name":"polars-arrow-format","version":"0.1.0","license":None,
+                   "license_file":"LICENSE","manifest_path":str(root/"Cargo.toml")}
+            checksum = "19b0ef2474af9396b19025b189d96e992311e6a47f90c53cd998b36c4c64b84c"
+            self.assertEqual(review_package_license(pkg, checksum), "Apache-2.0")
+            for changed, check in [(dict(pkg,version="0.1.1"),checksum),(pkg,"wrong"),
+                                   (dict(pkg,license_file="../LICENSE"),checksum)]:
+                with self.assertRaises(ValueError):
+                    review_package_license(changed,check)
+            (root / "LICENSE").write_text("Unknown license")
+            with self.assertRaises(ValueError):
+                review_package_license(pkg,checksum)
+
+    def test_verified_lockfiles_are_byte_identical(self):
+        import hashlib
+        from scripts.rust_expansion import LOCK_HASHES, LOCK_ROOT
+        self.assertEqual(set(LOCK_HASHES), {"rayon","tokio","ndarray","criterion","pyo3"})
+        for name, expected in LOCK_HASHES.items():
+            lock = (LOCK_ROOT / (name + ".lock")).read_bytes()
+            self.assertEqual(hashlib.sha256(lock).hexdigest(), expected)
+
+    def test_verified_rust_native_runner_requirements(self):
+        from scripts.runtime_resources import CORE_VERIFIED, RUNNER_SPECS, choose_reviewed_runner
+        from scripts.runtime_router import BUILTIN_RUNNERS, select_runner
+        expected = PLATFORMS | {"ubuntu-24.04"}
+        self.assertEqual(CORE_VERIFIED["rust"], expected)
+        self.assertEqual(set(BUILTIN_RUNNERS["rust"]), expected)
+        self.assertEqual(select_runner("rust"), "ubuntu-24.04")
+        for runner in expected:
+            spec = RUNNER_SPECS[runner]
+            selected = choose_reviewed_runner("rust", {"os":spec["os"],"arch":spec["arch"],"toolchains":["rustc","cargo"]}, CORE_VERIFIED["rust"], "standard")
+            self.assertEqual(selected, runner)
+        with self.assertRaises(ValueError):
+            choose_reviewed_runner("rust", {}, CORE_VERIFIED["rust"], "short", runner="ubuntu-slim")
+
 if __name__ == "__main__":
     unittest.main()

@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 from pathlib import Path
 
 CASES = {
@@ -91,9 +92,11 @@ fn tabular_filter_and_aggregation() -> PolarsResult<()> {
 use criterion::{criterion_group, criterion_main, Criterion};
 use std::hint::black_box;
 fn bench(c: &mut Criterion) {
+    let values: Vec<u64> = (0..10_000u64).collect();
+    assert_eq!(values.iter().map(|x| x*x).sum::<u64>(), 333283335000);
     c.bench_function("zeibael_sum_squares", |b| b.iter(|| {
-        let n = black_box(10_000u64);
-        black_box((0..n).map(|x| x*x).sum::<u64>())
+        let data = black_box(values.as_slice());
+        black_box(data.iter().map(|x| x*x).sum::<u64>())
     }));
 }
 criterion_group!(benches, bench);
@@ -214,6 +217,15 @@ PERMITTED_LICENSES = {
 }
 CRATES_SOURCE = "registry+https://github.com/rust-lang/crates.io-index"
 
+LOCK_HASHES = {
+    "criterion": "1695ba30f7c30731689ca47ec12032a2d23edc3915370665be4a26f93c977352",
+    "ndarray": "19a2ed5583fd0834021bf6a7099463ee229d5b48cddbc438737f8fa5b7a53889",
+    "pyo3": "e810a468af353e462e08a68e3944268ffa84efff044603984dba46fd6fbf74c9",
+    "rayon": "a05e4d7f50b5e95c2bfd5e0f692cc8b20a5dc7ae1c0b313ec5bdda4d787666c0",
+    "tokio": "daa7a3909407ed8cae6692651f60a7e1a91519cb9bc8e6e7a9e5b57eb70c58b3"
+}
+LOCK_ROOT = Path(__file__).resolve().parents[1] / "ci/fixtures/rust_expansion/locks"
+
 def run_command(argv, root, *, capture=False):
     result = subprocess.run(argv, cwd=root, text=True, encoding="utf-8", errors="replace",
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=420)
@@ -223,9 +235,31 @@ def run_command(argv, root, *, capture=False):
         raise RuntimeError("command failed: " + " ".join(argv[:3]))
     return result.stdout
 
+# Exact independently reviewed crate archive; no general license-file bypass.
+# https://docs.rs/crate/polars-arrow-format/0.1.0/source/LICENSE
+# https://crates.io/api/v1/crates/polars-arrow-format/0.1.0
+ARROW_FORMAT_CHECKSUM = "19b0ef2474af9396b19025b189d96e992311e6a47f90c53cd998b36c4c64b84c"
+
+def review_package_license(pkg, checksum):
+    license = pkg.get("license") or ""
+    tokens = set(re.findall(r"[A-Za-z0-9][A-Za-z0-9.+-]*", license)) - {"AND","OR","WITH"}
+    if tokens and tokens.issubset(PERMITTED_LICENSES):
+        return license
+    if (not license and pkg["name"] == "polars-arrow-format" and pkg["version"] == "0.1.0"
+            and checksum == ARROW_FORMAT_CHECKSUM and pkg.get("license_file")):
+        root = Path(pkg["manifest_path"]).resolve().parent
+        path = (root / pkg["license_file"]).resolve()
+        if path == root / "LICENSE" and path.is_file():
+            content = path.read_text(encoding="utf-8")
+            if ("Apache License" in content and "Version 2.0, January 2004" in content
+                    and "END OF TERMS AND CONDITIONS" in content):
+                return "Apache-2.0"
+    raise ValueError("unreviewed license: " + pkg["name"] + " " + license)
+
 def check_dependencies(root):
     raw = run_command(["cargo","metadata","--locked","--offline","--format-version","1"], root, capture=True)
     packages = json.loads(raw)["packages"]
+    checksums = {(p["name"],p["version"]):p.get("checksum") for p in tomllib.loads((root/"Cargo.lock").read_text(encoding="utf-8"))["package"]}
     reviewed = []
     for pkg in packages:
         if pkg.get("source") is None:
@@ -234,11 +268,11 @@ def check_dependencies(root):
             continue
         if pkg["source"] != CRATES_SOURCE:
             raise ValueError("non-crates.io dependency: " + pkg["name"])
-        license = pkg.get("license") or ""
-        tokens = set(re.findall(r"[A-Za-z0-9][A-Za-z0-9.+-]*", license)) - {"AND","OR","WITH"}
-        if not tokens or not tokens.issubset(PERMITTED_LICENSES):
-            raise ValueError("unreviewed license: " + pkg["name"] + " " + license)
-        reviewed.append({"name":pkg["name"],"version":pkg["version"],"license":license})
+        checksum = checksums.get((pkg["name"],pkg["version"]))
+        if not checksum or not re.fullmatch(r"[a-f0-9]{64}",checksum):
+            raise ValueError("missing registry checksum: " + pkg["name"])
+        license = review_package_license(pkg,checksum)
+        reviewed.append({"name":pkg["name"],"version":pkg["version"],"license":license,"checksum":checksum})
     return sorted(reviewed, key=lambda x:(x["name"], x["version"]))
 
 def prepare(case, root):
@@ -280,7 +314,16 @@ def execute_case(name, output):
         if mode == "tooling":
             run_command(["rustup","component","add","rustfmt","clippy"],root)
         if case.get("dependencies"):
-            run_command(["cargo","generate-lockfile"],root)
+            if name in LOCK_HASHES:
+                lock = (LOCK_ROOT / (name + ".lock")).read_bytes()
+                if hashlib.sha256(lock).hexdigest() != LOCK_HASHES[name]:
+                    raise ValueError("reviewed lockfile hash mismatch: " + name)
+                (root / "Cargo.lock").write_bytes(lock)
+            elif name == "polars":
+                # Only this not-yet-promoted recovery probe may resolve a fresh lock.
+                run_command(["cargo","generate-lockfile"],root)
+            else:
+                raise ValueError("missing reviewed lockfile: " + name)
             run_command(["cargo","fetch","--locked"],root)
         else:
             run_command(["cargo","generate-lockfile","--offline"],root)
