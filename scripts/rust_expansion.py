@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 from pathlib import Path
 
 CASES = {
@@ -223,9 +224,31 @@ def run_command(argv, root, *, capture=False):
         raise RuntimeError("command failed: " + " ".join(argv[:3]))
     return result.stdout
 
+# Exact independently reviewed crate archive; no general license-file bypass.
+# https://docs.rs/crate/polars-arrow-format/0.1.0/source/LICENSE
+# https://crates.io/api/v1/crates/polars-arrow-format/0.1.0
+ARROW_FORMAT_CHECKSUM = "19b0ef2474af9396b19025b189d96e992311e6a47f90c53cd998b36c4c64b84c"
+
+def review_package_license(pkg, checksum):
+    license = pkg.get("license") or ""
+    tokens = set(re.findall(r"[A-Za-z0-9][A-Za-z0-9.+-]*", license)) - {"AND","OR","WITH"}
+    if tokens and tokens.issubset(PERMITTED_LICENSES):
+        return license
+    if (not license and pkg["name"] == "polars-arrow-format" and pkg["version"] == "0.1.0"
+            and checksum == ARROW_FORMAT_CHECKSUM and pkg.get("license_file")):
+        root = Path(pkg["manifest_path"]).resolve().parent
+        path = (root / pkg["license_file"]).resolve()
+        if path == root / "LICENSE" and path.is_file():
+            content = path.read_text(encoding="utf-8")
+            if ("Apache License" in content and "Version 2.0, January 2004" in content
+                    and "END OF TERMS AND CONDITIONS" in content):
+                return "Apache-2.0"
+    raise ValueError("unreviewed license: " + pkg["name"] + " " + license)
+
 def check_dependencies(root):
     raw = run_command(["cargo","metadata","--locked","--offline","--format-version","1"], root, capture=True)
     packages = json.loads(raw)["packages"]
+    checksums = {(p["name"],p["version"]):p.get("checksum") for p in tomllib.loads((root/"Cargo.lock").read_text(encoding="utf-8"))["package"]}
     reviewed = []
     for pkg in packages:
         if pkg.get("source") is None:
@@ -234,11 +257,11 @@ def check_dependencies(root):
             continue
         if pkg["source"] != CRATES_SOURCE:
             raise ValueError("non-crates.io dependency: " + pkg["name"])
-        license = pkg.get("license") or ""
-        tokens = set(re.findall(r"[A-Za-z0-9][A-Za-z0-9.+-]*", license)) - {"AND","OR","WITH"}
-        if not tokens or not tokens.issubset(PERMITTED_LICENSES):
-            raise ValueError("unreviewed license: " + pkg["name"] + " " + license)
-        reviewed.append({"name":pkg["name"],"version":pkg["version"],"license":license})
+        checksum = checksums.get((pkg["name"],pkg["version"]))
+        if not checksum or not re.fullmatch(r"[a-f0-9]{64}",checksum):
+            raise ValueError("missing registry checksum: " + pkg["name"])
+        license = review_package_license(pkg,checksum)
+        reviewed.append({"name":pkg["name"],"version":pkg["version"],"license":license,"checksum":checksum})
     return sorted(reviewed, key=lambda x:(x["name"], x["version"]))
 
 def prepare(case, root):
