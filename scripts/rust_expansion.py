@@ -92,9 +92,11 @@ fn tabular_filter_and_aggregation() -> PolarsResult<()> {
 use criterion::{criterion_group, criterion_main, Criterion};
 use std::hint::black_box;
 fn bench(c: &mut Criterion) {
+    let values: Vec<u64> = (0..10_000u64).collect();
+    assert_eq!(values.iter().map(|x| x*x).sum::<u64>(), 333283335000);
     c.bench_function("zeibael_sum_squares", |b| b.iter(|| {
-        let n = black_box(10_000u64);
-        black_box((0..n).map(|x| x*x).sum::<u64>())
+        let data = black_box(values.as_slice());
+        black_box(data.iter().map(|x| x*x).sum::<u64>())
     }));
 }
 criterion_group!(benches, bench);
