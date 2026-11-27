@@ -240,10 +240,62 @@ def run_command(argv, root, *, capture=False):
 # https://crates.io/api/v1/crates/polars-arrow-format/0.1.0
 ARROW_FORMAT_CHECKSUM = "19b0ef2474af9396b19025b189d96e992311e6a47f90c53cd998b36c4c64b84c"
 
+def permitted_license_expression(expression):
+    """Evaluate reviewed license choices; every mandatory AND branch must pass."""
+    if not isinstance(expression, str) or len(expression) > 2048:
+        return False
+    tokens = re.findall(r"\(|\)|/|[A-Za-z0-9][A-Za-z0-9.+-]*", expression)
+    if not tokens or len(tokens) > 128 or "".join(tokens) != re.sub(r"\s+", "", expression):
+        return False
+    index = 0
+    def peek():
+        return tokens[index] if index < len(tokens) else None
+    def pop():
+        nonlocal index
+        if index >= len(tokens):
+            raise ValueError("unexpected end of license expression")
+        token = tokens[index]
+        index += 1
+        return token
+    def atom():
+        token = pop()
+        if token == "(":
+            accepted = alternative()
+            if pop() != ")":
+                raise ValueError("unclosed license group")
+            return accepted
+        if token in {"AND","OR","WITH","/","(",")"}:
+            raise ValueError("expected license identifier")
+        if peek() == "WITH":
+            pop()
+            exception = pop()
+            if exception in {"AND","OR","WITH","/","(",")"}:
+                raise ValueError("expected exception identifier")
+            return (token, exception) == ("Apache-2.0","LLVM-exception")
+        return token in PERMITTED_LICENSES and token != "LLVM-exception"
+    def conjunction():
+        accepted = atom()
+        while peek() == "AND":
+            pop()
+            right = atom()
+            accepted = accepted and right
+        return accepted
+    def alternative():
+        accepted = conjunction()
+        while peek() in {"OR","/"}:
+            pop()
+            right = conjunction()
+            accepted = accepted or right
+        return accepted
+    try:
+        accepted = alternative()
+        return index == len(tokens) and accepted
+    except (ValueError, RecursionError):
+        return False
+
 def review_package_license(pkg, checksum):
     license = pkg.get("license") or ""
-    tokens = set(re.findall(r"[A-Za-z0-9][A-Za-z0-9.+-]*", license)) - {"AND","OR","WITH"}
-    if tokens and tokens.issubset(PERMITTED_LICENSES):
+    if permitted_license_expression(license):
         return license
     if (not license and pkg["name"] == "polars-arrow-format" and pkg["version"] == "0.1.0"
             and checksum == ARROW_FORMAT_CHECKSUM and pkg.get("license_file")):
@@ -261,6 +313,7 @@ def check_dependencies(root):
     packages = json.loads(raw)["packages"]
     checksums = {(p["name"],p["version"]):p.get("checksum") for p in tomllib.loads((root/"Cargo.lock").read_text(encoding="utf-8"))["package"]}
     reviewed = []
+    license_errors = []
     for pkg in packages:
         if pkg.get("source") is None:
             if pkg["name"] != "zeibael-probe":
@@ -271,8 +324,14 @@ def check_dependencies(root):
         checksum = checksums.get((pkg["name"],pkg["version"]))
         if not checksum or not re.fullmatch(r"[a-f0-9]{64}",checksum):
             raise ValueError("missing registry checksum: " + pkg["name"])
-        license = review_package_license(pkg,checksum)
+        try:
+            license = review_package_license(pkg,checksum)
+        except ValueError as error:
+            license_errors.append(str(error))
+            continue
         reviewed.append({"name":pkg["name"],"version":pkg["version"],"license":license,"checksum":checksum})
+    if license_errors:
+        raise ValueError("dependency license review failed: " + "; ".join(license_errors))
     return sorted(reviewed, key=lambda x:(x["name"], x["version"]))
 
 def prepare(case, root):
