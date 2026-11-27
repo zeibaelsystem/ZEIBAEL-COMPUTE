@@ -51,5 +51,27 @@ class RustExpansionContract(unittest.TestCase):
             with self.assertRaises(ValueError):
                 review_package_license(pkg,checksum)
 
+    def test_verified_lockfiles_are_byte_identical(self):
+        import hashlib
+        from scripts.rust_expansion import LOCK_HASHES, LOCK_ROOT
+        self.assertEqual(set(LOCK_HASHES), {"rayon","tokio","ndarray","criterion","pyo3"})
+        for name, expected in LOCK_HASHES.items():
+            lock = (LOCK_ROOT / (name + ".lock")).read_bytes()
+            self.assertEqual(hashlib.sha256(lock).hexdigest(), expected)
+
+    def test_verified_rust_native_runner_requirements(self):
+        from scripts.runtime_resources import CORE_VERIFIED, RUNNER_SPECS, choose_reviewed_runner
+        from scripts.runtime_router import BUILTIN_RUNNERS, select_runner
+        expected = PLATFORMS | {"ubuntu-24.04"}
+        self.assertEqual(CORE_VERIFIED["rust"], expected)
+        self.assertEqual(set(BUILTIN_RUNNERS["rust"]), expected)
+        self.assertEqual(select_runner("rust"), "ubuntu-24.04")
+        for runner in expected:
+            spec = RUNNER_SPECS[runner]
+            selected = choose_reviewed_runner("rust", {"os":spec["os"],"arch":spec["arch"],"toolchains":["rustc","cargo"]}, CORE_VERIFIED["rust"], "standard")
+            self.assertEqual(selected, runner)
+        with self.assertRaises(ValueError):
+            choose_reviewed_runner("rust", {}, CORE_VERIFIED["rust"], "short", runner="ubuntu-slim")
+
 if __name__ == "__main__":
     unittest.main()
