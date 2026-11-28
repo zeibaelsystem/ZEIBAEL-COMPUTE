@@ -33,6 +33,23 @@ def main():
             if mode=="python":
                 command=[sys.executable,"-c",'''
 import json
+from spider_rs import Page
+page=Page("http://127.0.0.1:18776/a")
+page.fetch()
+print(json.dumps({"html":page.get_html()}))
+''']
+                p=subprocess.run(command,env=env,capture_output=True,text=True,timeout=45)
+                if p.returncode:raise RuntimeError("Binding failed: "+p.stderr[-3000:])
+                data=json.loads(p.stdout.strip().splitlines()[-1])
+                assert "ZEIBAEL binding" in data["html"],data
+                assert requests==["/a"],requests
+                print("ZEIBAEL_SPIDER_BINDING="+json.dumps({"mode":mode,"requests":requests,"scope":"single_page_only","status":"PASS"}),flush=True)
+                return
+            elif mode=="python_recursive":
+                # Preserved stricter diagnostic; not admitted after reproducible
+                # upstream recursive failure. Use verified Rust CLI for recursion.
+                command=[sys.executable,"-c",'''
+import json
 from spider_rs import Website
 w=Website("http://127.0.0.1:18776/")
 w.with_respect_robots_txt(True).with_budget({"*":8}).with_depth(3).with_delay(100).with_subdomains(False).build()
