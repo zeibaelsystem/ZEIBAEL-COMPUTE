@@ -14,7 +14,9 @@ def main():
     assert len(records)==1,records
     record=records[0]
     assert record["url"]==ENTRY["url"] and record["http_status"]=="200",record
-    assert record["status"]=="ok" and "Example Domain" in record["extraction"]["text"],record
+    assert record["status"]=="ok" and record["extraction"]["title"]=="Example Domain",record
+    assert "documentation examples" in record["extraction"]["text"],record
+    assert record["captured_at"]=="2026-10-05T11:28:41Z",record
     print("ZEIBAEL_COMMONCRAWL="+json.dumps({"status":"PASS","http_status":206,"bytes":len(raw),
           "archive_sha256":hashlib.sha256(raw).hexdigest(),"record_url":record["url"],
           "captured_at":record["captured_at"],"records":len(records)}),flush=True)
