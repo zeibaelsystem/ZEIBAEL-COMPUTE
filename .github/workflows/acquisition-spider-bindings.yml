@@ -27,9 +27,9 @@ jobs:
           (version 1)
           (allow default)
           (deny network*)
-          (allow network-bind (local ip "127.0.0.1:*"))
-          (allow network-inbound (local ip "127.0.0.1:*"))
-          (allow network-outbound (remote ip "127.0.0.1:*"))
+          (allow network-bind (local ip "localhost:*"))
+          (allow network-inbound (local ip "localhost:*"))
+          (allow network-outbound (remote ip "localhost:*"))
           EOF
           /usr/bin/sandbox-exec -f "$RUNNER_TEMP/local-only.sb" python ci/fixtures/spider_bindings/fixture.py python
   node:
