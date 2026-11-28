@@ -4,7 +4,7 @@ Use the free HTTPS data endpoint only; no S3 account, proxy, or redirects.
 A reviewed caller supplies an archive index record; it is never a live target.
 """
 from __future__ import annotations
-import hashlib
+import ipaddress
 import re
 import socket
 from scripts.acquisition_core import _PinnedHTTPSConnection,is_public_address
@@ -42,7 +42,7 @@ def check_range(locator,status,content_range,body):
 
 def fetch_range(entry):
     locator=validate_entry(entry)
-    addresses=sorted({x[4][0] for x in socket.getaddrinfo(HOST,443,type=socket.SOCK_STREAM,proto=socket.IPPROTO_TCP)})
+    addresses=sorted({x[4][0] for x in socket.getaddrinfo(HOST,443,type=socket.SOCK_STREAM,proto=socket.IPPROTO_TCP)}, key=lambda addr: (ipaddress.ip_address(addr).version, addr))
     if not addresses or not all(is_public_address(x) for x in addresses):
         raise ValueError("Non-public archive destination")
     conn=_PinnedHTTPSConnection(HOST,addresses[0])
