@@ -9,7 +9,7 @@ permissions:
   contents: read
 jobs:
   python:
-    runs-on: ubuntu-24.04
+    runs-on: macos-15
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -17,11 +17,21 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - run: |
           python -m pip install --disable-pip-version-check --no-input --only-binary=:all: spider-rs==0.0.57
       - run: |
-          sudo unshare --net -- bash -eu -c 'ip link set lo up; exec setpriv --reuid "$1" --regid "$2" --clear-groups "$3" "$4" python' _ "$(id -u)" "$(id -g)" "$(command -v python)" "$GITHUB_WORKSPACE/ci/fixtures/spider_bindings/fixture.py"
+          test "$(uname -m)" = arm64
+          test -x /usr/bin/sandbox-exec
+          cat > "$RUNNER_TEMP/local-only.sb" <<'EOF'
+          (version 1)
+          (allow default)
+          (deny network*)
+          (allow network-bind (local ip "127.0.0.1:*"))
+          (allow network-inbound (local ip "127.0.0.1:*"))
+          (allow network-outbound (remote ip "127.0.0.1:*"))
+          EOF
+          /usr/bin/sandbox-exec -f "$RUNNER_TEMP/local-only.sb" python ci/fixtures/spider_bindings/fixture.py python
   node:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -29,6 +39,6 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
-      - run: npm --prefix ci/fixtures/spider_bindings install --no-save --ignore-scripts --no-audit --no-fund @spider-rs/spider-rs@0.0.163
+      - run: npm --prefix ci/fixtures/spider_bindings install --no-save --ignore-scripts --no-audit --no-fund @spider-rs/spider-rs@0.0.157 @spider-rs/spider-rs-linux-x64-gnu@0.0.157
       - run: |
           sudo unshare --net -- bash -eu -c 'ip link set lo up; exec setpriv --reuid "$1" --regid "$2" --clear-groups python3 "$3" node "$4"' _ "$(id -u)" "$(id -g)" "$GITHUB_WORKSPACE/ci/fixtures/spider_bindings/fixture.py" "$(command -v node)"
