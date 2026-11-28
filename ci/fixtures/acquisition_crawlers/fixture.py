@@ -6,7 +6,7 @@ import sys
 import tempfile
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urldefrag
 
 BASE="http://127.0.0.1:18767"
 SEEN=[]
@@ -40,7 +40,9 @@ def scrapy_test():
         def parse(self,response):
             records.append((response.url,response.css("h1::text").get()))
             for link in response.css("a::attr(href)").getall():
-                target=response.urljoin(link)
+                target=urldefrag(response.urljoin(link)).url
+                if target == BASE+"/":
+                    continue  # root was already seeded; Scrapy start_urls bypass duplicate filter
                 u=urlsplit(target)
                 if (u.scheme,u.netloc)==("http","127.0.0.1:18767"):
                     yield scrapy.Request(target,callback=self.parse)
@@ -51,8 +53,8 @@ def scrapy_test():
         "USER_AGENT":"ZEIBAEL-LocalFixture/1.0"})
     process.crawl(LocalSpider)
     process.start()
-    assert set(records)=={(BASE+"/","ZEIBAEL-ROOT"),(BASE+"/a","ZEIBAEL-CHILD")},records
-    assert SEEN.count("/a")==1 and "/robots.txt" in SEEN and "/blocked" not in SEEN,SEEN
+    assert len(records)==2 and set(records)=={(BASE+"/","ZEIBAEL-ROOT"),(BASE+"/a","ZEIBAEL-CHILD")},records
+    assert SEEN.count("/")==1 and SEEN.count("/a")==1 and "/robots.txt" in SEEN and "/blocked" not in SEEN,SEEN
     print("ZEIBAEL_SCRAPY_CRAWL="+json.dumps({"pages":len(records),"requests":SEEN,"status":"PASS"}),flush=True)
 
 async def crawl4ai_test():
