@@ -8,7 +8,7 @@ import threading
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 
 BASE="http://127.0.0.1:18776"
-PAGES={"/":b'<html><a href="/a">A</a><a href="/a#dup">Again</a><a href="/blocked">Denied</a></html>',
+PAGES={"/":b'<!DOCTYPE html><html><head><title>ZEIBAEL fixture</title></head><body><h1>Local crawler fixture</h1><a href="/a">A</a><a href="/a#dup">Again</a><a href="/blocked">Denied</a></body></html>',
        "/a":b"<html><h1>ZEIBAEL binding</h1></html>"}
 requests=[]
 class Handler(BaseHTTPRequestHandler):
@@ -35,7 +35,7 @@ def main():
 import json
 from spider_rs import Website
 w=Website("http://127.0.0.1:18776/")
-w.with_respect_robots_txt(True).with_budget({"*":8}).with_depth(3).with_delay(100).with_subdomains(False)
+w.with_respect_robots_txt(True).with_budget({"*":8}).with_depth(3).with_delay(100).with_subdomains(False).build()
 w.crawl()
 print(json.dumps(w.get_links()))
 ''']
