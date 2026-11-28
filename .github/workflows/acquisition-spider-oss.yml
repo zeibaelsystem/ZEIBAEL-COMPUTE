@@ -1,0 +1,26 @@
+name: Spider OSS local fixture
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'ci/fixtures/spider_oss/**'
+      - '.github/workflows/acquisition-spider-oss.yml'
+permissions:
+  contents: read
+jobs:
+  fixture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Build exact Spider crate without cloud or AI features
+        working-directory: ci/fixtures/spider_oss
+        run: |
+          rustc --version
+          cargo build
+          cargo tree -e features -i spider
+      - name: Crawl only local fixture in isolated network namespace
+        run: |
+          sudo unshare --net -- bash -eu -c 'ip link set lo up; python3 ci/fixtures/spider_oss/fixture.py ci/fixtures/spider_oss/target/debug/zeibael-spider-fixture'
