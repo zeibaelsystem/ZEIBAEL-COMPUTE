@@ -42,7 +42,9 @@ print(json.dumps(w.get_links()))
             elif mode=="node":
                 command=[sys.argv[2],os.path.join(os.path.dirname(__file__),"node.mjs")]
             else:raise ValueError("Unsupported fixture mode")
-            p=subprocess.run(command,env=env,capture_output=True,text=True,timeout=45,check=True)
+            p=subprocess.run(command,env=env,capture_output=True,text=True,timeout=45)
+            if p.returncode:
+                raise RuntimeError("Binding failed: "+p.stderr[-3000:])
             links=json.loads(p.stdout.strip().splitlines()[-1])
             assert BASE+"/a" in links,(links,requests)
             assert requests.count("/a")==1 and requests.count("/")==1,requests
