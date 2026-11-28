@@ -1,0 +1,7 @@
+warcio==1.8.2
+feedparser==6.0.14
+duckdb==2.0.1
+polars==2.2.0
+shapely==2.2.0
+xarray==2026.9.0
+scipy==1.18.1
