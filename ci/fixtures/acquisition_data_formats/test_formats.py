@@ -22,7 +22,8 @@ class DataFormats(unittest.TestCase):
         writer = WARCWriter(out, gzip=True)
         headers = StatusAndHeaders("200 OK", [("Content-Type", "text/html")], protocol="HTTP/1.1")
         rec = writer.create_warc_record("https://example.org/archive", "response",
-                     payload=io.BytesIO(b"<h1>archived text</h1>"), http_headers=headers)
+                     payload=io.BytesIO(b"<h1>archived text</h1>"),
+                     length=len(b"<h1>archived text</h1>"), http_headers=headers)
         writer.write_record(rec)
         r = self.a.read_warc(out.getvalue())
         self.assertEqual(r[0]["url"], "https://example.org/archive")
