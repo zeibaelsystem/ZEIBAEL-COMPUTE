@@ -12,7 +12,7 @@ BASE="http://127.0.0.1:18767"
 SEEN=[]
 PAGES={"/":b'<html><body><h1>ZEIBAEL-ROOT</h1><a href="/a">A</a><a href="/a#dup">Again</a><a href="/blocked">Blocked</a></body></html>',
        "/a":b'<html><body><h1>ZEIBAEL-CHILD</h1><a href="/">Home</a></body></html>',
-       "/dynamic":b'<html><body><h1 id="result">pending</h1><script>document.getElementById("result").textContent="ZEIBAEL-DYNAMIC"</script></body></html>'}
+       "/dynamic":b'<html><head><title>Local data acquisition fixture</title></head><body><main><h1 id="result">pending</h1><p>This synthetic laboratory page documents a local and authorized data extraction test. The browser renders a deterministic marker using JavaScript. The test runs without external network access, credentials, proxies or hosted services.</p><p>Sample observations describe a controlled experiment with bounded input size, fixed origin, and repeatable output. The purpose is to compare document extraction and browser rendering on ordinary HTML content, not to evade any website restriction.</p></main><script>document.getElementById("result").textContent="ZEIBAEL-DYNAMIC"</script></body></html>'}
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         SEEN.append(self.path)
