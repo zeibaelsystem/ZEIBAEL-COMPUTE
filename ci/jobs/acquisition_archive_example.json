@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "jobs": [
+    {
+      "id": "archive_example",
+      "runtime": "python",
+      "runner": "ubuntu-24.04",
+      "timeout_profile": "short",
+      "commands": [
+        [
+          "python",
+          "-m",
+          "pip",
+          "install",
+          "--disable-pip-version-check",
+          "--no-input",
+          "warcio==1.8.2"
+        ],
+        [
+          "python",
+          "-m",
+          "ci.fixtures.acquisition_commoncrawl_smoke"
+        ]
+      ]
+    }
+  ]
+}
