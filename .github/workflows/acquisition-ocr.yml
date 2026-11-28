@@ -1,0 +1,27 @@
+name: Acquisition OCR fixture
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/acquisition_ocr.py'
+      - 'ci/fixtures/acquisition_ocr/**'
+      - '.github/workflows/acquisition-ocr.yml'
+permissions:
+  contents: read
+jobs:
+  ocr:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install distribution OCR and raster packages
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-eng poppler-utils fonts-dejavu-core python3-pil
+          tesseract --version
+          pdftoppm -v
+      - name: Execute trusted fixtures without network and without root
+        run: |
+          sudo unshare --net -- bash -eu -c 'ip link set lo up; exec setpriv --reuid "$1" --regid "$2" --clear-groups /usr/bin/python3 -m unittest discover -s ci/fixtures/acquisition_ocr -v' _ "$(id -u)" "$(id -g)"
